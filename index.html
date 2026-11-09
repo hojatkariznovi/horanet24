@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f5f8fb">
+  <meta name="description" content="حورانت۲۴؛ دنیای خدمات دیجیتال، ساده و همیشه در دسترس">
+  <title>حورانت۲۴ | دنیای دیجیتال شما</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
+</head>
+<body>
+  <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="حورانت۲۴">
+      <span class="brand-mark"><span></span><span></span><span></span></span>
+      <span><b>حورانت<span>۲۴</span></b><small>دنیای دیجیتال شما</small></span>
+    </a>
+    <div class="top-actions">
+      <button class="icon-btn" id="searchToggle" aria-label="جستجو">⌕</button>
+      <button class="profile-btn" id="profileBtn" aria-label="پروفایل">هـ</button>
+    </div>
+  </header>
+  <main class="shell">
+    <section class="welcome">
+      <div class="welcome-copy">
+        <span class="eyebrow"><i></i> یک قدم جلوتر، همیشه</span>
+        <h1>سلام، به دنیای<br><em>حورانت۲۴</em> خوش آمدید.</h1>
+        <p>خدمات روزمره‌ات را هوشمندتر، ساده‌تر و بدون رفت‌وآمد انجام بده.</p>
+        <button class="primary-btn" id="exploreServices">شروع کنید <span>←</span></button>
+      </div>
+      <div class="orbital" aria-hidden="true"><div class="orbital-core">H<span>24</span></div><i class="orbit orbit-one"></i><i class="orbit orbit-two"></i><b class="spark spark-one"></b><b class="spark spark-two"></b></div>
+      <div class="welcome-glow"></div>
+    </section>
+    <section class="quick-stats">
+      <div><strong>۲۴/۷</strong><span>همیشه در دسترس</span></div><i></i>
+      <div><strong>آنلاین</strong><span>بدون صف و رفت‌وآمد</span></div><i></i>
+      <div><strong>یکپارچه</strong><span>همه‌چیز در یک‌جا</span></div>
+    </section>
+    <section class="section" id="servicesSection">
+      <div class="section-head"><div><span class="eyebrow">خدمات هوشمند</span><h2>چه کاری برات انجام بدیم؟</h2></div><button class="text-btn" id="allServices">همه خدمات <span>←</span></button></div>
+      <div class="search-wrap" id="searchWrap"><span>⌕</span><input id="serviceSearch" type="search" placeholder="نام خدمت موردنظرت رو جستجو کن..." autocomplete="off"></div>
+      <div class="category-row" id="categoryRow"><button class="chip active" data-category="all">همه</button><button class="chip" data-category="vehicle">خودرو</button><button class="chip" data-category="insurance">بیمه</button><button class="chip" data-category="business">کسب‌وکار</button><button class="chip" data-category="government">خدمات اداری</button></div>
+      <div class="service-grid" id="serviceGrid">
+        <article class="service-card"><span class="service-icon">🚘</span><div><b>خدمات خودرو</b><small>نقل‌وانتقال، نوبت و خلافی</small></div><span class="card-arrow">↗</span></article>
+        <article class="service-card"><span class="service-icon">🛡</span><div><b>بیمه</b><small>شخص ثالث، بدنه و زندگی</small></div><span class="card-arrow">↗</span></article>
+        <article class="service-card"><span class="service-icon">▣</span><div><b>خدمات کسب‌وکار</b><small>مجوز، مالیات و کارت‌خوان</small></div><span class="card-arrow">↗</span></article>
+        <article class="service-card"><span class="service-icon">◈</span><div><b>خدمات اداری</b><small>درخواست‌ها و امور هویتی</small></div><span class="card-arrow">↗</span></article>
+      </div>
+      <p class="section-note" id="serviceStatus">در حال آماده‌سازی فهرست خدمات...</p>
+    </section>
+    <section class="feature-banner">
+      <div><span class="eyebrow">همراه هوشمند</span><h2>راه درست رو<br>سریع‌تر پیدا کن.</h2><p>برای انتخاب خدمت مناسب، راهنمایی و پیگیری درخواست‌ها همراهت هستیم.</p><button class="light-btn" id="assistantBtn">گفت‌وگو با پشتیبانی <span>←</span></button></div>
+      <div class="assistant-art"><div class="assistant-ring">✳</div><span class="bubble bubble-a">پاسخ‌گویی</span><span class="bubble bubble-b">راهنمایی</span></div>
+    </section>
+    <section class="section mini-section">
+      <div class="section-head"><div><span class="eyebrow">تازه‌های حورانت</span><h2>در جریان باش</h2></div><span class="live-label"><i></i> به‌روزرسانی</span></div>
+      <div class="news-card"><div class="news-icon">✦</div><div><b>دنیای خدمات دیجیتال در حال گسترش است</b><p>به‌زودی امکانات تازه‌ای به حورانت۲۴ اضافه می‌شود.</p></div><span>↗</span></div>
+    </section>
+    <footer><div class="footer-brand">حورانت۲۴</div><p>خدمات دیجیتال، ساده و قابل‌اعتماد.</p><small>© ۱۴۰۵ حورانت۲۴</small></footer>
+  </main>
+  <nav class="bottom-nav" aria-label="ناوبری اصلی">
+    <button class="nav-item selected" data-tab="home"><span>⌂</span><small>خانه</small></button>
+    <button class="nav-item" data-tab="services"><span>▦</span><small>خدمات</small></button>
+    <button class="nav-item" data-tab="explore"><span>◉</span><small>اکسپلور</small></button>
+    <button class="nav-item" data-tab="requests"><span>▤</span><small>درخواست‌ها</small></button>
+    <button class="nav-item" data-tab="profile"><span>○</span><small>حساب من</small></button>
+  </nav>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="./app.js"></script>
+</body>
+</html>
