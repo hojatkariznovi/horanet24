@@ -189,6 +189,13 @@ function wire(){
  $("navCoreBtn").onclick=showContactOptions;
  $("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal();});
  $("serviceSearch").addEventListener("input",renderServices);
+ document.querySelectorAll("[data-home-category]").forEach(btn=>btn.addEventListener("click",()=>{
+  state.activeCategory=btn.dataset.homeCategory;
+  $("serviceSearch").value="";
+  document.querySelectorAll("#categoryRow .chip").forEach(chip=>chip.classList.toggle("active",chip.dataset.category===state.activeCategory));
+  showView("services");
+  $("servicesSection").scrollIntoView({behavior:"smooth",block:"start"});
+ }));
  $("exploreServices").onclick=()=>showView("services");
  $("allServices").onclick=()=>{state.activeCategory="all";document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x.dataset.category==="all"));showView("services");};
  $("searchToggle").onclick=()=>{showView("services");$("serviceSearch").focus();};
