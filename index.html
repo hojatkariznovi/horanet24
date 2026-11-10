@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./tailwind.css">
-  <link rel="stylesheet" href="./styles.css?v=28">
+  <link rel="stylesheet" href="./styles.css?v=29">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
@@ -82,6 +82,43 @@
     </div>
     <div class="hero-slider-controls"><div class="hero-dots" id="heroDots"><button type="button" class="hero-dot active" data-slide="0" aria-label="رفتن به اسلاید ۱" aria-current="true"></button><button type="button" class="hero-dot" data-slide="1" aria-label="رفتن به اسلاید ۲" aria-current="false"></button><button type="button" class="hero-dot" data-slide="2" aria-label="رفتن به اسلاید ۳" aria-current="false"></button></div><div class="hero-arrows"><button type="button" id="heroPrev" aria-label="اسلاید قبلی"><i data-lucide="chevron-right"></i></button><button type="button" id="heroNext" aria-label="اسلاید بعدی"><i data-lucide="chevron-left"></i></button></div></div>
   </section>
+  <script>
+  (() => {
+    "use strict";
+    const slider=document.getElementById("heroSlider"),root=document.getElementById("heroSlides");
+    if(!slider||!root)return;
+    const slides=Array.from(root.querySelectorAll(".hero-slide"));
+    const dotRoot=document.getElementById("heroDots"),prev=document.getElementById("heroPrev"),next=document.getElementById("heroNext");
+    if(slides.length<2)return;
+    let active=0,timer=null,paused=false,touchX=null,touchY=null;
+    root.style.position="relative";root.style.minHeight="252px";root.style.overflow="hidden";
+    function paint(){
+      slides.forEach((slide,i)=>{
+        const selected=i===active;
+        slide.classList.toggle("active",selected);
+        Object.assign(slide.style,{position:"absolute",inset:"0",width:"100%",height:"100%",minHeight:"0",display:"flex",opacity:selected?"1":"0",visibility:selected?"visible":"hidden",pointerEvents:selected?"auto":"none",zIndex:selected?"2":"1",transform:selected?"translate3d(0,0,0)":"translate3d(24px,0,0)"});
+        slide.setAttribute("aria-hidden",selected?"false":"true");
+      });
+      if(dotRoot)Array.from(dotRoot.querySelectorAll("[data-slide]")).forEach((dot,i)=>{const selected=i===active;dot.classList.toggle("active",selected);dot.setAttribute("aria-current",selected?"true":"false");});
+    }
+    function move(step){active=(active+step+slides.length)%slides.length;paint();}
+    function stop(){if(timer!==null){clearInterval(timer);timer=null;}}
+    function start(){stop();if(!paused&&!document.hidden)timer=setInterval(()=>move(1),5000);}
+    prev?.addEventListener("click",event=>{event.preventDefault();move(-1);start();});
+    next?.addEventListener("click",event=>{event.preventDefault();move(1);start();});
+    dotRoot?.addEventListener("click",event=>{const dot=event.target.closest("[data-slide]");if(!dot)return;const requested=Number(dot.dataset.slide);if(Number.isInteger(requested)&&requested>=0&&requested<slides.length){active=requested;paint();start();}});
+    slider.addEventListener("pointerdown",event=>{touchX=event.clientX;touchY=event.clientY;},{passive:true});
+    slider.addEventListener("pointerup",event=>{if(touchX===null)return;const dx=event.clientX-touchX,dy=event.clientY-touchY;touchX=touchY=null;if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)*1.2){move(dx<0?1:-1);start();}},{passive:true});
+    slider.addEventListener("pointercancel",()=>{touchX=touchY=null;},{passive:true});
+    slider.addEventListener("mouseenter",()=>{paused=true;stop();});
+    slider.addEventListener("mouseleave",()=>{paused=false;start();});
+    slider.addEventListener("focusin",()=>{paused=true;stop();});
+    slider.addEventListener("focusout",event=>{if(!slider.contains(event.relatedTarget)){paused=false;start();}});
+    document.addEventListener("visibilitychange",()=>document.hidden?stop():start());
+    window.initHoranetSlider=()=>{paint();start();};
+    paint();start();
+  })();
+  </script>
   <section class="welcome app-view" data-app-view="home" id="home">
     <div class="welcome-copy">
       <span class="eyebrow"><i></i> همراه دیجیتال شما</span>
@@ -196,5 +233,5 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="./app.js"></script>
 <script src="./assistant-chat.js"></script>
-<script src="./enhancements.js?v=28"></script>
+
 </body></html>
