@@ -81,8 +81,13 @@ const refreshIcons=()=>{
  });
  if(window.lucide?.createIcons) window.lucide.createIcons({attrs:{'stroke-width':1.8}}); else renderH24FallbackIcons();
 };
-function showContactOptions(){
- openModal('<span class="eyebrow">پشتیبانی حورانت۲۴</span><h2 id="modalTitle">ارتباط در:</h2><div class="contact-options"><a class="contact-choice contact-eitaa" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener"><span class="contact-choice-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 12.5A7.5 7.5 0 0 1 15.5 5h17A7.5 7.5 0 0 1 40 12.5v14a7.5 7.5 0 0 1-7.5 7.5H20l-9 8v-8.5A7.5 7.5 0 0 1 8 27Z" fill="currentColor" opacity=".18"/><path d="M15 17h18M15 24h12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span><b>ایتا</b><small>ورود به ارتباط ایتا</small></span><i data-lucide="arrow-up-left"></i></a><a class="contact-choice contact-telegram" href="https://t.me/hojat_k82" target="_blank" rel="noopener"><span class="contact-choice-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="m5 22 36-14-8 33-11-9-7 6-1-12Z" fill="currentColor"/><path d="m14 26 20-13-13 18" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>تلگرام</b><small>پیام خصوصی مستقیم</small></span><i data-lucide="arrow-up-left"></i></a></div>');
+function showContactOptions(mode="contact",serviceTitle=""){
+ const isRequest=mode==="request";
+ const heading=isRequest?"ثبت درخواست در:":"ارتباط در:";
+ const intro=serviceTitle?'<p class="request-context">خدمت انتخاب‌شده: <b>'+esc(serviceTitle)+'</b></p>':"";
+ const eitaaSub=isRequest?"ادامه ثبت درخواست در ایتا":"ورود به ارتباط ایتا";
+ const telegramSub=isRequest?"ادامه ثبت درخواست در تلگرام":"پیام خصوصی مستقیم";
+ openModal('<span class="eyebrow">حورانت۲۴ · همراه دیجیتال شما</span><h2 id="modalTitle">'+heading+'</h2>'+intro+'<div class="contact-options"><a class="contact-choice contact-eitaa" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener"><span class="contact-choice-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 12.5A7.5 7.5 0 0 1 15.5 5h17A7.5 7.5 0 0 1 40 12.5v14a7.5 7.5 0 0 1-7.5 7.5H20l-9 8v-8.5A7.5 7.5 0 0 1 8 27Z" fill="currentColor" opacity=".18"/><path d="M15 17h18M15 24h12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span><b>ایتا</b><small>'+eitaaSub+'</small></span><i data-lucide="arrow-up-left"></i></a><a class="contact-choice contact-telegram" href="https://t.me/hojat_k82" target="_blank" rel="noopener"><span class="contact-choice-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="m5 22 36-14-8 33-11-9-7 6-1-12Z" fill="currentColor"/><path d="m14 26 20-13-13 18" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>تلگرام</b><small>'+telegramSub+'</small></span><i data-lucide="arrow-up-left"></i></a></div>');
 }
 function openModal(html){ $("modalContent").innerHTML=html; refreshIcons(); $("modalBackdrop").hidden=false; document.body.classList.add("modal-open"); }
 function closeModal(){ $("modalBackdrop").hidden=true; $("modalContent").innerHTML=""; document.body.classList.remove("modal-open"); }
@@ -100,7 +105,7 @@ function renderServices(){
  $("serviceStatus").textContent=items.length+" خدمت در دسترس است.";
 }
 
-function showService(id){ const s=state.services.find(x=>x.id===id); if(!s)return; state.selectedService=s; const docs=Array.isArray(s.required_documents)?s.required_documents:[]; const steps=Array.isArray(s.steps)?s.steps:[]; const fav=state.favorites.has(id); openModal('<span class="eyebrow">جزئیات خدمت</span><h2 id="modalTitle">'+esc(s.title)+'</h2><p>'+esc(s.description||s.summary||"برای دریافت راهنمایی بیشتر، درخواست خود را از طریق پشتیبانی ثبت کنید.")+'</p><div class="detail-block"><b>مدارک و اطلاعات موردنیاز</b><ul>'+ (docs.length?docs.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>پس از بررسی نوع درخواست اعلام می‌شود.</li>')+'</ul></div><div class="detail-block"><b>مراحل انجام</b><ol>'+(steps.length?steps.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>ارسال درخواست در پیام خصوصی تلگرام</li><li>بررسی و اعلام مراحل</li>')+'</ol></div><div class="modal-actions"><button class="primary-btn" id="serviceRequest" type="button"><span class="service-request-label">ثبت درخواست</span><span data-icon="send"></span></button><button class="secondary-btn" id="favoriteBtn"><span data-icon="heart"></span> '+(fav?"★ حذف از علاقه‌مندی‌ها":"☆ افزودن به علاقه‌مندی‌ها")+'</button></div><p class="micro-note">برای ثبت درخواست، پیام شما مستقیماً به پیام خصوصی تلگرام پشتیبانی حورانت۲۴ هدایت می‌شود؛ این وب‌سایت اطلاعات یا مدارک شما را دریافت نمی‌کند.</p>'); $("serviceRequest").onclick=()=>openTelegram("درخواست خدمت: "+s.title); $("favoriteBtn").onclick=()=>toggleFavorite(id); }
+function showService(id){ const s=state.services.find(x=>x.id===id); if(!s)return; state.selectedService=s; const docs=Array.isArray(s.required_documents)?s.required_documents:[]; const steps=Array.isArray(s.steps)?s.steps:[]; const fav=state.favorites.has(id); openModal('<span class="eyebrow">جزئیات خدمت</span><h2 id="modalTitle">'+esc(s.title)+'</h2><p>'+esc(s.description||s.summary||"برای دریافت راهنمایی بیشتر، درخواست خود را از طریق پشتیبانی ثبت کنید.")+'</p><div class="detail-block"><b>مدارک و اطلاعات موردنیاز</b><ul>'+ (docs.length?docs.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>پس از بررسی نوع درخواست اعلام می‌شود.</li>')+'</ul></div><div class="detail-block"><b>مراحل انجام</b><ol>'+(steps.length?steps.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>ارسال درخواست در پیام‌رسان انتخابی</li><li>بررسی و اعلام مراحل</li>')+'</ol></div><div class="modal-actions"><button class="primary-btn" id="serviceRequest" type="button"><span class="service-request-label">ثبت درخواست</span><span data-icon="send"></span></button><button class="secondary-btn" id="favoriteBtn"><span data-icon="heart"></span> '+(fav?"★ حذف از علاقه‌مندی‌ها":"☆ افزودن به علاقه‌مندی‌ها")+'</button></div><p class="micro-note">پس از انتخاب ایتا یا تلگرام، درخواست خود را در پیام‌رسان انتخابی ارسال کن؛ این وب‌سایت اطلاعات یا مدارک شما را دریافت نمی‌کند.</p>'); $("serviceRequest").onclick=()=>showContactOptions("request",s.title); $("favoriteBtn").onclick=()=>toggleFavorite(id); }
 async function toggleFavorite(id){ if(!state.session){toast("برای ذخیره علاقه‌مندی ابتدا وارد حساب شوید.");showLogin();return;} const exists=state.favorites.has(id); try{if(exists){const {error}=await state.client.from("favorites").delete().eq("user_id",state.session.user.id).eq("service_id",id);if(error)throw error;state.favorites.delete(id);}else{const {error}=await state.client.from("favorites").insert({user_id:state.session.user.id,service_id:id});if(error)throw error;state.favorites.add(id);} if(state.selectedService?.id===id)showService(id);toast(exists?"از علاقه‌مندی‌ها حذف شد.":"به علاقه‌مندی‌ها اضافه شد.");}catch(e){toast("ذخیره انجام نشد: "+e.message);} }
 function renderProducts(){
  const grid=$("productGrid");
@@ -184,7 +189,51 @@ function showView(name){
  if(view==="account")loadAccount();
  // Keep tab navigation in place; no page jump or anchor scrolling.
 }
+function initThemeAndMusic(){
+ const themeButton=$("themeToggle"),musicButton=$("musicToggle"),root=document.documentElement;
+ const applyTheme=theme=>{
+  const mode=theme==="dark"?"dark":"light";
+  root.dataset.theme=mode;
+  if(themeButton){themeButton.innerHTML='<span data-icon="'+(mode==="dark"?"sun":"moon")+'"></span>';themeButton.setAttribute("aria-label",mode==="dark"?"فعال‌کردن حالت روشن":"فعال‌کردن حالت تاریک");themeButton.title=mode==="dark"?"حالت روشن":"حالت تاریک";}
+  try{localStorage.setItem("h24-theme",mode);}catch(_){}
+  refreshIcons();
+ };
+ let saved="light";try{saved=localStorage.getItem("h24-theme")||"light";}catch(_){}
+ applyTheme(saved);
+ if(themeButton)themeButton.onclick=()=>applyTheme(root.dataset.theme==="dark"?"light":"dark");
+ let audio=null,musicTimer=null,musicOn=false;
+ const melody=[659.25,783.99,987.77,783.99,587.33,659.25,783.99,659.25,523.25,659.25,783.99,659.25,587.33,523.25,493.88,587.33,659.25,783.99,880,783.99,587.33,659.25,783.99,987.77,783.99,659.25,587.33,523.25,587.33,659.25,783.99,659.25];
+ const chords=[[130.81,164.81,196,246.94],[110,146.83,164.81,220],[98,130.81,164.81,196],[116.54,146.83,174.61,220]];
+ function note(freq,when,duration,volume,type="sine"){
+  const osc=audio.createOscillator(),gain=audio.createGain();
+  osc.type=type;osc.frequency.setValueAtTime(freq,when);
+  gain.gain.setValueAtTime(.0001,when);gain.gain.exponentialRampToValueAtTime(volume,when+.045);gain.gain.exponentialRampToValueAtTime(.0001,when+duration);
+  osc.connect(gain);gain.connect(audio.destination);osc.start(when);osc.stop(when+duration+.04);
+ }
+ function scheduleMusicLoop(){
+  if(!audio||!musicOn)return;
+  const start=audio.currentTime+.12,step=.36;
+  melody.forEach((freq,i)=>{const t=start+i*step;note(freq,t,.31,.022,"triangle");note(freq/2,t,.42,.009,"sine");});
+  chords.forEach((ch,i)=>ch.forEach(freq=>note(freq,start+i*step*8,step*8-.1,.006,"sine")));
+ }
+ async function toggleMusic(){
+  const Ctx=window.AudioContext||window.webkitAudioContext;
+  if(!Ctx){toast("مرورگر شما پخش موسیقی را پشتیبانی نمی‌کند.");return;}
+  if(!audio)audio=new Ctx();
+  if(musicOn){
+   musicOn=false;if(musicTimer!==null){clearInterval(musicTimer);musicTimer=null;}
+   await audio.suspend();
+  }else{
+   await audio.resume();musicOn=true;scheduleMusicLoop();
+   musicTimer=setInterval(scheduleMusicLoop,melody.length*.36*1000);
+  }
+  if(musicButton){musicButton.innerHTML='<span data-icon="'+(musicOn?"pause":"volume-2")+'"></span>';musicButton.setAttribute("aria-label",musicOn?"توقف موسیقی حورانت۲۴":"پخش موسیقی حورانت۲۴");musicButton.title=musicOn?"توقف موسیقی":"پخش موسیقی حورانت۲۴";}
+  refreshIcons();
+ }
+ if(musicButton)musicButton.onclick=()=>toggleMusic().catch(error=>{console.warn("H24 music:",error);toast("پخش موسیقی آغاز نشد.");});
+}
 function wire(){
+ initThemeAndMusic();
  $("modalClose").onclick=closeModal;
  $("navCoreBtn").onclick=showContactOptions;
  $("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal();});
