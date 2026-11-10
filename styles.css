@@ -1396,3 +1396,59 @@ p{line-height:2}
 #heroSlider .hero-slider-controls{z-index:20!important;pointer-events:auto!important}
 #heroSlider .hero-arrows{z-index:21!important}
 #heroSlider .hero-arrows button,#heroSlider .hero-dot{z-index:22!important;position:relative!important;pointer-events:auto!important;touch-action:manipulation!important}
+
+
+/* H24 theme and sound controls */
+.top-actions .icon-btn{display:grid;place-items:center}
+.top-actions .icon-btn svg{width:18px;height:18px;stroke-width:1.9}
+.top-actions .icon-btn:hover{background:linear-gradient(145deg,#e2f7f2,#e5edff);color:#087e86;border-color:#b5dfda;box-shadow:0 8px 18px rgba(28,117,129,.18);transform:translateY(-2px)}
+.request-context{margin:8px 0 14px!important;padding:10px 13px;border-radius:12px;background:linear-gradient(135deg,#eaf8f4,#eef2ff);color:#597985!important}
+.request-context b{color:#167f84}
+@media(max-width:420px){.top-actions{gap:6px}.top-actions .icon-btn,.top-actions .profile-btn{width:35px;height:35px;border-radius:11px}.top-actions .icon-btn svg{width:16px;height:16px}}
+html[data-theme="dark"]{color-scheme:dark}
+html[data-theme="dark"] body{background:linear-gradient(145deg,#0b1721 0%,#101f2b 54%,#111b2a 100%)!important;color:#e5eff4!important}
+html[data-theme="dark"] .topbar{color:#e5eff4}
+html[data-theme="dark"] .brand,html[data-theme="dark"] .brand b{color:#e7f2f6}
+html[data-theme="dark"] .brand small{color:#91a8b5}
+html[data-theme="dark"] .icon-btn,html[data-theme="dark"] .profile-btn{background:#1a2c39!important;border-color:#314957!important;color:#b5d4dc!important;box-shadow:0 5px 16px rgba(0,0,0,.2)!important}
+html[data-theme="dark"] .desktop-nav a{color:#a9bdc8}
+html[data-theme="dark"] .desktop-nav a:hover{color:#6de0d1}
+html[data-theme="dark"] .welcome{background:linear-gradient(112deg,#183642 0%,#1b2d3d 55%,#252e48 100%)!important;border-color:#36505d!important;box-shadow:0 18px 50px rgba(0,0,0,.22)!important}
+html[data-theme="dark"] .welcome h1,html[data-theme="dark"] .welcome-copy{color:#edf6f8}
+html[data-theme="dark"] .welcome p{color:#b1c5cf}
+html[data-theme="dark"] .hero-proof{color:#a8d9d2}
+html[data-theme="dark"] .quick-stats,html[data-theme="dark"] .news-card,html[data-theme="dark"] .account-card{background:rgba(24,43,56,.88)!important;border-color:#304957!important;box-shadow:0 9px 25px rgba(0,0,0,.18)!important}
+html[data-theme="dark"] .quick-stats strong,html[data-theme="dark"] .news-card b,html[data-theme="dark"] .account-card b{color:#dcebf0}
+html[data-theme="dark"] .quick-stats span,html[data-theme="dark"] .news-card p,html[data-theme="dark"] .account-card p{color:#91a8b5}
+html[data-theme="dark"] .section-head h2,html[data-theme="dark"] .section-head h3{color:#e2edf2}
+html[data-theme="dark"] .section-head .eyebrow,html[data-theme="dark"] .section-note{color:#8ca9b6}
+html[data-theme="dark"] .search-wrap,html[data-theme="dark"] .chip{background:#1b2d3a!important;border-color:#354d5b!important;color:#b7cbd4!important}
+html[data-theme="dark"] .search-wrap input{color:#e6f1f5}
+html[data-theme="dark"] .search-wrap input::placeholder{color:#8198a6}
+html[data-theme="dark"] .chip.active{background:#194944!important;border-color:#287d78!important;color:#a5eee0!important}
+html[data-theme="dark"] .service-card,html[data-theme="dark"] .product-card,html[data-theme="dark"] .explore-card,html[data-theme="dark"] .challenge-card{background:linear-gradient(145deg,#1b2d3a,#172633)!important;border-color:#304957!important;box-shadow:0 9px 24px rgba(0,0,0,.18)!important;color:#e2edf2}
+html[data-theme="dark"] .service-card b,html[data-theme="dark"] .product-copy b,html[data-theme="dark"] .explore-card b,html[data-theme="dark"] .challenge-card b{color:#e2edf2}
+html[data-theme="dark"] .service-card small,html[data-theme="dark"] .product-copy p,html[data-theme="dark"] .explore-card p,html[data-theme="dark"] .challenge-card p{color:#9db1bd}
+html[data-theme="dark"] .bottom-nav{background:rgba(16,31,43,.94)!important;border-color:#344a58!important;box-shadow:0 -10px 34px rgba(0,0,0,.32)!important}
+html[data-theme="dark"] .bottom-nav .nav-item{color:#9db2be!important}
+html[data-theme="dark"] .bottom-nav .nav-item.selected{color:#70e0d1!important;background:linear-gradient(145deg,#1c4948,#243c54)!important;border-color:#376d6b!important}
+html[data-theme="dark"] .bottom-nav .nav-item:hover,html[data-theme="dark"] .bottom-nav .nav-item:focus-visible{color:#a5f0e5!important;background:linear-gradient(145deg,#244c4c,#2b405c)!important;border-color:#477c79!important}
+html[data-theme="dark"] .bottom-nav .nav-core{background:#1c3545!important;border-color:#42606d!important;color:#bcebe3!important}
+html[data-theme="dark"] footer{color:#8da4b1;border-color:#304653}
+html[data-theme="dark"] footer .footer-brand{color:#73d7ce}
+html[data-theme="dark"] .app-modal{background:linear-gradient(145deg,#1b2d3a,#142330)!important;border-color:#3a5260!important;color:#e4eef3}
+html[data-theme="dark"] .app-modal h2,html[data-theme="dark"] .app-modal b{color:#e5f0f4}
+html[data-theme="dark"] .app-modal>p,html[data-theme="dark"] .micro-note{color:#a4b8c2!important}
+html[data-theme="dark"] .detail-block,html[data-theme="dark"] .notice-box{background:#203b47!important;color:#c5d8df}
+html[data-theme="dark"] .detail-block b{color:#8fe0d5}
+html[data-theme="dark"] .detail-block ul,html[data-theme="dark"] .detail-block ol{color:#b5c8d1}
+html[data-theme="dark"] .contact-choice{background:linear-gradient(135deg,#203643,#1a2b3a)!important;border-color:#3b5361!important;color:#e4f0f4!important}
+html[data-theme="dark"] .contact-choice small{color:#a0b6c1}
+html[data-theme="dark"] .request-context{background:linear-gradient(135deg,#1e4546,#263951)!important;color:#b9d2d8!important}
+html[data-theme="dark"] .request-context b{color:#8de3d8}
+html[data-theme="dark"] .modal-close{background:#29414e;color:#d6e7ec}
+html[data-theme="dark"] .secondary-btn{background:#203743;border-color:#405a67;color:#c4d9e0}
+html[data-theme="dark"] .app-form input{background:#132633;border-color:#3b5562;color:#e8f2f5}
+html[data-theme="dark"] .app-form label{color:#bdd0d8}
+html[data-theme="dark"] .toast{background:#d8f4ef;color:#12353f}
+html[data-theme="dark"] .feature-banner{box-shadow:0 18px 40px rgba(0,0,0,.24)}
