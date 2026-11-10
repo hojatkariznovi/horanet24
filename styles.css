@@ -642,3 +642,41 @@ footer{border-top:1px solid rgba(166,196,211,.32);color:#78909f}
 
 .service-icon svg{width:24px;height:24px;stroke-width:1.8}
 
+
+
+/* H24 layout repair — scoped icon sizing and reliable mobile navigation */
+i[data-lucide],svg.lucide{width:18px!important;height:18px!important;max-width:18px;max-height:18px;flex:0 0 18px;vertical-align:middle}
+.hero-slide-cta i[data-lucide],.hero-slide-cta svg.lucide,.membership-link i[data-lucide],.membership-link svg.lucide,.hero-secondary i[data-lucide],.hero-secondary svg.lucide,.footer-bot i[data-lucide],.footer-bot svg.lucide,.primary-btn i[data-lucide],.primary-btn svg.lucide,.secondary-btn i[data-lucide],.secondary-btn svg.lucide,.service-card-action i[data-lucide],.service-card-action svg.lucide,.product-cta i[data-lucide],.product-cta svg.lucide{width:15px!important;height:15px!important;max-width:15px;max-height:15px;flex:0 0 15px}
+.hero-arrows button{width:30px;height:30px;min-width:30px;min-height:30px;padding:0}
+.hero-arrows button i[data-lucide],.hero-arrows button svg.lucide{width:15px!important;height:15px!important;max-width:15px;max-height:15px;flex:0 0 15px}
+.membership-icon i[data-lucide],.membership-icon svg.lucide{width:21px!important;height:21px!important;max-width:21px;max-height:21px;flex:0 0 21px}
+.service-icon{flex:0 0 41px}
+.service-icon i[data-lucide],.service-icon svg.lucide{width:22px!important;height:22px!important;max-width:22px;max-height:22px;flex:0 0 22px}
+.top-actions .icon-host,.top-actions i[data-lucide],.top-actions svg.lucide{width:18px!important;height:18px!important;max-width:18px;max-height:18px;flex:0 0 18px}
+.bottom-nav .nav-item>svg,.bottom-nav .nav-item>.icon-host,.bottom-nav .nav-item>span>svg,.bottom-nav .nav-item>span>.icon-host{width:22px!important;height:22px!important;max-width:22px;max-height:22px;flex:0 0 22px}
+.bottom-nav .nav-item small{display:block;white-space:nowrap;line-height:1.35;font-size:9px}
+@media(max-width:760px){
+ .topbar{height:66px!important;min-height:66px;padding:0 14px!important;gap:8px}
+ .brand{gap:8px;min-width:0;flex:0 1 auto}.brand-mark{width:36px;height:36px;flex:0 0 36px}
+ .brand b{font-size:17px}.brand small{font-size:9px}.desktop-nav{display:none!important}
+ .top-actions{gap:7px;flex:0 0 auto}
+ .icon-btn,.profile-btn{width:36px;height:36px;min-width:36px;min-height:36px;border-radius:12px;padding:0;display:grid;place-items:center}
+ .shell{width:100%;max-width:100%;padding-left:14px;padding-right:14px;padding-bottom:118px}
+ .hero-slider{width:100%;min-height:260px;margin:10px 0 20px;border-radius:20px}.hero-slides{min-height:220px}
+ .hero-slide{min-height:220px;padding:22px 18px 43px}.hero-slide-copy{width:100%;max-width:100%}
+ .hero-slide h2{font-size:22px;line-height:1.5;max-width:245px}.hero-slide p{font-size:10px;max-width:250px;line-height:1.9}
+ .hero-slide-cta{min-height:38px;padding:8px 12px;gap:7px;font-size:10px}
+ .hero-slide-art{left:-48px;bottom:6px;transform:scale(.68);transform-origin:left bottom;opacity:.42}
+ .hero-slider-controls{left:12px;right:12px;bottom:8px;gap:8px}.hero-autoplay-label{font-size:8px}
+ .membership-grid{grid-template-columns:minmax(0,1fr);gap:10px;margin-bottom:30px}
+ .membership-card{min-height:0;padding:17px 18px;border-radius:18px}.membership-card h2{font-size:15px}.membership-card p{font-size:10px}
+ .membership-link{font-size:10px;gap:7px}
+ .bottom-nav{position:fixed!important;left:10px!important;right:10px!important;bottom:max(8px,env(safe-area-inset-bottom))!important;transform:none!important;width:auto!important;max-width:none!important;min-height:68px!important;height:auto!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;align-items:center;gap:2px!important;padding:6px 5px calc(6px + env(safe-area-inset-bottom))!important;border-radius:19px!important;z-index:100!important;overflow:visible}
+ .bottom-nav .nav-item{width:100%;min-width:0!important;min-height:52px;height:52px;margin:0;padding:4px 1px;gap:3px;border-radius:12px}
+ .bottom-nav .nav-item small{font-size:8px;line-height:1.25}
+ .bottom-nav .nav-core{width:100%;min-width:0!important;height:60px;margin:-12px 0 0;padding:0;gap:0}
+ .bottom-nav .nav-core-halo{width:48px;height:48px;top:0;border-radius:17px}
+ .bottom-nav .nav-core-mark{font-size:15px;line-height:43px}.bottom-nav .nav-core small{font-size:8px;margin-top:0}
+ .toast{bottom:88px;max-width:calc(100vw - 30px);white-space:normal;text-align:center}
+}
+@media(max-width:360px){.brand small{font-size:8px}.hero-slide h2{font-size:20px}.bottom-nav{left:7px!important;right:7px!important}.bottom-nav .nav-item small{font-size:7px}}
