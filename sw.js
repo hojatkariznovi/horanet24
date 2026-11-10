@@ -1,4 +1,4 @@
-const CACHE="horanet24-shell-v24";
+const CACHE="horanet24-shell-v25";
 const ASSETS=["./","./index.html","./styles.css?v=24","./tailwind.css","./app.js","./enhancements.js?v=24","./assistant-chat.js","./manifest.webmanifest","./assets/icon.svg"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key))))));
