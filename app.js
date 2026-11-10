@@ -209,19 +209,28 @@ function initThemeAndMusic(){
  applyTheme(saved);
  if(themeButton)themeButton.onclick=()=>applyTheme(root.dataset.theme==="dark"?"light":"dark");
  let audio=null,musicTimer=null,musicOn=false;
- const melody=[659.25,783.99,987.77,783.99,587.33,659.25,783.99,659.25,523.25,659.25,783.99,659.25,587.33,523.25,493.88,587.33,659.25,783.99,880,783.99,587.33,659.25,783.99,987.77,783.99,659.25,587.33,523.25,587.33,659.25,783.99,659.25];
- const chords=[[130.81,164.81,196,246.94],[110,146.83,164.81,220],[98,130.81,164.81,196],[116.54,146.83,174.61,220]];
+ // Original calm ambient theme for Horanet24 — gentle piano-like tones and warm sustained chords.
+ const melody=[587.33,739.99,880,739.99,659.25,587.33,493.88,587.33,659.25,739.99,880,739.99,659.25,587.33,493.88,440,493.88,587.33,659.25,587.33,493.88,440,493.88,587.33];
+ const chords=[[146.83,220,293.66,369.99],[123.47,185,246.94,293.66],[98,146.83,196,246.94],[110,164.81,220,293.66]];
  function note(freq,when,duration,volume,type="sine"){
   const osc=audio.createOscillator(),gain=audio.createGain();
   osc.type=type;osc.frequency.setValueAtTime(freq,when);
-  gain.gain.setValueAtTime(.0001,when);gain.gain.exponentialRampToValueAtTime(volume,when+.045);gain.gain.exponentialRampToValueAtTime(.0001,when+duration);
-  osc.connect(gain);gain.connect(audio.destination);osc.start(when);osc.stop(when+duration+.04);
+  gain.gain.setValueAtTime(.0001,when);
+  gain.gain.exponentialRampToValueAtTime(volume,when+.16);
+  gain.gain.setValueAtTime(volume,when+Math.max(.17,duration-.22));
+  gain.gain.exponentialRampToValueAtTime(.0001,when+duration);
+  osc.connect(gain);gain.connect(audio.destination);osc.start(when);osc.stop(when+duration+.05);
  }
  function scheduleMusicLoop(){
   if(!audio||!musicOn)return;
-  const start=audio.currentTime+.12,step=.36;
-  melody.forEach((freq,i)=>{const t=start+i*step;note(freq,t,.31,.022,"triangle");note(freq/2,t,.42,.009,"sine");});
-  chords.forEach((ch,i)=>ch.forEach(freq=>note(freq,start+i*step*8,step*8-.1,.006,"sine")));
+  const start=audio.currentTime+.18,step=.62;
+  melody.forEach((freq,i)=>{
+   const t=start+i*step;
+   note(freq,t,.54,.014,"sine");
+   note(freq,t,.48,.004,"triangle");
+   if(i%2===0)note(freq/2,t,.68,.003,"sine");
+  });
+  chords.forEach((ch,i)=>ch.forEach(freq=>note(freq,start+i*step*6,step*6-.18,.0038,"sine")));
  }
  async function toggleMusic(){
   const Ctx=window.AudioContext||window.webkitAudioContext;
@@ -232,7 +241,7 @@ function initThemeAndMusic(){
    await audio.suspend();
   }else{
    await audio.resume();musicOn=true;scheduleMusicLoop();
-   musicTimer=setInterval(scheduleMusicLoop,melody.length*.36*1000);
+   musicTimer=setInterval(scheduleMusicLoop,melody.length*.62*1000);
   }
   if(musicButton){musicButton.innerHTML='<span data-icon="'+(musicOn?"pause":"volume-2")+'"></span>';musicButton.setAttribute("aria-label",musicOn?"توقف موسیقی حورانت۲۴":"پخش موسیقی حورانت۲۴");musicButton.title=musicOn?"توقف موسیقی":"پخش موسیقی حورانت۲۴";}
   refreshIcons();
