@@ -881,3 +881,26 @@ i[data-lucide],svg.lucide{width:18px!important;height:18px!important;max-width:1
     max-width:31px!important;max-height:31px!important;
   }
 }
+
+/* H24 account profile and contact chooser */
+.account-card{display:block}
+.account-profile-head{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid #e8f0f2}
+.account-avatar{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border-radius:16px;color:#168f98;background:linear-gradient(145deg,#e8fffa,#e8edff);box-shadow:inset 0 1px #fff,0 7px 18px #398b9b20}
+.account-avatar svg{width:24px;height:24px}
+.account-identity{min-width:0;flex:1}.account-identity b{font-size:14px}.account-identity p{margin:4px 0 0}
+.account-points{display:grid;justify-items:center;padding:7px 13px;border-radius:13px;background:#eaf8f5;color:#168b88}.account-points strong{font-size:17px}.account-points small{font-size:9px}
+.account-details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:15px 0}
+.account-detail{min-width:0;padding:11px 13px;border:1px solid #eaf0f3;border-radius:13px;background:#ffffffb8}
+.account-detail small{display:block;margin-bottom:5px;color:#8496a2;font-size:9px}
+.account-detail b{display:block;overflow-wrap:anywhere;color:#304e5d;font-size:11px}
+.customer-code-detail{background:linear-gradient(130deg,#edfbf7,#f0f3ff);border-color:#dcefeb}
+.account-actions{display:flex;flex-wrap:wrap;gap:8px}.account-actions button{font-size:10px}
+.contact-options{display:grid;gap:12px;margin-top:20px}
+.contact-choice{display:flex;align-items:center;gap:13px;padding:14px;border:1px solid #e5eef1;border-radius:17px;background:linear-gradient(135deg,#fff,#f3f9fb);text-decoration:none;color:#254858;box-shadow:0 8px 22px #315f7010;transition:transform .2s ease,box-shadow .2s ease}
+.contact-choice:active{transform:scale(.985)}
+.contact-choice-icon{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(145deg,#e5faf5,#e8edff);color:#148f98}
+.contact-choice-icon svg{width:31px;height:31px}
+.contact-telegram .contact-choice-icon{background:linear-gradient(145deg,#e4f3ff,#d9eaff);color:#2689c7}
+.contact-choice>span:nth-child(2){flex:1;display:grid;gap:4px}.contact-choice b{font-size:13px}.contact-choice small{font-size:10px;color:#8295a1}.contact-choice>i{color:#8ca5af}
+.hero-autoplay-label{display:none!important}
+@media(max-width:520px){.account-details-grid{gap:7px}.account-detail{padding:9px}.account-actions button{flex:1}.account-profile-head{gap:9px}.account-avatar{width:42px;height:42px;flex-basis:42px}}
