@@ -1452,3 +1452,24 @@ html[data-theme="dark"] .app-form input{background:#132633;border-color:#3b5562;
 html[data-theme="dark"] .app-form label{color:#bdd0d8}
 html[data-theme="dark"] .toast{background:#d8f4ef;color:#12353f}
 html[data-theme="dark"] .feature-banner{box-shadow:0 18px 40px rgba(0,0,0,.24)}
+
+
+/* H24 neon line icons — subtle colored glow, fixed geometry */
+.bottom-nav .nav-item[data-view="home"] .nav-icon svg{color:#17b9aa!important;stroke:#17b9aa!important;filter:drop-shadow(0 0 2px rgba(23,185,170,.62)) drop-shadow(0 0 6px rgba(23,185,170,.34))!important}
+.bottom-nav .nav-item[data-view="services"] .nav-icon svg{color:#54a5f4!important;stroke:#54a5f4!important;filter:drop-shadow(0 0 2px rgba(84,165,244,.68)) drop-shadow(0 0 6px rgba(84,165,244,.36))!important}
+.bottom-nav .nav-item[data-view="products"] .nav-icon svg{color:#a18af0!important;stroke:#a18af0!important;filter:drop-shadow(0 0 2px rgba(161,138,240,.68)) drop-shadow(0 0 6px rgba(161,138,240,.36))!important}
+.bottom-nav .nav-item[data-view="account"] .nav-icon svg{color:#e0a65f!important;stroke:#e0a65f!important;filter:drop-shadow(0 0 2px rgba(224,166,95,.68)) drop-shadow(0 0 6px rgba(224,166,95,.34))!important}
+.bottom-nav .nav-item.selected .nav-icon{border-color:rgba(255,255,255,.95)!important;box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(108,205,201,.18),0 0 15px rgba(67,177,183,.18)!important}
+.bottom-nav .nav-item.selected .nav-icon svg{filter:drop-shadow(0 0 3px currentColor) drop-shadow(0 0 8px currentColor)!important;transform:translateY(-1px) scale(1.08)!important}
+.bottom-nav .nav-item:hover .nav-icon svg,.bottom-nav .nav-item:focus-visible .nav-icon svg{filter:drop-shadow(0 0 3px currentColor) drop-shadow(0 0 9px currentColor)!important}
+html[data-theme="dark"] .bottom-nav .nav-item .nav-icon{background:linear-gradient(145deg,#203b49,#1b2d40)!important;border-color:#395362!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 13px rgba(58,174,190,.1)!important}
+html[data-theme="dark"] .bottom-nav .nav-item.selected .nav-icon{background:linear-gradient(145deg,#214b4b,#273d58)!important;border-color:#4a8883!important;box-shadow:0 0 0 1px rgba(103,220,205,.2),0 0 18px rgba(62,197,184,.2)!important}
+
+/* Slider runs from its own inline controller; keep slide transitions predictable */
+#heroSlider #heroSlides{position:relative!important;min-height:252px!important;overflow:hidden!important;touch-action:pan-y!important}
+#heroSlider #heroSlides>.hero-slide{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;display:flex!important;box-sizing:border-box!important;transition:opacity .48s ease,transform .58s cubic-bezier(.2,.7,.2,1),visibility .48s ease!important;backface-visibility:hidden!important}
+#heroSlider .hero-slider-controls{z-index:20!important;pointer-events:auto!important}
+#heroSlider .hero-arrows{z-index:21!important}
+#heroSlider .hero-arrows button,#heroSlider .hero-dot{position:relative!important;z-index:22!important;pointer-events:auto!important;touch-action:manipulation!important}
+@media(max-width:760px){#heroSlider #heroSlides{min-height:238px!important}}
+@media(prefers-reduced-motion:reduce){#heroSlider #heroSlides>.hero-slide{transition:none!important}}
