@@ -10,7 +10,7 @@
   root.innerHTML=slides.map((s,i)=>'<article class="hero-slide '+(i===index?"active":"")+'" '+(s.image_url?'style="background-image:linear-gradient(90deg,#102c43ed,#153f56a8),url('+esc(s.image_url)+');background-size:cover;background-position:center"':"")+'><div class="hero-slide-copy"><span class="hero-kicker">'+esc(s.eyebrow||"اطلاعیه حورانت۲۴")+'</span>'+(s.badge_label?'<span class="hero-pill">'+esc(s.badge_label)+'</span>':"")+'<h2>'+esc(s.title)+'</h2><p>'+esc(s.description||"برای دریافت جزئیات و راهنمایی، از مسیر رسمی حورانت۲۴ اقدام کن.")+'</p><a class="hero-slide-cta" href="'+esc(s.button_url||bot)+'" target="_blank" rel="noopener">'+esc(s.button_text||"مشاهده جزئیات")+' <i data-lucide="arrow-up-left"></i></a></div><div class="hero-slide-art"><span class="hero-art-orbit"></span><span class="hero-art-icon"><i data-lucide="bell-ring"></i></span><span class="hero-art-chip">HORANET24</span></div></article>').join("");
   dots.innerHTML=slides.map((_,i)=>'<button type="button" class="hero-dot '+(i===index?"active":"")+'" data-slide="'+i+'" aria-label="رفتن به اسلاید '+(i+1)+'"></button>').join("");
   dots.querySelectorAll("[data-slide]").forEach(b=>b.addEventListener("click",()=>go(Number(b.dataset.slide))));
-  window.lucide?.createIcons?.({attrs:{"stroke-width":1.8}});
+  if(window.refreshH24Icons)window.refreshH24Icons();else window.lucide?.createIcons?.({attrs:{"stroke-width":1.8}});
  }
  function go(n){if(!slides.length)return;index=(n+slides.length)%slides.length;paint();restart();}
  function restart(){clearInterval(timer);if(slides.length>1)timer=setInterval(()=>go(index+1),5000);}
