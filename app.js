@@ -103,7 +103,40 @@ function showProduct(id){
  openModal('<span class="eyebrow">محصول دیجیتال حورانت۲۴</span><h2 id="modalTitle">'+esc(p.title)+'</h2><p>'+esc(p.description||p.summary||"برای دریافت اطلاعات بیشتر پیام دهید.")+'</p><div class="notice-box">این مورد در حال حاضر به‌عنوان محصول نمونه در ویترین نمایش داده می‌شود. برای استعلام شرایط و دریافت محصول، پیام خصوصی تلگرام را باز کنید.</div><button class="primary-btn full" id="productRequest">ارسال پیام در تلگرام ←</button>');
  $("productRequest").onclick=()=>openTelegram("محصول: "+p.title);
 }
-async function loadContent(){try{const [cats,services,products,stories,posts,challenges]=await Promise.all([state.client.from("service_categories").select("id,title,slug,icon").eq("is_active",true).order("sort_order"),state.client.from("services").select("id,title,slug,summary,description,required_documents,steps,price_label,category:service_categories(title,slug)").eq("is_active",true).order("sort_order"),state.client.from("products").select("id,title,summary,description,price_label,image_url,product_type,slug").eq("is_active",true).order("sort_order"),state.client.from("stories").select("id,title,media_url,media_type,link_url").eq("is_published",true).order("sort_order"),state.client.from("explore_posts").select("id,title,caption,media_url,media_type,category").eq("is_published",true).order("published_at",{ascending:false}),state.client.from("challenges").select("id,title,description,points_reward,ends_at").eq("is_active",true).order("created_at",{ascending:false})]); if(cats.error)throw cats.error; if(services.error)throw services.error; state.categories=cats.data||[];state.services=services.data||[];state.products=products.data||[];renderCategories();renderServices();renderProducts();renderStories(stories.data||[]);renderExplore(posts.data||[]);renderChallenges(challenges.data||[]); }catch(e){console.error(e);$("serviceStatus").textContent="دریافت فهرست خدمات با خطا روبه‌رو شد. لطفاً کمی بعد دوباره تلاش کنید."; $("serviceGrid").innerHTML='<div class="empty-state">اتصال به فهرست خدمات برقرار نشد.</div>';}}
+async function loadContent(){
+ try{
+  const [cats,services,products]=await Promise.all([
+   state.client.from("service_categories").select("id,title,slug,icon").eq("is_active",true).order("sort_order"),
+   state.client.from("services").select("id,title,slug,summary,description,required_documents,steps,price_label,category:service_categories(title,slug)").eq("is_active",true).order("sort_order"),
+   state.client.from("products").select("id,title,summary,description,price_label,image_url,product_type,slug").eq("is_active",true).order("sort_order")
+  ]);
+  if(cats.error)throw cats.error;if(services.error)throw services.error;if(products.error)throw products.error;
+  state.categories=cats.data||[];state.services=services.data||[];state.products=products.data||[];
+  renderCategories();renderServices();renderProducts();
+  const grid=$("serviceGrid");if(grid)grid.setAttribute("aria-busy","false");
+ }catch(e){console.error(e);$("serviceStatus").textContent="دریافت فهرست خدمات با خطا روبه‌رو شد. لطفاً کمی بعد دوباره تلاش کنید.";$("serviceGrid").innerHTML='<div class="empty-state">اتصال به فهرست خدمات برقرار نشد.</div>';}
+}
+let optionalHomeContentLoaded=false;
+async function loadOptionalHomeContent(){
+ if(optionalHomeContentLoaded||!state.client)return;
+ optionalHomeContentLoaded=true;
+ const [stories,posts,challenges]=await Promise.all([
+  state.client.from("stories").select("id,title,media_url,media_type,link_url").eq("is_published",true).order("sort_order"),
+  state.client.from("explore_posts").select("id,title,caption,media_url,media_type,category").eq("is_published",true).order("published_at",{ascending:false}),
+  state.client.from("challenges").select("id,title,description,points_reward,ends_at").eq("is_active",true).order("created_at",{ascending:false})
+ ]);
+ if(!stories.error)renderStories(stories.data||[]);
+ if(!posts.error)renderExplore(posts.data||[]);
+ if(!challenges.error)renderChallenges(challenges.data||[]);
+}
+function observeOptionalContent(){
+ const targets=[$("storyRow"),$("exploreGrid"),$("challengeList")].filter(Boolean);
+ if(!("IntersectionObserver"in window)||!targets.length){loadOptionalHomeContent();return;}
+ const observer=new IntersectionObserver(entries=>{
+  if(entries.some(entry=>entry.isIntersecting)){observer.disconnect();loadOptionalHomeContent();}
+ },{rootMargin:"250px 0px"});
+ targets.forEach(target=>observer.observe(target));
+}
 function renderStories(items){const row=$("storyRow"); if(!items.length){row.innerHTML='<span class="section-note">استوری تازه‌ای منتشر نشده است.</span>';return;} row.innerHTML=items.map(s=>'<button class="story-item" data-link="'+esc(s.link_url||"")+'"><span class="story-ring">'+(s.media_type==="video"?iconSvg("play"):iconSvg("sparkles"))+'</span><small>'+esc(s.title)+'</small></button>').join("");row.querySelectorAll(".story-item").forEach(b=>b.onclick=()=>b.dataset.link?window.open(b.dataset.link,"_blank","noopener"):toast("جزئیات این استوری در حال آماده‌سازی است."));refreshIcons();}
 function renderExplore(items){const grid=$("exploreGrid");if(!items.length){grid.innerHTML='<div class="empty-state">محتوای آموزشی و ویدئویی هنوز منتشر نشده است.</div>';return;}grid.innerHTML=items.map(p=>'<article class="explore-card">'+(p.media_url?'<img src="'+esc(p.media_url)+'" alt="'+esc(p.title)+'" loading="lazy">':'<div class="explore-placeholder">'+iconSvg("book-open-check")+'</div>')+'<div><b>'+esc(p.title)+'</b><p>'+esc(p.caption||"")+'</p></div></article>').join("");refreshIcons();}
 function renderChallenges(items){const el=$("challengeList");if(!items.length){el.innerHTML='<div class="empty-state">چالش فعالی وجود ندارد.</div>';return;}el.innerHTML=items.map(c=>'<article class="challenge-card"><div><b>'+esc(c.title)+'</b><p>'+esc(c.description||"")+'</p></div><strong>'+Number(c.points_reward||0).toLocaleString("fa-IR")+' امتیاز</strong></article>').join("");}
@@ -153,6 +186,6 @@ function wire(){
  document.querySelectorAll("[data-view]").forEach(btn=>btn.addEventListener("click",e=>{e.preventDefault();showView(btn.dataset.view);}));
  $("loginBtn").onclick=showLogin;
 }
-async function init(){wire();refreshIcons();if(!window.supabase?.createClient){$("serviceStatus").textContent="کتابخانه ارتباط با پایگاه داده بارگذاری نشد.";return;}state.client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);window.h24Client=state.client;const {data}=await state.client.auth.getSession();state.session=data.session;if(state.session)await ensureProfile(state.session.user);await Promise.all([loadContent(),window.initHoranetSlider?window.initHoranetSlider(state.client):Promise.resolve()]);if(state.session)await loadFavorites();loadAccount();state.client.auth.onAuthStateChange(async(_event,session)=>{state.session=session;state.profileCache=null;if(session){await ensureProfile(session.user);await loadFavorites();}else state.favorites.clear();loadAccount();});if("serviceWorker"in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(console.warn);}
+async function init(){wire();refreshIcons();if(!window.supabase?.createClient){$("serviceStatus").textContent="کتابخانه ارتباط با پایگاه داده بارگذاری نشد.";return;}state.client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);window.h24Client=state.client;const {data}=await state.client.auth.getSession();state.session=data.session;if(state.session)await ensureProfile(state.session.user);await Promise.all([loadContent(),window.initHoranetSlider?window.initHoranetSlider(state.client):Promise.resolve()]);observeOptionalContent();if(state.session)await loadFavorites();loadAccount();state.client.auth.onAuthStateChange(async(_event,session)=>{state.session=session;state.profileCache=null;if(session){await ensureProfile(session.user);await loadFavorites();}else state.favorites.clear();loadAccount();});if("serviceWorker"in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(console.warn);}
 window.refreshH24Icons=refreshIcons;
 document.addEventListener("DOMContentLoaded",init);
