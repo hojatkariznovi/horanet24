@@ -1,28 +1,109 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f5f8fb"><meta name="description" content="حورانت۲۴؛ دنیای خدمات دیجیتال، ساده و همیشه در دسترس">
-<title>حورانت۲۴ | دنیای دیجیتال شما</title>
-<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./assets/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="./styles.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7fafc">
+  <meta name="description" content="حورانت۲۴؛ خدمات آنلاین خودرو، بیمه، کسب‌وکار و امور اداری؛ راهنمایی شفاف و ثبت درخواست از طریق ربات رسمی ایتا.">
+  <meta name="keywords" content="حورانت۲۴, خدمات آنلاین, بیمه شخص ثالث, تعویض پلاک, کارت سوخت, مجوز کسب, کارتخوان">
+  <meta property="og:title" content="حورانت۲۴ | خدمات دیجیتال، ساده و مطمئن">
+  <meta property="og:description" content="خدمات روزمره را ساده‌تر، شفاف‌تر و آنلاین پیگیری کنید.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://horanet24.ir/">
+  <link rel="canonical" href="https://horanet24.ir/">
+  <title>حورانت۲۴ | خدمات دیجیتال، ساده و مطمئن</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./tailwind.css">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
 </head>
 <body>
 <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
-<header class="topbar"><a class="brand" href="#home"><span class="brand-mark"><span></span><span></span><span></span></span><span><b>حورانت<span>۲۴</span></b><small>دنیای دیجیتال شما</small></span></a><div class="top-actions"><button class="icon-btn" id="searchToggle" aria-label="جستجو">⌕</button><button class="profile-btn" id="profileBtn" aria-label="حساب کاربری">هـ</button></div></header>
+<header class="topbar">
+  <a class="brand" href="#home" aria-label="حورانت۲۴، صفحه اصلی">
+    <span class="brand-mark"><span></span><span></span><span></span></span>
+    <span><b>حورانت<span>۲۴</span></b><small>خدمات دیجیتال، ساده و مطمئن</small></span>
+  </a>
+  <nav class="desktop-nav" aria-label="ناوبری اصلی">
+    <a href="#servicesSection">خدمات</a><a href="#productsSection">محصولات</a><a href="#howItWorks">راهنمای دریافت</a><a href="#aboutSection">درباره ما</a>
+  </nav>
+  <div class="top-actions">
+    <button class="icon-btn" id="searchToggle" aria-label="جستجوی خدمات">⌕</button>
+    <button class="profile-btn" id="profileBtn" aria-label="حساب کاربری">هـ</button>
+  </div>
+</header>
 <main class="shell">
-<section class="welcome" id="home"><div class="welcome-copy"><span class="eyebrow"><i></i> یک قدم جلوتر، همیشه</span><h1>سلام، به دنیای<br><em>حورانت۲۴</em> خوش آمدید.</h1><p>خدمات روزمره‌ات را هوشمندتر، ساده‌تر و بدون رفت‌وآمد دنبال کن.</p><button class="primary-btn" id="exploreServices">مشاهده خدمات <span>←</span></button></div><div class="orbital" aria-hidden="true"><div class="orbital-core">H<span>24</span></div><i class="orbit orbit-one"></i><i class="orbit orbit-two"></i><b class="spark spark-one"></b><b class="spark spark-two"></b></div><div class="welcome-glow"></div></section>
-<section class="quick-stats"><div><strong>۲۴/۷</strong><span>همیشه در دسترس</span></div><i></i><div><strong>آنلاین</strong><span>بدون صف و رفت‌وآمد</span></div><i></i><div><strong>یکپارچه</strong><span>همه‌چیز در یک‌جا</span></div></section>
-<section class="section" id="servicesSection"><div class="section-head"><div><span class="eyebrow">خدمات هوشمند</span><h2>چه کاری برات انجام بدیم؟</h2></div><button class="text-btn" id="allServices">همه خدمات <span>←</span></button></div><div class="search-wrap" id="searchWrap"><span>⌕</span><input id="serviceSearch" type="search" placeholder="نام خدمت موردنظرت رو جستجو کن..." autocomplete="off"></div><div class="category-row" id="categoryRow"><button class="chip active" data-category="all">همه</button><button class="chip" data-category="vehicle">خودرو</button><button class="chip" data-category="insurance">بیمه</button><button class="chip" data-category="business">کسب‌وکار</button><button class="chip" data-category="administrative">خدمات اداری</button><button class="chip" data-category="pos">کارت‌خوان</button></div><div class="service-grid" id="serviceGrid"></div><p class="section-note" id="serviceStatus">در حال دریافت خدمات...</p></section>
-<section class="section" id="productsSection"><div class="section-head"><div><span class="eyebrow">فروشگاه دیجیتال</span><h2>محصولات و فایل‌های آماده</h2></div></div><div class="product-grid" id="productGrid"><div class="empty-state">در حال بارگذاری محصولات...</div></div></section>
-<section class="section" id="storiesSection"><div class="section-head"><div><span class="eyebrow">خبرهای کوتاه</span><h2>استوری‌های حورانت</h2></div></div><div class="story-row" id="storyRow"><span class="section-note">محتوای تازه به‌زودی نمایش داده می‌شود.</span></div></section>
-<section class="feature-banner"><div><span class="eyebrow">همراه هوشمند</span><h2>راه درست رو<br>سریع‌تر پیدا کن.</h2><p>برای انتخاب خدمت مناسب، راهنمایی و پیگیری درخواست‌ها همراهت هستیم.</p><button class="light-btn" id="assistantBtn">گفت‌وگو با پشتیبانی <span>←</span></button></div><div class="assistant-art"><div class="assistant-ring">✳</div><span class="bubble bubble-a">پاسخ‌گویی</span><span class="bubble bubble-b">راهنمایی</span></div></section>
-<section class="section" id="exploreSection"><div class="section-head"><div><span class="eyebrow">از دنیای حورانت</span><h2>اکسپلور</h2></div></div><div class="explore-grid" id="exploreGrid"><div class="empty-state">محتوای آموزشی و ویدئویی به‌زودی اینجا قرار می‌گیرد.</div></div></section>
-<section class="section" id="challengesSection"><div class="section-head"><div><span class="eyebrow">تعامل و امتیاز</span><h2>چالش‌های حورانت</h2></div></div><div class="challenge-list" id="challengeList"><div class="empty-state">چالش فعالی ثبت نشده است.</div></div></section>
-<section class="section" id="accountSection"><div class="section-head"><div><span class="eyebrow">حساب کاربری</span><h2>پروفایل و همراهی شما</h2></div></div><div class="account-card" id="accountCard"><div><b>به حورانت۲۴ بپیوندید</b><p>برای مشاهده علاقه‌مندی‌ها و امکانات حساب، وارد شوید.</p></div><button class="primary-btn" id="loginBtn">ورود / عضویت</button></div></section>
-<footer><div class="footer-brand">حورانت۲۴</div><p>خدمات دیجیتال، ساده و قابل‌اعتماد.</p><div class="footer-contact"><a href="tel:09157592892">۰۹۱۵۷۵۹۲۸۹۲</a><a href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener">ربات ایتا</a><a href="https://t.me/Hojat_k82" target="_blank" rel="noopener">تلگرام</a><a href="https://rubika.ir/Hojat_k82" target="_blank" rel="noopener">روبیکا</a></div><small>© ۱۴۰۵ حورانت۲۴</small></footer>
+  <section class="welcome" id="home">
+    <div class="welcome-copy">
+      <span class="eyebrow"><i></i> همراه دیجیتال شما</span>
+      <h1>کارهای مهمت را<br><em>هوشمندانه‌تر</em> انجام بده.</h1>
+      <p>از خدمات خودرو و بیمه تا امور اداری و کسب‌وکار؛ مسیر انجام هر خدمت را روشن و ساده دنبال کن.</p>
+      <div class="hero-actions">
+        <button class="primary-btn" id="exploreServices">مشاهده خدمات <span>←</span></button>
+        <a class="hero-secondary" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener">ورود به ربات ایتا ↗</a>
+      </div>
+      <div class="hero-proof"><span>✓</span> راهنمای مدارک و مراحل پیش از ثبت درخواست</div>
+    </div>
+    <div class="orbital" aria-hidden="true"><div class="orbital-core">H<span>24</span></div><i class="orbit orbit-one"></i><i class="orbit orbit-two"></i><b class="spark spark-one"></b><b class="spark spark-two"></b></div>
+    <div class="welcome-glow"></div>
+    <div class="hero-side-note"><span class="hero-side-icon">✦</span><span><b>یک مسیر روشن</b><small>از انتخاب خدمت تا راهنمایی</small></span></div>
+  </section>
+  <section class="quick-stats" aria-label="ویژگی‌های حورانت۲۴">
+    <div><strong>۲۴/۷</strong><span>دسترسی به اطلاعات خدمات</span></div><i></i>
+    <div><strong>آنلاین</strong><span>شروع درخواست از راه دور</span></div><i></i>
+    <div><strong>شفاف</strong><span>مدارک و مراحل مشخص</span></div>
+  </section>
+
+  <section class="section" id="servicesSection">
+    <div class="section-head"><div><span class="eyebrow">خدمات حورانت</span><h2>از کجا شروع کنیم؟</h2><p class="section-subtitle">خدمت موردنظرت را پیدا کن و قبل از اقدام، جزئیاتش را ببین.</p></div><button class="text-btn" id="allServices">نمایش همه <span>←</span></button></div>
+    <div class="search-wrap" id="searchWrap"><span>⌕</span><input id="serviceSearch" type="search" placeholder="مثلاً بیمه شخص ثالث، تعویض پلاک، کارت سوخت..." autocomplete="off" aria-label="جستجوی خدمات"></div>
+    <div class="category-row" id="categoryRow"><button class="chip active" data-category="all">همه خدمات</button><button class="chip" data-category="vehicle">خودرو</button><button class="chip" data-category="insurance">بیمه</button><button class="chip" data-category="business">کسب‌وکار</button><button class="chip" data-category="administrative">امور اداری</button><button class="chip" data-category="pos">کارت‌خوان</button></div>
+    <div class="service-grid" id="serviceGrid"><div class="empty-state">در حال دریافت خدمات...</div></div>
+    <p class="section-note" id="serviceStatus">خدمات در حال بارگذاری است.</p>
+  </section>
+
+  <section class="section product-section" id="productsSection">
+    <div class="section-head"><div><span class="eyebrow">فروشگاه حورانت</span><h2>فایل‌ها و محصولات کاربردی</h2><p class="section-subtitle">نمونه محصولات دیجیتال؛ برای دریافت نسخه نهایی و شرایط تهیه به ایتا هدایت می‌شوی.</p></div><span class="mini-label">محصولات نمونه</span></div>
+    <div class="product-grid" id="productGrid"><div class="empty-state">در حال بارگذاری محصولات...</div></div>
+  </section>
+
+  <section class="how-section" id="howItWorks">
+    <div class="how-heading"><span class="eyebrow">مسیر دریافت خدمت</span><h2>سه قدم تا شروع</h2><p>بدون فرم‌های پیچیده؛ اطلاعات هر خدمت را ببین و از مسیر رسمی درخواستت را مطرح کن.</p></div>
+    <div class="how-grid">
+      <article class="how-card"><span class="how-number">۰۱</span><div class="how-icon">⌕</div><h3>انتخاب خدمت</h3><p>از دسته‌بندی‌ها یا جستجو، خدمت موردنظرت را پیدا کن.</p></article>
+      <article class="how-card"><span class="how-number">۰۲</span><div class="how-icon">▤</div><h3>بررسی مدارک</h3><p>توضیحات، مدارک لازم و مراحل انجام را پیش از اقدام بخوان.</p></article>
+      <article class="how-card"><span class="how-number">۰۳</span><div class="how-icon">↗</div><h3>ادامه در ایتا</h3><p>برای ثبت درخواست و هماهنگی، وارد ربات رسمی حورانت۲۴ شو.</p></article>
+    </div>
+  </section>
+
+  <section class="feature-banner">
+    <div><span class="eyebrow">پشتیبانی حورانت۲۴</span><h2>برای انتخاب مسیر درست،<br>تنها نیستی.</h2><p>اگر بین چند خدمت مردد هستی یا درباره مدارک سؤال داری، از راه ارتباطی رسمی پیام بده.</p><button class="light-btn" id="assistantBtn">گفت‌وگو با پشتیبانی <span>←</span></button></div>
+    <div class="assistant-art"><div class="assistant-ring">✳</div><span class="bubble bubble-a">راهنمایی</span><span class="bubble bubble-b">پاسخ‌گویی</span></div>
+  </section>
+
+  <section class="section" id="storiesSection"><div class="section-head"><div><span class="eyebrow">تازه‌های حورانت</span><h2>اطلاعیه‌ها و استوری‌ها</h2><p class="section-subtitle">اطلاع‌رسانی‌های کوتاه و زمان‌دار.</p></div></div><div class="story-row" id="storyRow"><span class="section-note">محتوای تازه به‌زودی نمایش داده می‌شود.</span></div></section>
+  <section class="section" id="exploreSection"><div class="section-head"><div><span class="eyebrow">دانستنی‌های کاربردی</span><h2>یاد بگیر، آگاهانه اقدام کن</h2><p class="section-subtitle">راهنماها و محتوای آموزشی کوتاه.</p></div></div><div class="explore-grid" id="exploreGrid"><div class="empty-state">محتوای آموزشی به‌زودی منتشر می‌شود.</div></div></section>
+  <section class="section" id="challengesSection"><div class="section-head"><div><span class="eyebrow">تعامل با حورانت</span><h2>چالش‌ها و امتیازها</h2></div></div><div class="challenge-list" id="challengeList"><div class="empty-state">چالش فعالی ثبت نشده است.</div></div></section>
+
+  <section class="about-panel" id="aboutSection">
+    <div><span class="eyebrow">درباره حورانت۲۴</span><h2>خدمات دیجیتال،<br>با احترام به وقت شما.</h2></div>
+    <p>حورانت۲۴ یک مسیر آنلاین برای آشنایی با خدمات، مدارک و مراحل انجام آن‌هاست. اطلاعات سایت برای راهنمایی اولیه است و شرایط نهایی هر خدمت پس از بررسی درخواست اعلام می‌شود.</p>
+  </section>
+
+  <section class="section" id="accountSection"><div class="section-head"><div><span class="eyebrow">حساب کاربری</span><h2>فضای شخصی شما</h2></div></div><div class="account-card" id="accountCard"><div><b>به حورانت۲۴ بپیوندید</b><p>برای ذخیره علاقه‌مندی‌ها وارد حساب شوید.</p></div><button class="primary-btn" id="loginBtn">ورود / عضویت</button></div></section>
+
+  <footer>
+    <div class="footer-top"><div><div class="footer-brand">حورانت۲۴</div><p>کیفیت خدمات، از شفافیت مسیر شروع می‌شود.</p></div><a class="footer-bot" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener">ربات رسمی ایتا ↗</a></div>
+    <div class="footer-contact"><a href="tel:09157592892">۰۹۱۵۷۵۹۲۸۹۲</a><a href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener">ایتـا</a><a href="https://t.me/Hojat_k82" target="_blank" rel="noopener">تلگرام</a><a href="https://rubika.ir/Hojat_k82" target="_blank" rel="noopener">روبیکا</a></div>
+    <small>© ۱۴۰۵ حورانت۲۴ · تمامی حقوق محفوظ است.</small>
+  </footer>
 </main>
-<nav class="bottom-nav" aria-label="ناوبری اصلی"><button class="nav-item selected" data-target="home"><span>⌂</span><small>خانه</small></button><button class="nav-item" data-target="servicesSection"><span>▦</span><small>خدمات</small></button><button class="nav-item" data-target="exploreSection"><span>◉</span><small>اکسپلور</small></button><button class="nav-item" data-target="productsSection"><span>▤</span><small>فروشگاه</small></button><button class="nav-item" data-target="accountSection"><span>○</span><small>حساب من</small></button></nav>
+<nav class="bottom-nav" aria-label="ناوبری اصلی"><button class="nav-item selected" data-target="home"><span>⌂</span><small>خانه</small></button><button class="nav-item" data-target="servicesSection"><span>▦</span><small>خدمات</small></button><button class="nav-item" data-target="howItWorks"><span>◇</span><small>راهنما</small></button><button class="nav-item" data-target="productsSection"><span>▤</span><small>فروشگاه</small></button><button class="nav-item" data-target="accountSection"><span>○</span><small>حساب من</small></button></nav>
 <div class="modal-backdrop" id="modalBackdrop" hidden><section class="app-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="بستن">×</button><div id="modalContent"></div></section></div>
-<div class="toast" id="toast" role="status"></div><script src="./app.js"></script>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="./app.js"></script>
 </body></html>
