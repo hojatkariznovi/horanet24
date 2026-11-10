@@ -39,7 +39,7 @@
       const response=await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","apikey":PUBLIC_KEY},body:JSON.stringify({messages:history})});
       const data=await response.json(); wait.remove();
       if(!response.ok)throw new Error(data.message||"ارتباط برقرار نشد.");
-      const answer=String(data.answer||"پاسخی دریافت نشد.");history.push({role:"assistant",content:answer});addMessage("assistant",answer);
+      const answer=String(data.reply||"پاسخی دریافت نشد.");history.push({role:"assistant",content:answer});addMessage("assistant",answer);
     }catch(error){wait.remove();addMessage("assistant",error.message||"ارتباط برقرار نشد. از راه ایتا با پشتیبانی تماس بگیر.");}
     finally{busy=false;input.disabled=false;form.querySelector("button").disabled=false;input.focus();}
   }
@@ -50,7 +50,7 @@
     if(!history.length){addMessage("assistant","ابتدا موضوع موردنظرت را در گفت‌وگو مطرح کن.");return;}
     const btn=root.querySelector(".h24-save");btn.disabled=true;btn.textContent="در حال ثبت...";
     try{
-      const r=await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","apikey":PUBLIC_KEY},body:JSON.stringify({action:"handoff",messages:history,name:handoff.querySelector('[name="name"]').value,phone:handoff.querySelector('[name="phone"]').value,topic:history.find(m=>m.role==="user")?.content||"گفت‌وگوی دستیار"})});
+      const r=await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","apikey":PUBLIC_KEY},body:JSON.stringify({action:"handoff",transcript:history,message:history.filter(m=>m.role==="user").slice(-1)[0]?.content||"درخواست پیگیری",name:handoff.querySelector("[name=name]").value,phone:handoff.querySelector("[name=phone]").value,service:history.find(m=>m.role==="user")?.content||"گفت‌وگوی دستیار"})});
       const data=await r.json();if(!r.ok)throw new Error(data.message||"ثبت انجام نشد.");
       addMessage("assistant","درخواست پیگیری در پنل پشتیبانی ثبت شد. همچنین می‌توانی برای گفت‌وگوی مستقیم از دکمه ایتا استفاده کنی.");
       handoff.hidden=true;
