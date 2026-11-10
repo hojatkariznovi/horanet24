@@ -1,4 +1,5 @@
 (() => {
+ "use strict";
  const bot="https://eitaa.com/huranet24_app", $=id=>document.getElementById(id);
  const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const fallbackSlides=[
@@ -6,9 +7,9 @@
   {eyebrow:"بیمه",badge_label:"نقدی و اقساطی",title:"برای بیمه، انتخاب آگاهانه‌تری داشته باش",description:"راهنمای بیمه شخص ثالث، بیمه بدنه و سایر خدمات بیمه‌ای را از حورانت۲۴ دریافت کن.",button_text:"مشاهده خدمات بیمه",button_url:bot,icon:"shield-check"},
   {eyebrow:"خدمات اداری و کسب‌وکار",badge_label:"همراه دیجیتال شما",title:"از امور اداری تا خدمات کسب‌وکار",description:"مدارک، مراحل و راهنمای خدماتی مثل مجوز کسب و امور مالیاتی را یک‌جا بررسی کن.",button_text:"شروع از پشتیبانی",button_url:bot,icon:"briefcase-business"}
  ];
- let slides=fallbackSlides.slice(),index=0,timer=null,touchX=null,controlsBound=false;
+ let slides=fallbackSlides.slice(),index=0,interval=null,touchX=null,controlsBound=false;
  const safeLink=value=>{try{const u=new URL(value||bot,location.origin);return /^https?:$/.test(u.protocol)?u.href:bot;}catch{return bot;}};
- function paint(){
+ function render(){
   const root=$("heroSlides"),dots=$("heroDots"),arrows=document.querySelector(".hero-arrows");
   if(!root||!dots)return;
   root.innerHTML=slides.map((s,i)=>{
@@ -21,38 +22,41 @@
   if(arrows)arrows.hidden=slides.length<2;
   if(window.refreshH24Icons)window.refreshH24Icons();else window.lucide?.createIcons?.({attrs:{"stroke-width":1.8}});
  }
- function stop(){if(timer){clearTimeout(timer);timer=null;}}
- function restart(){stop();if(slides.length>1&&!document.hidden)timer=setTimeout(()=>go(index+1),5200);}
- function go(n){if(!slides.length)return;index=(n+slides.length)%slides.length;paint();restart();}
- function bindControls(){
+ function go(next){
+  if(slides.length<2)return;
+  index=(next+slides.length)%slides.length;
+  const root=$("heroSlides"),dots=$("heroDots");
+  root?.querySelectorAll(".hero-slide").forEach((el,i)=>{el.classList.toggle("active",i===index);el.setAttribute("aria-hidden",i===index?"false":"true");});
+  dots?.querySelectorAll(".hero-dot").forEach((el,i)=>{el.classList.toggle("active",i===index);el.setAttribute("aria-current",i===index?"true":"false");});
+ }
+ function bind(){
   if(controlsBound)return;controlsBound=true;
   $("heroPrev")?.addEventListener("click",()=>go(index-1));
   $("heroNext")?.addEventListener("click",()=>go(index+1));
+  $("heroDots")?.addEventListener("click",e=>{const b=e.target.closest("[data-slide]");if(b)go(Number(b.dataset.slide));});
   const slider=$("heroSlider");
-  slider?.addEventListener("mouseenter",stop);slider?.addEventListener("mouseleave",restart);
-  slider?.addEventListener("focusin",stop);slider?.addEventListener("focusout",restart);
   slider?.addEventListener("touchstart",e=>{touchX=e.changedTouches?.[0]?.clientX??null;},{passive:true});
-  slider?.addEventListener("touchend",e=>{if(touchX===null)return;const delta=(e.changedTouches?.[0]?.clientX??touchX)-touchX;if(Math.abs(delta)>45)go(index+(delta>0?1:-1));touchX=null;},{passive:true});
-  document.addEventListener("visibilitychange",()=>{if(document.hidden)stop();else restart();});
+  slider?.addEventListener("touchend",e=>{if(touchX===null)return;const delta=(e.changedTouches?.[0]?.clientX??touchX)-touchX;if(Math.abs(delta)>40)go(index+(delta>0?-1:1));touchX=null;},{passive:true});
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden&&interval===null)start();});
  }
+ function start(){if(interval!==null)clearInterval(interval);interval=setInterval(()=>{if(!document.hidden)go(index+1);},4800);}
  async function init(db){
-  bindControls();
-  let rows=[];
+  bind();
   if(db?.from){
    try{
     const [sr,settings]=await Promise.all([
      db.from("hero_slides").select("id,eyebrow,title,description,badge_label,button_text,button_url,image_url,sort_order,is_active").eq("is_active",true).order("sort_order",{ascending:true}),
      db.from("site_settings").select("setting_value").eq("setting_key","premium_channel").maybeSingle()
     ]);
-    if(sr.error)console.warn("Horanet slider database fallback:",sr.error);else rows=sr.data||[];
+    const rows=sr.error?[]:(sr.data||[]);
+    slides=rows.length>=2?rows:[...rows,...fallbackSlides.slice(0,Math.max(0,3-rows.length))];
+    index=0;render();
     const cfg=settings.data?.setting_value||{},link=$("premiumChannelLink");
     if(link){link.href=safeLink(cfg.url||bot);link.textContent=cfg.url?"ورود به کانال ویژه":"دریافت شرایط عضویت";}
-   }catch(error){console.warn("Horanet slider initialization:",error);}
+   }catch(error){console.warn("Horanet slider fallback:",error);}
   }
-  slides=rows.length>=2?rows:[...rows,...fallbackSlides.slice(0,Math.max(0,3-rows.length))];
-  index=0;paint();restart();
  }
- // Render three real slides immediately; the carousel never depends on Supabase.
- bindControls();paint();restart();
+ // First render and autoplay are independent of Supabase and run as soon as the page loads.
+ bind();render();start();
  window.initHoranetSlider=init;
 })();
