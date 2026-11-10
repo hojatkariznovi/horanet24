@@ -1257,3 +1257,37 @@ p{line-height:2}
  .welcome p{font-size:10.5px!important;line-height:2!important}
  .orbital{width:138px!important;height:138px!important}
 }
+
+
+/* Compact home intro with story-style category shortcuts placed beneath its content */
+.welcome{min-height:0!important;padding:34px 46px!important;align-items:center!important}
+.welcome-copy{max-width:650px!important}
+.welcome h1{margin:9px 0 6px!important}
+.welcome p{margin-bottom:14px!important}
+.welcome .hero-proof{margin-top:9px}
+.welcome .home-category-stories{justify-content:flex-start;gap:9px;max-width:100%;margin:15px 0 0;padding:0;overflow:visible}
+.welcome .home-category-story{flex:0 1 auto;min-width:94px;flex-direction:row;justify-content:flex-start;gap:8px;padding:7px 11px;border:1px solid #dcebe9;border-radius:14px;background:linear-gradient(145deg,#ffffffed,#eef8f7);box-shadow:0 5px 15px rgba(62,135,150,.08);font-size:10px;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background .2s ease}
+.welcome .home-story-ring{width:30px;height:30px;flex:0 0 30px;border-radius:9px;outline:0;border:1px solid #d5efeb;box-shadow:none;background:linear-gradient(145deg,#fff,#e5f5f2);color:#239b9d}
+.welcome .home-story-ring svg{width:16px;height:16px}
+.welcome .home-category-story:hover,.welcome .home-category-story:focus-visible{transform:translateY(-3px);border-color:#75cfc4;background:linear-gradient(145deg,#fff,#e5f7f3);box-shadow:0 9px 20px rgba(43,151,151,.17);outline:none}
+.welcome .home-category-story:active{transform:scale(.97)}
+/* Service filters use the same visual language, in rectangular rather than circular form */
+.category-row{gap:9px;padding:5px 1px 14px;align-items:center}
+.category-row .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border:1px solid #e1ecee;border-radius:13px;background:linear-gradient(145deg,#fff,#f2f8f9);color:#66808d;box-shadow:0 4px 12px rgba(70,111,130,.06);font-size:10px;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background .2s ease,color .2s ease}
+.category-row .chip span,.category-row .chip svg{width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;stroke-width:1.9;color:#399e9c}
+.category-row .chip:hover,.category-row .chip:focus-visible{transform:translateY(-2px);border-color:#83d2c8;background:linear-gradient(145deg,#fff,#e9f8f5);box-shadow:0 8px 17px rgba(43,151,151,.15);outline:none;color:#247f83}
+.category-row .chip.active{border-color:#75cfc4;background:linear-gradient(145deg,#e8f8f4,#eaf0fc);color:#187f85;box-shadow:0 6px 15px rgba(43,151,151,.12)}
+.category-row .chip.active span,.category-row .chip.active svg{color:#168e91}
+@media(max-width:760px){
+ .welcome{min-height:0!important;padding:23px 18px 25px!important;align-items:flex-start!important}
+ .welcome-copy{max-width:100%!important}
+ .welcome h1{font-size:28px!important}
+ .welcome p{font-size:10.5px!important;line-height:1.9!important;margin-bottom:12px!important}
+ .welcome .home-category-stories{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+ .welcome .home-category-story{min-width:0;padding:6px 9px;font-size:9px;gap:6px}
+ .welcome .home-story-ring{width:27px;height:27px;flex-basis:27px}
+ .welcome .home-story-ring svg{width:15px;height:15px}
+ .welcome .orbital{width:112px!important;height:112px!important;left:-32px!important;top:auto!important;bottom:-26px!important;opacity:.14}
+ .category-row .chip{padding:7px 10px;font-size:9px}
+}
+@media(hover:none){.welcome .home-category-story:active,.category-row .chip:active{transform:scale(.97)}}
