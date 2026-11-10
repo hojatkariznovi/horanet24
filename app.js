@@ -7,7 +7,8 @@ const $ = (id) => document.getElementById(id);
 const state = { client:null, session:null, services:[], products:[], categories:[], favorites:new Set(), activeCategory:"all", selectedService:null };
 const toast = (message) => { const el=$("toast"); el.textContent=message; el.classList.add("show"); clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>el.classList.remove("show"),3000); };
 const esc = (value="") => String(value).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const categoryIcon = (slug="") => ({vehicle:"🚘",insurance:"🛡",business:"▣",administrative:"◈",pos:"▤"}[slug]||"✦");
+const iconSvg=(name)=>{const paths={vehicle:'<path d="M5 17h14l1-5-2-4H6l-2 4 1 5Z"/><path d="M7 17v2m10-2v2M4 12h16M7 8l1-3h8l1 3"/><circle cx="7.5" cy="14.5" r="1"/><circle cx="16.5" cy="14.5" r="1"/>',insurance:'<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/>',business:'<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4h8v3M3 12h18M10 12v2h4v-2"/>',administrative:'<path d="M6 3h9l4 4v14H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v5h5M8 13h8M8 17h8"/>',pos:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 10h8m-8 4h3m-3 4h8"/>',spark:'<path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/>'};return '<svg viewBox="0 0 24 24" aria-hidden="true">'+(paths[name]||paths.spark)+'</svg>';};
+const categoryIcon = (slug="") => iconSvg(slug);
 function openModal(html){ $("modalContent").innerHTML=html; $("modalBackdrop").hidden=false; document.body.classList.add("modal-open"); }
 function closeModal(){ $("modalBackdrop").hidden=true; $("modalContent").innerHTML=""; document.body.classList.remove("modal-open"); }
 function openEitaa(text){ window.open(EITAA_BOT_URL,"_blank","noopener"); }
@@ -19,7 +20,7 @@ async function toggleFavorite(id){ if(!state.session){toast("برای ذخیره
 function renderProducts(){
  const grid=$("productGrid");
  if(!state.products.length){grid.innerHTML='<div class="empty-state">محصولی برای نمایش ثبت نشده است.</div>';return;}
- const glyph=p=>/plate|vehicle/i.test(p.slug||"")?"▤":/fuel/i.test(p.slug||"")?"⛽":/business/i.test(p.slug||"")?"▣":"✧";
+ const glyph=p=>/plate|vehicle/i.test(p.slug||"")?iconSvg("vehicle"):/fuel/i.test(p.slug||"")?iconSvg("spark"):/business/i.test(p.slug||"")?iconSvg("business"):iconSvg("spark");
  grid.innerHTML=state.products.map(p=>'<article class="product-card"><div class="product-visual">'+(p.image_url?'<img src="'+esc(p.image_url)+'" alt="'+esc(p.title)+'" loading="lazy">':'<div class="product-art"><span>'+glyph(p)+'</span></div>')+'</div><div class="product-copy"><span class="product-tag">'+(p.product_type==="digital"?"فایل و محصول دیجیتال":"محصول حورانت")+'</span><b>'+esc(p.title)+'</b><p>'+esc(p.summary||"محصول کاربردی حورانت۲۴")+'</p><strong>'+esc(p.price_label||"استعلام شرایط از ایتا")+'</strong><button class="secondary-btn product-cta" data-id="'+p.id+'">جزئیات و دریافت ←</button></div></article>').join("");
  grid.querySelectorAll(".product-cta").forEach(b=>b.onclick=()=>showProduct(b.dataset.id));
 }
