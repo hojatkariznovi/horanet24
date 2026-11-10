@@ -26,7 +26,7 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
       - name: Validate JavaScript
-        run: node --check app.js
+        run: node --check app.js && node --check admin.js
       - name: Build Tailwind site
         run: npm run build
       - name: Configure Pages
