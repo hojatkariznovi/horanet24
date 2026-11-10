@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "build": "tailwindcss -i ./tailwind.input.css -o ./dist/tailwind.css --minify && mkdir -p dist/assets && cp index.html app.js admin.html admin.js styles.css manifest.webmanifest sw.js CNAME dist/ && cp -R assets/. dist/assets/"
+    "build": "tailwindcss -i ./tailwind.input.css -o ./dist/tailwind.css --minify && mkdir -p dist/assets && cp index.html app.js admin.html admin.js styles.css manifest.webmanifest sw.js robots.txt sitemap.xml CNAME dist/ && cp -R assets/. dist/assets/"
   },
   "devDependencies": {
     "autoprefixer": "10.4.21",
