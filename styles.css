@@ -1348,3 +1348,51 @@ p{line-height:2}
 #heroSlider .hero-arrows button{min-width:30px;min-height:30px}
 #heroSlider .hero-slide-cta{position:relative;z-index:4}
 @media(prefers-reduced-motion:reduce){#heroSlider #heroSlides .hero-slide.h24-flip-out-next,#heroSlider #heroSlides .hero-slide.h24-flip-out-prev,#heroSlider #heroSlides .hero-slide.h24-flip-in-next,#heroSlider #heroSlides .hero-slide.h24-flip-in-prev{animation-duration:.01ms}}
+
+
+/* H24 navigation icon palette and clearer, soft-contrast hover */
+.bottom-nav .nav-item[data-view="home"] .nav-icon svg{color:#149b91!important;stroke:#149b91!important}
+.bottom-nav .nav-item[data-view="services"] .nav-icon svg{color:#397fc2!important;stroke:#397fc2!important}
+.bottom-nav .nav-item[data-view="products"] .nav-icon svg{color:#8870c7!important;stroke:#8870c7!important}
+.bottom-nav .nav-item[data-view="account"] .nav-icon svg{color:#b17d42!important;stroke:#b17d42!important}
+.bottom-nav .nav-item.selected .nav-icon{background:linear-gradient(145deg,#fff,#e1f7f1 58%,#e8edff)!important}
+.bottom-nav .nav-item:hover,.bottom-nav .nav-item:focus-visible{
+ color:#086f78!important;
+ background:linear-gradient(135deg,#d9f3ec 0%,#e3edff 100%)!important;
+ border-color:#a9d9d3!important;
+ box-shadow:0 8px 18px rgba(25,112,127,.22),inset 0 1px 0 rgba(255,255,255,.98)!important;
+ transform:translateY(-3px)!important
+}
+.bottom-nav .nav-item:hover .nav-icon,.bottom-nav .nav-item:focus-visible .nav-icon{
+ background:linear-gradient(145deg,#fff,#c9eee5 58%,#d8e4ff)!important;
+ border-color:#acdcd5!important;
+ box-shadow:0 5px 14px rgba(25,116,132,.22),inset 0 1px 0 #fff!important
+}
+.bottom-nav .nav-item:hover .nav-icon svg,.bottom-nav .nav-item:focus-visible .nav-icon svg{
+ filter:drop-shadow(0 3px 4px rgba(15,100,125,.28))!important;transform:translateY(-1px) scale(1.13)!important
+}
+@media(hover:none){.bottom-nav .nav-item:active{background:linear-gradient(135deg,#d9f3ec,#e3edff)!important;border-color:#a9d9d3!important;transform:scale(.96)!important}}
+
+/* Reliable slider: simple state-based transitions, independent of 3D animation timing */
+#heroSlider #heroSlides{position:relative!important;overflow:hidden!important;isolation:isolate!important;perspective:none!important;touch-action:pan-y!important}
+#heroSlider #heroSlides .hero-slide,
+#heroSlider #heroSlides .hero-slide.active{
+ position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;
+ display:flex!important;align-items:center!important;box-sizing:border-box!important;
+ opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+ transform:translate3d(22px,0,0) scale(.985)!important;
+ transition:opacity .48s ease,transform .58s cubic-bezier(.2,.7,.2,1),visibility 0s linear .58s!important;
+ backface-visibility:hidden!important
+}
+#heroSlider #heroSlides .hero-slide.active{
+ opacity:1!important;visibility:visible!important;pointer-events:auto!important;
+ transform:translate3d(0,0,0) scale(1)!important;z-index:2!important;
+ transition:opacity .48s ease,transform .58s cubic-bezier(.2,.7,.2,1),visibility 0s!important
+}
+#heroSlider #heroSlides .hero-slide.h24-flip-in-next,
+#heroSlider #heroSlides .hero-slide.h24-flip-in-prev,
+#heroSlider #heroSlides .hero-slide.h24-flip-out-next,
+#heroSlider #heroSlides .hero-slide.h24-flip-out-prev{animation:none!important}
+#heroSlider .hero-slider-controls{z-index:20!important;pointer-events:auto!important}
+#heroSlider .hero-arrows{z-index:21!important}
+#heroSlider .hero-arrows button,#heroSlider .hero-dot{z-index:22!important;position:relative!important;pointer-events:auto!important;touch-action:manipulation!important}
