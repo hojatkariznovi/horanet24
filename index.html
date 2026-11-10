@@ -175,8 +175,18 @@
 </main>
 <nav class="bottom-nav" aria-label="منوی اصلی حورانت۲۴"><button class="nav-item selected" data-view="home" aria-label="خانه"><span data-icon="house"></span><small>خانه</small></button><button class="nav-item" data-view="services" aria-label="خدمات"><span data-icon="grid-2x2"></span><small>خدمات</small></button><button class="nav-core" id="navCoreBtn" aria-label="ارتباط با پشتیبانی حورانت۲۴"><span class="nav-core-halo"></span><span class="nav-core-mark">H<span>24</span></span><small>ارتباط</small></button><button class="nav-item" data-view="products" aria-label="فروشگاه"><span data-icon="shopping-bag"></span><small>فروشگاه</small></button><button class="nav-item" data-view="account" aria-label="حساب کاربری"><span data-icon="user-round"></span><small>حساب من</small></button></nav>
 <div class="modal-backdrop" id="modalBackdrop" hidden><section class="app-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="بستن">×</button><div id="modalContent"></div></section></div>
+<aside class="h24-ai" id="h24Ai">
+<button class="h24-ai-launch" id="h24AiLaunch" type="button" aria-label="گفت‌وگو با دستیار هوشمند"><span class="h24-ai-launch-icon" data-icon="message-circle"></span><span>دستیار هوشمند</span><i class="h24-ai-online"></i></button>
+<section class="h24-ai-panel" id="h24AiPanel" aria-label="دستیار هوشمند حورانت۲۴" hidden>
+<header class="h24-ai-head"><div class="h24-ai-avatar"><span data-icon="sparkles"></span></div><div><b>دستیار حورانت۲۴</b><small><i></i> راهنمای خدمات و مدارک</small></div><button id="h24AiClose" type="button" aria-label="بستن">×</button></header>
+<div class="h24-ai-messages" id="h24AiMessages" aria-live="polite"><div class="h24-ai-message assistant">سلام. درباره شرایط، مدارک یا مراحل خدمات حورانت۲۴ چه سؤالی دارید؟<small>اطلاعات اولیه؛ پاسخ نهایی پس از بررسی پشتیبان</small></div></div>
+<div class="h24-ai-prompts" id="h24AiPrompts"><button type="button">مدارک کارت سوخت چیست؟</button><button type="button">بیمه شخص ثالث اقساطی</button><button type="button">مدارک تعویض پلاک</button></div>
+<form class="h24-ai-compose" id="h24AiForm"><textarea id="h24AiInput" rows="1" maxlength="1200" placeholder="سؤال خود را بنویسید..." required></textarea><button type="submit" aria-label="ارسال پیام"><span data-icon="send"></span></button></form>
+<div class="h24-ai-foot"><span>پاسخ‌گویی هوشمند · بدون دریافت مدارک</span><button id="h24AiHandoff" type="button">ارتباط با پشتیبان</button></div>
+<form class="h24-ai-handoff" id="h24AiHandoffForm" hidden><b>درخواست پیگیری انسانی</b><input name="name" maxlength="80" placeholder="نام (اختیاری)"><input name="phone" inputmode="tel" maxlength="20" placeholder="شماره تماس (اختیاری)"><input name="service" maxlength="120" placeholder="خدمت موردنظر (اختیاری)"><textarea name="message" rows="2" maxlength="1500" placeholder="موضوع درخواست یا سؤال شما" required></textarea><button type="submit">ثبت و ارتباط با ایتا</button><small>درخواست در پنل مدیریت ثبت می‌شود و برای ادامه به ربات ایتا هدایت می‌شوید.</small></form>
+</section></aside>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="./app.js"></script>
 <script src="./assistant-chat.js"></script>
-<script src="./enhancements.js"></script>
+<script src="./enhancements.js"></script><script src="./ai-assistant.js"></script>
 </body></html>
