@@ -14,9 +14,9 @@ function h24UiSound(kind="tap"){
   const play=()=>{
    if(!h24UiSoundsEnabled||ctx.state!=="running")return;
    const patterns={
-    tap:[[740,0,.055,.035],[990,.018,.06,.026]],
-    open:[[523,0,.09,.028],[659,.045,.09,.024],[784,.09,.12,.02]],
-    close:[[784,0,.075,.024],[659,.045,.075,.022],[523,.09,.10,.02]]
+    tap:[[740,0,.055,.012],[990,.018,.06,.008]],
+    open:[[523,0,.09,.011],[659,.045,.09,.009],[784,.09,.12,.008]],
+    close:[[784,0,.075,.009],[659,.045,.075,.008],[523,.09,.10,.007]]
    };
    const now=ctx.currentTime+.025;
    (patterns[kind]||patterns.tap).forEach(([hz,offset,duration,volume])=>{
