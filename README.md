@@ -1,22 +1,32 @@
-# Horanet24 — Digital World Platform
+# Horanet24 — Digital Services Platform
 
-A mobile-first Persian (RTL) digital services platform.
+A mobile-first Persian (RTL) service showcase for **horanet24.ir**.
 
-## Product direction
-- Premium, minimal, pearl-white and silver interface
-- Subtle turquoise, blue, and violet light accents
-- Persian-first, right-to-left, responsive and installable PWA
-- Service discovery, customer profiles, requests, order tracking, favorites, stories, short-form explore content, challenges, points, referrals, chat, consultations, and a secure admin workspace
+## Frontend
+- Responsive Persian RTL interface with a pearl-white, turquoise and blue visual system.
+- Tailwind CSS utilities compiled at build time; no Tailwind CDN runtime.
+- Service discovery with categories, search, details, required documents and steps.
+- Product catalogue with sample digital products and Eitaa hand-off.
+- Stories, educational content, PWA manifest and service worker.
+- Supabase Auth for optional customer accounts and favorites.
+
+## Service model
+The public website is a showcase and guidance layer. It does **not** collect service orders, identity documents, payments, or perform request processing. Service and product CTAs direct customers to the official Eitaa bot: https://eitaa.com/huranet24_app.
 
 ## Backend
-Supabase provides authentication, PostgreSQL, storage, and server-side workflows. Database foundations have been provisioned; production authorization, business logic, and policies must be completed and tested before launch.
+Supabase project: `iqrgqkluuhbyphtihsls`.
+- PostgreSQL content tables for service categories, services, products, stories and explore posts.
+- Public read policies only for active/published catalogue content.
+- Customer profile and favorites protected with Row Level Security.
+- Customer request/conversation tables exist in the database but are not part of the public website flow.
+- Never expose a Supabase service-role or secret key in frontend code.
 
-## Development principles
-- Mobile-first and accessible
-- Never expose service-role keys in client code
-- Enforce authorization and points/referral logic server-side
-- Keep customer data private with tested Row Level Security
-- Treat this repository as the source of truth for application code
+## Build and deployment
+GitHub Pages deploys from `dist/` using GitHub Actions. Tailwind is compiled during CI.
+- `npm install`
+- `npm run build`
 
-## Status
-Project repository initialized. Frontend scaffold and Supabase integration are the next implementation steps.
+## Operational notes
+- Sample catalogue products are clearly labelled as samples and must be replaced or approved before commercial promotion.
+- Admin content-management access must be provisioned separately and protected by explicit admin authorization policies.
+- Verify Supabase RLS and GitHub Actions after every production change.
