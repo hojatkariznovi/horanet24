@@ -61,6 +61,17 @@ function renderH24FallbackIcons(){
 }
 
 const refreshIcons=()=>{
+ document.querySelectorAll("img.nav-3d-icon[data-fallback-icon]").forEach(img=>{
+  if(img.dataset.fallbackBound)return;
+  img.dataset.fallbackBound="1";
+  img.addEventListener("error",()=>{
+   const fallback=document.createElement("i");
+   fallback.setAttribute("data-lucide",img.dataset.fallbackIcon);
+   fallback.setAttribute("aria-hidden","true");
+   img.replaceWith(fallback);
+   refreshIcons();
+  },{once:true});
+ });
  document.querySelectorAll("[data-icon]").forEach(node=>{
   const name=node.dataset.icon||"sparkles";
   node.setAttribute("data-lucide",LUCIDE_ICON_MAP[name]||name);
@@ -89,7 +100,7 @@ function renderServices(){
  $("serviceStatus").textContent=items.length+" خدمت در دسترس است.";
 }
 
-function showService(id){ const s=state.services.find(x=>x.id===id); if(!s)return; state.selectedService=s; const docs=Array.isArray(s.required_documents)?s.required_documents:[]; const steps=Array.isArray(s.steps)?s.steps:[]; const fav=state.favorites.has(id); openModal('<span class="eyebrow">جزئیات خدمت</span><h2 id="modalTitle">'+esc(s.title)+'</h2><p>'+esc(s.description||s.summary||"برای دریافت راهنمایی بیشتر، درخواست خود را از طریق پشتیبانی ثبت کنید.")+'</p><div class="detail-block"><b>مدارک و اطلاعات موردنیاز</b><ul>'+ (docs.length?docs.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>پس از بررسی نوع درخواست اعلام می‌شود.</li>')+'</ul></div><div class="detail-block"><b>مراحل انجام</b><ol>'+(steps.length?steps.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>ارسال درخواست در پیام خصوصی تلگرام</li><li>بررسی و اعلام مراحل</li>')+'</ol></div><div class="modal-actions"><button class="primary-btn" id="serviceRequest">درخواست این خدمت <span data-icon="send"></span></button><button class="secondary-btn" id="favoriteBtn"><span data-icon="heart"></span> '+(fav?"★ حذف از علاقه‌مندی‌ها":"☆ افزودن به علاقه‌مندی‌ها")+'</button></div><p class="micro-note">برای ثبت درخواست، پیام شما مستقیماً به پیام خصوصی تلگرام پشتیبانی حورانت۲۴ هدایت می‌شود؛ این وب‌سایت اطلاعات یا مدارک شما را دریافت نمی‌کند.</p>'); $("serviceRequest").onclick=()=>openTelegram("درخواست خدمت: "+s.title); $("favoriteBtn").onclick=()=>toggleFavorite(id); }
+function showService(id){ const s=state.services.find(x=>x.id===id); if(!s)return; state.selectedService=s; const docs=Array.isArray(s.required_documents)?s.required_documents:[]; const steps=Array.isArray(s.steps)?s.steps:[]; const fav=state.favorites.has(id); openModal('<span class="eyebrow">جزئیات خدمت</span><h2 id="modalTitle">'+esc(s.title)+'</h2><p>'+esc(s.description||s.summary||"برای دریافت راهنمایی بیشتر، درخواست خود را از طریق پشتیبانی ثبت کنید.")+'</p><div class="detail-block"><b>مدارک و اطلاعات موردنیاز</b><ul>'+ (docs.length?docs.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>پس از بررسی نوع درخواست اعلام می‌شود.</li>')+'</ul></div><div class="detail-block"><b>مراحل انجام</b><ol>'+(steps.length?steps.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>ارسال درخواست در پیام خصوصی تلگرام</li><li>بررسی و اعلام مراحل</li>')+'</ol></div><div class="modal-actions"><button class="primary-btn" id="serviceRequest">ثبت درخواست <span data-icon="send"></span></button><button class="secondary-btn" id="favoriteBtn"><span data-icon="heart"></span> '+(fav?"★ حذف از علاقه‌مندی‌ها":"☆ افزودن به علاقه‌مندی‌ها")+'</button></div><p class="micro-note">برای ثبت درخواست، پیام شما مستقیماً به پیام خصوصی تلگرام پشتیبانی حورانت۲۴ هدایت می‌شود؛ این وب‌سایت اطلاعات یا مدارک شما را دریافت نمی‌کند.</p>'); $("serviceRequest").onclick=()=>openTelegram("درخواست خدمت: "+s.title); $("favoriteBtn").onclick=()=>toggleFavorite(id); }
 async function toggleFavorite(id){ if(!state.session){toast("برای ذخیره علاقه‌مندی ابتدا وارد حساب شوید.");showLogin();return;} const exists=state.favorites.has(id); try{if(exists){const {error}=await state.client.from("favorites").delete().eq("user_id",state.session.user.id).eq("service_id",id);if(error)throw error;state.favorites.delete(id);}else{const {error}=await state.client.from("favorites").insert({user_id:state.session.user.id,service_id:id});if(error)throw error;state.favorites.add(id);} if(state.selectedService?.id===id)showService(id);toast(exists?"از علاقه‌مندی‌ها حذف شد.":"به علاقه‌مندی‌ها اضافه شد.");}catch(e){toast("ذخیره انجام نشد: "+e.message);} }
 function renderProducts(){
  const grid=$("productGrid");
