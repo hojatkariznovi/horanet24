@@ -2,6 +2,32 @@
 const SUPABASE_URL = "https://iqrgqkluuhbyphtihsls.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jJeR9OBKSiQU4dBnQrGILA_I56-Npbf";
 const $ = (id) => document.getElementById(id);
+// Lightweight synthesized UI sounds: no audio files, network requests, or startup work.
+let h24UiAudio=null;
+function h24UiSound(kind="tap"){
+ try{
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;
+  if(!AudioCtx)return;
+  if(!h24UiAudio)h24UiAudio=new AudioCtx();
+  const ctx=h24UiAudio;
+  if(ctx.state==="suspended")ctx.resume().catch(()=>{});
+  const patterns={
+   tap:[[740,0,.035,.010],[990,.012,.035,.006]],
+   open:[[523,0,.075,.008],[659,.035,.075,.007],[784,.07,.095,.006]],
+   close:[[784,0,.055,.006],[659,.035,.055,.006],[523,.07,.075,.005]]
+  };
+  const now=ctx.currentTime+.012;
+  (patterns[kind]||patterns.tap).forEach(([hz,offset,duration,volume])=>{
+   const osc=ctx.createOscillator(),gain=ctx.createGain();
+   osc.type="sine";osc.frequency.setValueAtTime(hz,now+offset);
+   gain.gain.setValueAtTime(.0001,now+offset);
+   gain.gain.exponentialRampToValueAtTime(volume,now+offset+.008);
+   gain.gain.exponentialRampToValueAtTime(.0001,now+offset+duration);
+   osc.connect(gain);gain.connect(ctx.destination);
+   osc.start(now+offset);osc.stop(now+offset+duration+.01);
+  });
+ }catch(_){}
+}
 const state = { client:null, session:null, services:[], products:[], categories:[], favorites:new Set(), activeCategory:"all", selectedService:null, profileCache:null };
 const toast = (message) => { const el=$("toast"); el.textContent=message; el.classList.add("show"); clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>el.classList.remove("show"),3000); };
 const esc = (value="") => String(value).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -89,8 +115,8 @@ function showContactOptions(mode="contact",serviceTitle=""){
  const telegramSub=mode==="request"?"ادامه ثبت درخواست در تلگرام":mode==="membership"?"ارسال درخواست عضویت در تلگرام":mode==="alerts"?"دریافت اطلاع‌رسانی در تلگرام":mode==="product"?"پیگیری دریافت محصول در تلگرام":"ادامه در تلگرام";
  openModal('<span class="eyebrow">حورانت۲۴ · همراه دیجیتال شما</span><h2 id="modalTitle">'+heading+'</h2>'+intro+'<div class="contact-options"><a class="contact-choice contact-eitaa" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener"><span class="contact-choice-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 12.5A7.5 7.5 0 0 1 15.5 5h17A7.5 7.5 0 0 1 40 12.5v14a7.5 7.5 0 0 1-7.5 7.5H20l-9 8v-8.5A7.5 7.5 0 0 1 8 27Z" fill="currentColor" opacity=".18"/><path d="M15 17h18M15 24h12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span><b>ایتا</b><small>'+eitaaSub+'</small></span><i data-lucide="arrow-up-left"></i></a><a class="contact-choice contact-telegram" href="https://t.me/hojat_k82" target="_blank" rel="noopener"><span class="contact-choice-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="m5 22 36-14-8 33-11-9-7 6-1-12Z" fill="currentColor"/><path d="m14 26 20-13-13 18" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>تلگرام</b><small>'+telegramSub+'</small></span><i data-lucide="arrow-up-left"></i></a></div>');
 }
-function openModal(html){ $("modalContent").innerHTML=html; refreshIcons(); $("modalBackdrop").hidden=false; document.body.classList.add("modal-open"); }
-function closeModal(){ $("modalBackdrop").hidden=true; $("modalContent").innerHTML=""; document.body.classList.remove("modal-open"); }
+function openModal(html){ h24UiSound("open"); $("modalContent").innerHTML=html; refreshIcons(); $("modalBackdrop").hidden=false; document.body.classList.add("modal-open"); }
+function closeModal(){ if(!$("modalBackdrop").hidden)h24UiSound("close"); $("modalBackdrop").hidden=true; $("modalContent").innerHTML=""; document.body.classList.remove("modal-open"); }
 function openTelegram(text){ showContactOptions("contact",text||"پشتیبانی حورانت۲۴"); }
 function showMembershipInfo(kind="premium"){
  if(kind==="alerts"){
@@ -250,6 +276,12 @@ function initThemeAndMusic(){
 }
 function wire(){
  initThemeAndMusic();
+ // Delegated listener covers mouse, touch and keyboard activation without per-control handlers.
+ document.addEventListener("click",event=>{
+  const control=event.target.closest('button,a,[role="button"],.service-live,.product-card,.nav-item,[data-home-category],[data-slide]');
+  if(!control||control.disabled||control.getAttribute("aria-disabled")==="true")return;
+  h24UiSound("tap");
+ },{capture:true,passive:true});
  $("modalClose").onclick=closeModal;
  document.addEventListener("click",event=>{
   const infoLink=event.target.closest("[data-h24-info]");
