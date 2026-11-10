@@ -1291,3 +1291,28 @@ p{line-height:2}
  .category-row .chip{padding:7px 10px;font-size:9px}
 }
 @media(hover:none){.welcome .home-category-story:active,.category-row .chip:active{transform:scale(.97)}}
+
+
+/* Stepper-like service shortcuts sit outside and below the welcome panel */
+.home-category-stories{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;max-width:900px;margin:14px auto 28px;padding:0 8px;overflow-x:auto;scrollbar-width:none}
+.home-category-stories::-webkit-scrollbar{display:none}
+.home-category-story{position:relative;z-index:1;flex:1 1 0;min-width:0;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:8px;padding:9px 13px;border:1px solid #dcebea;border-radius:999px;background:linear-gradient(145deg,#fff,#f0f8f7);box-shadow:0 5px 15px rgba(62,135,150,.08);color:#587889;font:inherit;font-size:10px;font-weight:650;white-space:nowrap;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background .2s ease}
+.home-story-ring{width:29px;height:29px;flex:0 0 29px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#e4f5f1);border:1px solid #d5efeb;outline:0;box-shadow:none;color:#239b9d}
+.home-story-ring svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8}
+.home-category-story:hover,.home-category-story:focus-visible{transform:translateY(-3px);border-color:#75cfc4;background:linear-gradient(145deg,#fff,#e5f7f3);box-shadow:0 9px 20px rgba(43,151,151,.17);outline:none}
+.home-category-story:active{transform:scale(.97)}
+/* Service-page category filters: oval capsule chips with icon hover feedback */
+.category-row{gap:9px;padding:5px 1px 14px;align-items:center}
+.category-row .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 15px;border:1px solid #e1ecee;border-radius:999px;background:linear-gradient(145deg,#fff,#f2f8f9);color:#66808d;box-shadow:0 4px 12px rgba(70,111,130,.06);font-size:10px;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background .2s ease,color .2s ease}
+.category-row .chip span,.category-row .chip svg{width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;stroke-width:1.9;color:#399e9c}
+.category-row .chip:hover,.category-row .chip:focus-visible{transform:translateY(-2px);border-color:#83d2c8;background:linear-gradient(145deg,#fff,#e9f8f5);box-shadow:0 8px 17px rgba(43,151,151,.15);outline:none;color:#247f83}
+.category-row .chip.active{border-color:#75cfc4;background:linear-gradient(145deg,#e8f8f4,#eaf0fc);color:#187f85;box-shadow:0 6px 15px rgba(43,151,151,.12)}
+.category-row .chip.active span,.category-row .chip.active svg{color:#168e91}
+@media(max-width:760px){
+ .home-category-stories{justify-content:flex-start;gap:7px;margin:11px 0 22px;padding:0 2px}
+ .home-category-story{flex:0 0 auto;padding:7px 10px;font-size:9px;gap:6px}
+ .home-story-ring{width:25px;height:25px;flex-basis:25px}
+ .home-story-ring svg{width:14px;height:14px}
+ .category-row .chip{padding:7px 12px;font-size:9px}
+}
+@media(hover:none){.home-category-story:active,.category-row .chip:active{transform:scale(.97)}}
