@@ -15,7 +15,7 @@
       <div class="h24-intro">سلام. درباره مدارک، شرایط و انتخاب خدمت موردنظرت سؤال کن. اگر پاسخ نیاز به بررسی انسانی داشته باشد، راه ارتباط با پشتیبانی را نشانت می‌دهم.</div>
       <div class="h24-messages" aria-live="polite"><div class="h24-msg bot">برای شروع، نام خدمت یا سؤالت را بنویس.</div></div>
       <div class="h24-handoff" hidden>
-        <b>درخواست پیگیری توسط پشتیبانی</b><p>در صورت تمایل، نام و شماره تماس را وارد کن تا موضوع گفت‌وگو برای بررسی در پنل مدیریت ثبت شود. این اطلاعات اختیاری است.</p>
+        <b>درخواست پیگیری توسط پشتیبانی</b><p>با ثبت این فرم، متن گفت‌وگو برای پیگیری در پنل مدیریت ذخیره می‌شود. نام و شماره تماس اختیاری است؛ رمزها و شماره‌های حساس را ارسال نکن.</p>
         <input name="name" maxlength="80" placeholder="نام (اختیاری)">
         <input name="phone" maxlength="20" inputmode="tel" placeholder="شماره تماس (اختیاری)">
         <div class="h24-handoff-actions"><button class="h24-save" type="button">ثبت درخواست پیگیری</button><a href="${EITAA}" target="_blank" rel="noopener">گفت‌وگو در ایتا</a></div>
