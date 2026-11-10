@@ -711,3 +711,28 @@ i[data-lucide],svg.lucide{width:18px!important;height:18px!important;max-width:1
 .h24-launch[hidden],.h24-panel[hidden],.h24-handoff[hidden]{display:none!important}
 .assistant-lead-preview{margin:8px 0 0;color:#627c86;font-size:10px;line-height:1.8;white-space:pre-wrap}
 @media(max-width:760px){#h24Assistant{right:12px;bottom:82px}.h24-panel{position:fixed;right:10px;left:10px;bottom:78px;width:auto;height:min(650px,calc(100dvh - 100px));min-height:360px}.h24-launch{padding:9px 12px}}
+
+
+/* H24 mobile navigation and icon stability — final scoped overrides */
+.bottom-nav{box-sizing:border-box}
+.bottom-nav .nav-item,.bottom-nav .nav-core{box-sizing:border-box;min-width:0}
+.bottom-nav svg.lucide{display:block;width:22px!important;height:22px!important;min-width:22px;min-height:22px;max-width:22px;max-height:22px;flex:0 0 22px;overflow:visible}
+.bottom-nav .nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px 1px}
+.bottom-nav .nav-item small{display:block;line-height:1.25;white-space:nowrap;font-size:9px}
+.icon-host svg.lucide,.icon-host>.lucide{display:block;flex:0 0 auto}
+@media(max-width:760px){
+ .bottom-nav{position:fixed!important;left:9px!important;right:9px!important;bottom:max(8px,env(safe-area-inset-bottom))!important;top:auto!important;transform:none!important;width:auto!important;max-width:none!important;min-width:0!important;height:68px!important;min-height:68px!important;padding:5px 7px calc(5px + env(safe-area-inset-bottom))!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;align-items:center!important;justify-items:stretch!important;gap:2px!important;overflow:visible!important;border-radius:19px!important;z-index:100!important}
+ .bottom-nav .nav-item{width:100%!important;min-width:0!important;max-width:100%!important;height:55px!important;min-height:55px!important;margin:0!important;padding:3px 0!important;gap:3px!important;overflow:hidden}
+ .bottom-nav .nav-item>span,.bottom-nav .nav-item>.icon-host{width:24px!important;height:24px!important;min-width:24px!important;min-height:24px!important;display:grid!important;place-items:center!important;font-size:0!important;line-height:0!important}
+ .bottom-nav .nav-item svg.lucide{width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;max-width:22px!important;max-height:22px!important}
+ .bottom-nav .nav-item small{font-size:8px!important;line-height:1.2!important;max-width:100%;overflow:hidden;text-overflow:clip}
+ .bottom-nav .nav-core{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;max-width:100%!important;height:58px!important;min-height:58px!important;margin:-4px 0 0!important;padding:0!important;gap:0!important;overflow:visible!important}
+ .bottom-nav .nav-core-halo{width:45px!important;height:45px!important;top:0!important;border-radius:16px!important}
+ .bottom-nav .nav-core-mark{font-size:15px!important;line-height:42px!important}
+ .bottom-nav .nav-core small{font-size:8px!important;margin-top:0!important;line-height:1.2!important}
+ .shell{padding-bottom:104px!important}
+}
+@media(max-width:360px){
+ .bottom-nav{left:6px!important;right:6px!important;padding-inline:4px!important}
+ .bottom-nav .nav-item small{font-size:7px!important}
+}
