@@ -1235,3 +1235,25 @@ p{line-height:2}
  transform:translateY(-1px) scale(1.12)!important;filter:drop-shadow(0 3px 4px rgba(15,117,130,.28))!important
 }
 @media(hover:none){.bottom-nav .nav-item:active{background:#e1f5f1!important;box-shadow:0 5px 14px rgba(24,119,132,.18)!important;transform:scale(.96)!important}}
+
+
+/* Home service categories styled like compact story bubbles */
+.home-category-stories{display:flex;align-items:flex-start;justify-content:center;gap:clamp(13px,3vw,30px);padding:0 4px;margin:0 auto 17px;max-width:760px;overflow-x:auto;scrollbar-width:none}
+.home-category-stories::-webkit-scrollbar{display:none}
+.home-category-story{flex:0 0 76px;display:flex;flex-direction:column;align-items:center;gap:7px;padding:0;border:0;background:transparent;color:#587889;font:inherit;font-size:10px;font-weight:650;white-space:nowrap}
+.home-story-ring{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#e8f8f4 58%,#eef0ff);border:2px solid #fff;outline:2px solid #a8e2d9;box-shadow:0 5px 15px rgba(62,135,150,.12),inset 0 1px 0 #fff;color:#239b9d;transition:transform .2s ease,box-shadow .2s ease,outline-color .2s ease}
+.home-story-ring svg{width:25px;height:25px;stroke:currentColor;stroke-width:1.8}
+.home-category-story:hover .home-story-ring,.home-category-story:focus-visible .home-story-ring{transform:translateY(-3px) scale(1.05);outline-color:#6acdc1;box-shadow:0 9px 19px rgba(43,151,151,.2),inset 0 1px 0 #fff}
+.home-category-story:focus-visible{outline:2px solid #4bbdb5;outline-offset:5px;border-radius:12px}
+.home-category-story:active .home-story-ring{transform:scale(.96)}
+.welcome{min-height:375px!important;padding:45px 52px!important}
+@media(max-width:760px){
+ .home-category-stories{justify-content:flex-start;gap:15px;padding:0 4px 2px;margin:0 0 14px}
+ .home-category-story{flex-basis:66px;font-size:9px;gap:6px}
+ .home-story-ring{width:55px;height:55px}
+ .home-story-ring svg{width:23px;height:23px}
+ .welcome{min-height:375px!important;padding:26px 20px 104px!important}
+ .welcome h1{font-size:30px!important}
+ .welcome p{font-size:10.5px!important;line-height:2!important}
+ .orbital{width:138px!important;height:138px!important}
+}
