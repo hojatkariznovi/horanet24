@@ -54,6 +54,7 @@
   <link rel="stylesheet" href="./tailwind.css">
   <link rel="stylesheet" href="./styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
 <body class="font-sans antialiased">
 <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
@@ -71,6 +72,10 @@
   </div>
 </header>
 <main class="shell">
+  <section class="hero-slider app-view" data-app-view="home" id="heroSlider" aria-label="اطلاعیه‌ها و پیشنهادهای مهم">
+    <div class="hero-slides" id="heroSlides"><article class="hero-slide active"><div class="hero-slide-copy"><span class="hero-kicker">اطلاعیه‌های حورانت۲۴</span><span class="hero-pill">به‌روز و کاربردی</span><h2>از فرصت‌های مهم جا نمان</h2><p>اطلاعیه ثبت‌نام‌ها، طرح‌های حمایتی و خدمات تازه را از یک مسیر دنبال کن.</p><a class="hero-slide-cta" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener">عضویت در اطلاع‌رسانی <i data-lucide="arrow-up-left"></i></a></div><div class="hero-slide-art"><span class="hero-art-orbit"></span><span class="hero-art-icon"><i data-lucide="bell-ring"></i></span><span class="hero-art-chip">H24 · ALERT</span></div></article></div>
+    <div class="hero-slider-controls"><div class="hero-dots" id="heroDots"></div><div class="hero-arrows"><button type="button" id="heroPrev" aria-label="اسلاید قبلی"><i data-lucide="chevron-right"></i></button><button type="button" id="heroNext" aria-label="اسلاید بعدی"><i data-lucide="chevron-left"></i></button></div><span class="hero-autoplay-label">پخش خودکار · ۵ ثانیه</span></div>
+  </section>
   <section class="welcome app-view" data-app-view="home" id="home">
     <div class="welcome-copy">
       <span class="eyebrow"><i></i> همراه دیجیتال شما</span>
@@ -147,6 +152,10 @@
     <div class="assistant-art"><div class="assistant-ring"><span data-icon="sparkles"></span></div><span class="bubble bubble-a">راهنمایی</span><span class="bubble bubble-b">پاسخ‌گویی</span></div>
   </section>
 
+  <section class="membership-grid app-view" data-app-view="home" aria-label="عضویت و اطلاع‌رسانی">
+    <article class="membership-card alerts-card"><div class="membership-icon"><i data-lucide="bell-ring"></i></div><span class="eyebrow">رایگان · اطلاع‌رسانی</span><h2>هیچ ثبت‌نام مهمی را از دست نده</h2><p>برای خبر فعال‌شدن طرح‌هایی مثل طرح مادران و ثبت‌نام‌های جدید، از طریق ربات رسمی عضو اطلاع‌رسانی شو.</p><a href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener" class="membership-link">عضویت در اطلاع‌رسانی <i data-lucide="arrow-up-left"></i></a></article>
+    <article class="membership-card premium-card"><div class="membership-icon"><i data-lucide="crown"></i></div><span class="eyebrow">عضویت ویژه · محتوای اختصاصی</span><h2>کانال ویژه حورانت۲۴</h2><p>آموزش‌های کاربردی، تحلیل خدمات روز، نکته‌های اجرایی و اطلاعیه‌های منتخب در یک کانال اختصاصی.</p><a id="premiumChannelLink" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener" class="membership-link">مشاهده شرایط عضویت <i data-lucide="arrow-up-left"></i></a><small class="premium-note">هزینه و روش پرداخت پیش از عضویت اعلام می‌شود.</small></article>
+  </section>
   <section class="section app-view" data-app-view="home" id="storiesSection"><div class="section-head"><div><span class="eyebrow">تازه‌های حورانت</span><h2>اطلاعیه‌ها و استوری‌ها</h2><p class="section-subtitle">اطلاع‌رسانی‌های کوتاه و زمان‌دار.</p></div></div><div class="story-row" id="storyRow"><span class="section-note">محتوای تازه به‌زودی نمایش داده می‌شود.</span></div></section>
   <section class="section app-view" data-app-view="home" id="exploreSection"><div class="section-head"><div><span class="eyebrow">دانستنی‌های کاربردی</span><h2>یاد بگیر، آگاهانه اقدام کن</h2><p class="section-subtitle">راهنماها و محتوای آموزشی کوتاه.</p></div></div><div class="explore-grid" id="exploreGrid"><div class="empty-state">محتوای آموزشی به‌زودی منتشر می‌شود.</div></div></section>
   <section class="section app-view" data-app-view="home" id="challengesSection"><div class="section-head"><div><span class="eyebrow">تعامل با حورانت</span><h2>چالش‌ها و امتیازها</h2></div></div><div class="challenge-list" id="challengeList"><div class="empty-state">چالش فعالی ثبت نشده است.</div></div></section>
@@ -168,4 +177,5 @@
 <div class="modal-backdrop" id="modalBackdrop" hidden><section class="app-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="بستن">×</button><div id="modalContent"></div></section></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="./app.js"></script>
+<script src="./enhancements.js"></script>
 </body></html>
