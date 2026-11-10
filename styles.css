@@ -1328,3 +1328,23 @@ p{line-height:2}
 #servicesSection .category-row .chip.active span,#servicesSection .category-row .chip.active svg{color:#168e91!important}
 @media(max-width:760px){#servicesSection .category-row{justify-content:flex-start!important;gap:7px!important;margin:0 0 12px!important;padding:2px 1px 8px!important}#servicesSection .category-row .chip{min-height:36px!important;padding:5px 11px!important;font-size:9px!important}}
 @media(hover:none){#servicesSection .category-row .chip:active{transform:scale(.97)!important}}
+
+
+/* Horanet24 slider: stable layered slides with a dimensional page-flip transition */
+#heroSlider #heroSlides{position:relative!important;overflow:hidden!important;isolation:isolate;touch-action:pan-y;perspective:1100px}
+#heroSlider #heroSlides .hero-slide,#heroSlider #heroSlides .hero-slide.active{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;opacity:0;visibility:hidden;pointer-events:none;transform:translate3d(0,0,0) rotateY(0);backface-visibility:hidden;transform-style:preserve-3d;transition:none!important}
+#heroSlider #heroSlides .hero-slide.active{opacity:1;visibility:visible;pointer-events:auto;z-index:2!important}
+#heroSlider #heroSlides .hero-slide.h24-flip-out-next{z-index:3!important;visibility:visible;animation:h24FlipOutNext .68s cubic-bezier(.2,.72,.2,1) both}
+#heroSlider #heroSlides .hero-slide.h24-flip-out-prev{z-index:3!important;visibility:visible;animation:h24FlipOutPrev .68s cubic-bezier(.2,.72,.2,1) both}
+#heroSlider #heroSlides .hero-slide.h24-flip-in-next{z-index:2!important;visibility:visible;animation:h24FlipInNext .68s cubic-bezier(.2,.72,.2,1) both}
+#heroSlider #heroSlides .hero-slide.h24-flip-in-prev{z-index:2!important;visibility:visible;animation:h24FlipInPrev .68s cubic-bezier(.2,.72,.2,1) both}
+@keyframes h24FlipOutNext{0%{opacity:1;transform:perspective(1100px) rotateY(0) translateX(0);filter:brightness(1)}100%{opacity:0;transform:perspective(1100px) rotateY(-48deg) translateX(-9%);filter:brightness(.72)}}
+@keyframes h24FlipOutPrev{0%{opacity:1;transform:perspective(1100px) rotateY(0) translateX(0);filter:brightness(1)}100%{opacity:0;transform:perspective(1100px) rotateY(48deg) translateX(9%);filter:brightness(.72)}}
+@keyframes h24FlipInNext{0%{opacity:0;transform:perspective(1100px) rotateY(48deg) translateX(9%);filter:brightness(.72)}100%{opacity:1;transform:perspective(1100px) rotateY(0) translateX(0);filter:brightness(1)}}
+@keyframes h24FlipInPrev{0%{opacity:0;transform:perspective(1100px) rotateY(-48deg) translateX(-9%);filter:brightness(.72)}100%{opacity:1;transform:perspective(1100px) rotateY(0) translateX(0);filter:brightness(1)}}
+#heroSlider .hero-slider-controls{z-index:10!important;pointer-events:auto!important}
+#heroSlider .hero-arrows{z-index:11!important}
+#heroSlider .hero-arrows button,#heroSlider .hero-dot{position:relative;z-index:12;cursor:pointer;pointer-events:auto;touch-action:manipulation}
+#heroSlider .hero-arrows button{min-width:30px;min-height:30px}
+#heroSlider .hero-slide-cta{position:relative;z-index:4}
+@media(prefers-reduced-motion:reduce){#heroSlider #heroSlides .hero-slide.h24-flip-out-next,#heroSlider #heroSlides .hero-slide.h24-flip-out-prev,#heroSlider #heroSlides .hero-slide.h24-flip-in-next,#heroSlider #heroSlides .hero-slide.h24-flip-in-prev{animation-duration:.01ms}}
