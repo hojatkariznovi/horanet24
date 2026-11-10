@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./tailwind.css">
-  <link rel="stylesheet" href="./styles.css?v=30">
+  <link rel="stylesheet" href="./styles.css?v=31">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
@@ -69,7 +69,7 @@
   <div class="top-actions">
     <button class="icon-btn" id="searchToggle" aria-label="جستجوی خدمات" title="جستجوی خدمات"><span data-icon="search"></span></button>
     <button class="icon-btn" id="themeToggle" aria-label="فعال‌کردن حالت تاریک" title="تغییر پوسته"><span data-icon="moon"></span></button>
-    <button class="icon-btn" id="musicToggle" aria-label="پخش موسیقی حورانت۲۴" title="پخش موسیقی حورانت۲۴"><span data-icon="volume-2"></span></button>
+    <button class="icon-btn" id="soundToggle" aria-label="خاموش‌کردن صداهای لمس و کلیک" title="صداهای رابط کاربری روشن"><span data-icon="volume-2"></span></button>
     <button class="profile-btn" id="profileBtn" aria-label="حساب کاربری"><span data-icon="user-round"></span></button>
   </div>
 </header>
@@ -82,6 +82,12 @@
     </div>
     <div class="hero-slider-controls"><div class="hero-dots" id="heroDots"><button type="button" class="hero-dot active" data-slide="0" aria-label="رفتن به اسلاید ۱" aria-current="true"></button><button type="button" class="hero-dot" data-slide="1" aria-label="رفتن به اسلاید ۲" aria-current="false"></button><button type="button" class="hero-dot" data-slide="2" aria-label="رفتن به اسلاید ۳" aria-current="false"></button></div><div class="hero-arrows"><button type="button" id="heroPrev" aria-label="اسلاید قبلی"><i data-lucide="chevron-right"></i></button><button type="button" id="heroNext" aria-label="اسلاید بعدی"><i data-lucide="chevron-left"></i></button></div></div>
   </section>
+  <div class="h24-music-strip" id="h24MusicStrip" aria-label="موسیقی اختصاصی حورانت۲۴">
+    <span class="h24-music-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="h24-music-label">موسیقی اختصاصی حورانت۲۴</span>
+    <span class="h24-music-caption">یک حس آرام در دنیای دیجیتال</span>
+    <button type="button" id="musicToggle" class="h24-music-control" aria-label="پخش موسیقی اختصاصی حورانت۲۴" title="پخش موسیقی حورانت۲۴" aria-pressed="false"><i data-lucide="play"></i></button>
+  </div>
   <script>
   (() => {
     "use strict";
