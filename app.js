@@ -245,7 +245,7 @@ function wire(){
  document.addEventListener("click",event=>{
   const infoLink=event.target.closest("[data-h24-info]");
   if(infoLink){event.preventDefault();showMembershipInfo(infoLink.dataset.h24Info);return;}
-  const socialLink=event.target.closest('a[href*="eitaa.com"],a[href*="t.me"]');
+  const socialLink=event.target.closest('a[data-h24-title],a[href*="eitaa.com"],a[href*="t.me"]');
   if(socialLink&&!socialLink.closest(".contact-options")){event.preventDefault();showContactOptions("contact",socialLink.dataset.h24Title||socialLink.textContent.trim()||"ادامه در پیام‌رسان");}
  });
  $("navCoreBtn").onclick=showContactOptions;
