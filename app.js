@@ -1,8 +1,6 @@
 /* Horanet24 web app — public showcase + Supabase content */
 const SUPABASE_URL = "https://iqrgqkluuhbyphtihsls.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jJeR9OBKSiQU4dBnQrGILA_I56-Npbf";
-/* Add the exact public Eitaa bot URL here when supplied by the owner. */
-const EITAA_BOT_URL = "https://eitaa.com/huranet24_app";
 const $ = (id) => document.getElementById(id);
 const state = { client:null, session:null, services:[], products:[], categories:[], favorites:new Set(), activeCategory:"all", selectedService:null };
 const toast = (message) => { const el=$("toast"); el.textContent=message; el.classList.add("show"); clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>el.classList.remove("show"),3000); };
@@ -75,7 +73,7 @@ const refreshIcons=()=>{
 function openModal(html){ $("modalContent").innerHTML=html; refreshIcons(); $("modalBackdrop").hidden=false; document.body.classList.add("modal-open"); }
 function closeModal(){ $("modalBackdrop").hidden=true; $("modalContent").innerHTML=""; document.body.classList.remove("modal-open"); }
 const TELEGRAM_CONTACT_URL="https://t.me/hojat_k82";
-function openEitaa(text){ window.open(TELEGRAM_CONTACT_URL,"_blank","noopener"); }
+function openTelegram(text){ window.open(TELEGRAM_CONTACT_URL,"_blank","noopener"); }
 async function ensureProfile(user){ if(!user)return; try{ const {error}=await state.client.from("profiles").upsert({id:user.id,full_name:user.user_metadata?.full_name||user.email?.split("@")[0]||"کاربر حورانت"},{onConflict:"id",ignoreDuplicates:true}); if(error)console.warn("Profile bootstrap:",error.message); }catch(e){console.warn(e);} }
 function renderCategories(){ const row=$("categoryRow"); row.innerHTML='<button class="chip active" data-category="all">همه</button>'+state.categories.map(c=>'<button class="chip" data-category="'+esc(c.slug)+'">'+esc(c.title)+'</button>').join(""); row.querySelectorAll(".chip").forEach(btn=>btn.addEventListener("click",()=>{state.activeCategory=btn.dataset.category;row.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x===btn));renderServices();})); }
 function renderServices(){
@@ -88,7 +86,7 @@ function renderServices(){
  $("serviceStatus").textContent=items.length+" خدمت در دسترس است.";
 }
 
-function showService(id){ const s=state.services.find(x=>x.id===id); if(!s)return; state.selectedService=s; const docs=Array.isArray(s.required_documents)?s.required_documents:[]; const steps=Array.isArray(s.steps)?s.steps:[]; const fav=state.favorites.has(id); openModal('<span class="eyebrow">جزئیات خدمت</span><h2 id="modalTitle">'+esc(s.title)+'</h2><p>'+esc(s.description||s.summary||"برای دریافت راهنمایی بیشتر، درخواست خود را از طریق پشتیبانی ثبت کنید.")+'</p><div class="detail-block"><b>مدارک و اطلاعات موردنیاز</b><ul>'+ (docs.length?docs.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>پس از بررسی نوع درخواست اعلام می‌شود.</li>')+'</ul></div><div class="detail-block"><b>مراحل انجام</b><ol>'+(steps.length?steps.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>ارسال درخواست در پیام خصوصی تلگرام</li><li>بررسی و اعلام مراحل</li>')+'</ol></div><div class="modal-actions"><button class="primary-btn" id="serviceRequest">درخواست این خدمت <span data-icon="send"></span></button><button class="secondary-btn" id="favoriteBtn"><span data-icon="heart"></span> '+(fav?"★ حذف از علاقه‌مندی‌ها":"☆ افزودن به علاقه‌مندی‌ها")+'</button></div><p class="micro-note">برای ثبت درخواست، پیام شما مستقیماً به پیام خصوصی تلگرام پشتیبانی حورانت۲۴ هدایت می‌شود؛ این وب‌سایت اطلاعات یا مدارک شما را دریافت نمی‌کند.</p>'); $("serviceRequest").onclick=()=>openEitaa("درخواست خدمت: "+s.title); $("favoriteBtn").onclick=()=>toggleFavorite(id); }
+function showService(id){ const s=state.services.find(x=>x.id===id); if(!s)return; state.selectedService=s; const docs=Array.isArray(s.required_documents)?s.required_documents:[]; const steps=Array.isArray(s.steps)?s.steps:[]; const fav=state.favorites.has(id); openModal('<span class="eyebrow">جزئیات خدمت</span><h2 id="modalTitle">'+esc(s.title)+'</h2><p>'+esc(s.description||s.summary||"برای دریافت راهنمایی بیشتر، درخواست خود را از طریق پشتیبانی ثبت کنید.")+'</p><div class="detail-block"><b>مدارک و اطلاعات موردنیاز</b><ul>'+ (docs.length?docs.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>پس از بررسی نوع درخواست اعلام می‌شود.</li>')+'</ul></div><div class="detail-block"><b>مراحل انجام</b><ol>'+(steps.length?steps.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>ارسال درخواست در پیام خصوصی تلگرام</li><li>بررسی و اعلام مراحل</li>')+'</ol></div><div class="modal-actions"><button class="primary-btn" id="serviceRequest">درخواست این خدمت <span data-icon="send"></span></button><button class="secondary-btn" id="favoriteBtn"><span data-icon="heart"></span> '+(fav?"★ حذف از علاقه‌مندی‌ها":"☆ افزودن به علاقه‌مندی‌ها")+'</button></div><p class="micro-note">برای ثبت درخواست، پیام شما مستقیماً به پیام خصوصی تلگرام پشتیبانی حورانت۲۴ هدایت می‌شود؛ این وب‌سایت اطلاعات یا مدارک شما را دریافت نمی‌کند.</p>'); $("serviceRequest").onclick=()=>openTelegram("درخواست خدمت: "+s.title); $("favoriteBtn").onclick=()=>toggleFavorite(id); }
 async function toggleFavorite(id){ if(!state.session){toast("برای ذخیره علاقه‌مندی ابتدا وارد حساب شوید.");showLogin();return;} const exists=state.favorites.has(id); try{if(exists){const {error}=await state.client.from("favorites").delete().eq("user_id",state.session.user.id).eq("service_id",id);if(error)throw error;state.favorites.delete(id);}else{const {error}=await state.client.from("favorites").insert({user_id:state.session.user.id,service_id:id});if(error)throw error;state.favorites.add(id);} if(state.selectedService?.id===id)showService(id);toast(exists?"از علاقه‌مندی‌ها حذف شد.":"به علاقه‌مندی‌ها اضافه شد.");}catch(e){toast("ذخیره انجام نشد: "+e.message);} }
 function renderProducts(){
  const grid=$("productGrid");
@@ -100,7 +98,7 @@ function renderProducts(){
 function showProduct(id){
  const p=state.products.find(x=>x.id===id);if(!p)return;
  openModal('<span class="eyebrow">محصول دیجیتال حورانت۲۴</span><h2 id="modalTitle">'+esc(p.title)+'</h2><p>'+esc(p.description||p.summary||"برای دریافت اطلاعات بیشتر پیام دهید.")+'</p><div class="notice-box">این مورد در حال حاضر به‌عنوان محصول نمونه در ویترین نمایش داده می‌شود. برای استعلام شرایط و دریافت محصول، پیام خصوصی تلگرام را باز کنید.</div><button class="primary-btn full" id="productRequest">ارسال پیام در تلگرام ←</button>');
- $("productRequest").onclick=()=>openEitaa("محصول: "+p.title);
+ $("productRequest").onclick=()=>openTelegram("محصول: "+p.title);
 }
 async function loadContent(){try{const [cats,services,products,stories,posts,challenges]=await Promise.all([state.client.from("service_categories").select("id,title,slug,icon").eq("is_active",true).order("sort_order"),state.client.from("services").select("id,title,slug,summary,description,required_documents,steps,price_label,category:service_categories(title,slug)").eq("is_active",true).order("sort_order"),state.client.from("products").select("id,title,summary,description,price_label,image_url,product_type,slug").eq("is_active",true).order("sort_order"),state.client.from("stories").select("id,title,media_url,media_type,link_url").eq("is_published",true).order("sort_order"),state.client.from("explore_posts").select("id,title,caption,media_url,media_type,category").eq("is_published",true).order("published_at",{ascending:false}),state.client.from("challenges").select("id,title,description,points_reward,ends_at").eq("is_active",true).order("created_at",{ascending:false})]); if(cats.error)throw cats.error; if(services.error)throw services.error; state.categories=cats.data||[];state.services=services.data||[];state.products=products.data||[];renderCategories();renderServices();renderProducts();renderStories(stories.data||[]);renderExplore(posts.data||[]);renderChallenges(challenges.data||[]); }catch(e){console.error(e);$("serviceStatus").textContent="دریافت فهرست خدمات با خطا روبه‌رو شد. لطفاً کمی بعد دوباره تلاش کنید."; $("serviceGrid").innerHTML='<div class="empty-state">اتصال به فهرست خدمات برقرار نشد.</div>';}}
 function renderStories(items){const row=$("storyRow"); if(!items.length){row.innerHTML='<span class="section-note">استوری تازه‌ای منتشر نشده است.</span>';return;} row.innerHTML=items.map(s=>'<button class="story-item" data-link="'+esc(s.link_url||"")+'"><span class="story-ring">'+(s.media_type==="video"?iconSvg("play"):iconSvg("sparkles"))+'</span><small>'+esc(s.title)+'</small></button>').join("");row.querySelectorAll(".story-item").forEach(b=>b.onclick=()=>b.dataset.link?window.open(b.dataset.link,"_blank","noopener"):toast("جزئیات این استوری در حال آماده‌سازی است."));refreshIcons();}
@@ -123,13 +121,13 @@ function showView(name){
 }
 function wire(){
  $("modalClose").onclick=closeModal;
- $("navCoreBtn").onclick=()=>window.openHoranetAssistant?window.openHoranetAssistant():openEitaa("پشتیبانی حورانت۲۴");
+ $("navCoreBtn").onclick=()=>window.openHoranetAssistant?window.openHoranetAssistant():openTelegram("پشتیبانی حورانت۲۴");
  $("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal();});
  $("serviceSearch").addEventListener("input",renderServices);
  $("exploreServices").onclick=()=>showView("services");
  $("allServices").onclick=()=>{state.activeCategory="all";document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x.dataset.category==="all"));showView("services");};
  $("searchToggle").onclick=()=>{showView("services");$("serviceSearch").focus();};
- $("assistantBtn").onclick=()=>window.openHoranetAssistant?window.openHoranetAssistant():openEitaa("پشتیبانی حورانت۲۴");
+ $("assistantBtn").onclick=()=>window.openHoranetAssistant?window.openHoranetAssistant():openTelegram("پشتیبانی حورانت۲۴");
  $("profileBtn").onclick=()=>showView("account");
  document.querySelectorAll("[data-view]").forEach(btn=>btn.addEventListener("click",e=>{e.preventDefault();showView(btn.dataset.view);}));
  $("loginBtn").onclick=showLogin;
