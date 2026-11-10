@@ -831,3 +831,53 @@ i[data-lucide],svg.lucide{width:18px!important;height:18px!important;max-width:1
     width:20px!important;height:20px!important;
   }
 }
+
+
+/* H24 custom dimensional navigation icons — keeps the existing nav geometry */
+.bottom-nav .nav-3d-icon{
+  position:relative;
+  width:36px;height:34px;flex:0 0 36px;
+  display:grid;place-items:center;
+  overflow:visible;
+  border:0!important;
+  border-radius:11px;
+  background:transparent!important;
+  box-shadow:none!important;
+  transform:translateY(0);
+  transition:transform .22s ease,filter .22s ease;
+}
+.bottom-nav .nav-3d-art{
+  display:block;width:34px!important;height:34px!important;
+  min-width:34px!important;min-height:34px!important;
+  max-width:34px!important;max-height:34px!important;
+  overflow:visible;
+  filter:drop-shadow(0 4px 2px rgba(23,75,103,.2)) drop-shadow(0 7px 7px rgba(25,115,137,.13));
+  transform:translateY(-1px);
+  transition:filter .22s ease,transform .22s ease;
+}
+.bottom-nav .nav-item.selected .nav-3d-icon{
+  transform:translateY(-2px) scale(1.07);
+  filter:drop-shadow(0 5px 8px rgba(24,151,153,.22));
+}
+.bottom-nav .nav-item.selected .nav-3d-art{
+  filter:drop-shadow(0 4px 2px rgba(23,75,103,.23)) drop-shadow(0 8px 8px rgba(25,145,145,.2));
+  transform:translateY(-1px) scale(1.03);
+}
+.bottom-nav .nav-item:active .nav-3d-art{transform:translateY(1px) scale(.96)}
+.bottom-nav .nav-item small{position:relative;z-index:2}
+.bottom-nav .nav-core-halo{
+  background:radial-gradient(circle at 30% 22%,#fff 0%,#f0fffb 20%,#baf2e7 48%,#91b9ef 78%,#527fc0 100%)!important;
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 9px 18px rgba(35,124,153,.25),inset 0 2px 4px rgba(255,255,255,.95),inset 0 -5px 9px rgba(54,108,166,.16)!important;
+}
+.bottom-nav .nav-core-mark{
+  text-shadow:0 2px 0 rgba(255,255,255,.8),0 4px 8px rgba(20,91,115,.2);
+}
+@media(max-width:760px){
+  .bottom-nav .nav-3d-icon{width:32px;height:28px;flex-basis:32px}
+  .bottom-nav .nav-3d-art{
+    width:31px!important;height:31px!important;
+    min-width:31px!important;min-height:31px!important;
+    max-width:31px!important;max-height:31px!important;
+  }
+}
