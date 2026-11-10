@@ -70,13 +70,13 @@ function showView(name){
 }
 function wire(){
  $("modalClose").onclick=closeModal;
- $("navCoreBtn").onclick=()=>openEitaa("پشتیبانی حورانت۲۴");
+ $("navCoreBtn").onclick=()=>window.openHoranetAssistant?window.openHoranetAssistant():openEitaa("پشتیبانی حورانت۲۴");
  $("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal();});
  $("serviceSearch").addEventListener("input",renderServices);
  $("exploreServices").onclick=()=>showView("services");
  $("allServices").onclick=()=>{state.activeCategory="all";document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x.dataset.category==="all"));showView("services");};
  $("searchToggle").onclick=()=>{showView("services");$("serviceSearch").focus();};
- $("assistantBtn").onclick=()=>openEitaa("پشتیبانی حورانت۲۴");
+ $("assistantBtn").onclick=()=>window.openHoranetAssistant?window.openHoranetAssistant():openEitaa("پشتیبانی حورانت۲۴");
  $("profileBtn").onclick=()=>showView("account");
  document.querySelectorAll("[data-view]").forEach(btn=>btn.addEventListener("click",e=>{e.preventDefault();showView(btn.dataset.view);}));
  $("loginBtn").onclick=showLogin;
