@@ -1473,3 +1473,10 @@ html[data-theme="dark"] .bottom-nav .nav-item.selected .nav-icon{background:line
 #heroSlider .hero-arrows button,#heroSlider .hero-dot{position:relative!important;z-index:22!important;pointer-events:auto!important;touch-action:manipulation!important}
 @media(max-width:760px){#heroSlider #heroSlides{min-height:238px!important}}
 @media(prefers-reduced-motion:reduce){#heroSlider #heroSlides>.hero-slide{transition:none!important}}
+
+
+/* Membership information page inside the shared modal */
+.membership-terms{margin-top:16px}
+.membership-terms ul{padding-right:20px}
+.membership-terms li{margin:8px 0;line-height:1.9}
+#premiumJoin,#alertsJoin{margin-top:12px}
