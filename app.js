@@ -107,7 +107,7 @@ function showView(name){
  document.body.dataset.activeView=view;
  if(view==="services")renderServices();
  if(view==="account")loadAccount();
- window.scrollTo({top:0,behavior:"instant"});
+ window.scrollTo(0,0);
 }
 function wire(){
  $("modalClose").onclick=closeModal;
