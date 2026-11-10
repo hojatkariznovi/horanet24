@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./tailwind.css">
-  <link rel="stylesheet" href="./styles.css?v=23">
+  <link rel="stylesheet" href="./styles.css?v=24">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
@@ -80,13 +80,6 @@
     </div>
     <div class="hero-slider-controls"><div class="hero-dots" id="heroDots"><button type="button" class="hero-dot active" data-slide="0" aria-label="رفتن به اسلاید ۱" aria-current="true"></button><button type="button" class="hero-dot" data-slide="1" aria-label="رفتن به اسلاید ۲" aria-current="false"></button><button type="button" class="hero-dot" data-slide="2" aria-label="رفتن به اسلاید ۳" aria-current="false"></button></div><div class="hero-arrows"><button type="button" id="heroPrev" aria-label="اسلاید قبلی"><i data-lucide="chevron-right"></i></button><button type="button" id="heroNext" aria-label="اسلاید بعدی"><i data-lucide="chevron-left"></i></button></div></div>
   </section>
-  <section class="home-category-stories app-view" data-app-view="home" aria-label="دسته‌بندی خدمات">
-    <button type="button" class="home-category-story" data-home-category="vehicle"><span class="home-story-ring"><i data-lucide="car-front"></i></span><span>خدمات خودرو</span></button>
-    <button type="button" class="home-category-story" data-home-category="insurance"><span class="home-story-ring"><i data-lucide="shield-check"></i></span><span>بیمه</span></button>
-    <button type="button" class="home-category-story" data-home-category="administrative"><span class="home-story-ring"><i data-lucide="folder-open"></i></span><span>امور اداری</span></button>
-    <button type="button" class="home-category-story" data-home-category="business"><span class="home-story-ring"><i data-lucide="briefcase-business"></i></span><span>کسب‌وکار</span></button>
-    <button type="button" class="home-category-story" data-home-category="pos"><span class="home-story-ring"><i data-lucide="credit-card"></i></span><span>کارت‌خوان</span></button>
-  </section>
   <section class="welcome app-view" data-app-view="home" id="home">
     <div class="welcome-copy">
       <span class="eyebrow"><i></i> همراه دیجیتال شما</span>
@@ -98,6 +91,13 @@
       </div>
       <a class="hero-secondary" href="https://t.me/hojat_k82" target="_blank" rel="noopener">ثبت درخواست در تلگرام <span data-icon="send"></span></a>
       <div class="hero-proof"><span data-icon="badge-check"></span> راهنمای مدارک و مراحل پیش از ثبت درخواست</div>
+        <section class="home-category-stories app-view" data-app-view="home" aria-label="دسته‌بندی خدمات">
+          <button type="button" class="home-category-story" data-home-category="vehicle"><span class="home-story-ring"><i data-lucide="car-front"></i></span><span>خدمات خودرو</span></button>
+          <button type="button" class="home-category-story" data-home-category="insurance"><span class="home-story-ring"><i data-lucide="shield-check"></i></span><span>بیمه</span></button>
+          <button type="button" class="home-category-story" data-home-category="administrative"><span class="home-story-ring"><i data-lucide="folder-open"></i></span><span>امور اداری</span></button>
+          <button type="button" class="home-category-story" data-home-category="business"><span class="home-story-ring"><i data-lucide="briefcase-business"></i></span><span>کسب‌وکار</span></button>
+          <button type="button" class="home-category-story" data-home-category="pos"><span class="home-story-ring"><i data-lucide="credit-card"></i></span><span>کارت‌خوان</span></button>
+        </section>
     </div>
     <div class="orbital" aria-hidden="true"><div class="orbital-core">H<span>24</span></div><i class="orbit orbit-one"></i><i class="orbit orbit-two"></i><b class="spark spark-one"></b><b class="spark spark-two"></b></div>
     <div class="welcome-glow"></div>
@@ -195,5 +195,5 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="./app.js"></script>
 <script src="./assistant-chat.js"></script>
-<script src="./enhancements.js?v=23"></script>
+<script src="./enhancements.js?v=24"></script>
 </body></html>
