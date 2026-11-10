@@ -11,6 +11,57 @@ const LUCIDE_ICON_MAP={"car-front":"car-front","receipt":"receipt-text","fuel":"
 const iconSvg=(name="sparkles")=>'<i data-lucide="'+(LUCIDE_ICON_MAP[name]||name)+'" aria-hidden="true"></i>';
 const SERVICE_ICONS={"plate-appointment":"car-front","vehicle-fines":"receipt","fuel-card":"fuel","vehicle-transfer-followup":"car-document","vehicle-insurance-tax":"shield-car","third-party-insurance":"shield-check","car-body-insurance":"shield-car","third-party-installments":"shield-calendar","life-investment-insurance":"heart-chart","business-license":"briefcase-check","tax-accounting":"calculator","administrative-services":"folder","inheritance-certificate":"certificate","passport-request":"passport","civil-registry-services":"user-card","subsidy-household":"users","bank-account-opening":"bank","pos-device":"credit-card","pos-install-support":"wrench"};
 const categoryIcon=(categorySlug="",serviceSlug="")=>iconSvg(SERVICE_ICONS[serviceSlug]||({vehicle:"car-front",insurance:"shield-check",business:"briefcase-check",administrative:"folder",pos:"credit-card"})[categorySlug]||"sparkles");
+
+const H24_FALLBACK_PATHS={
+ house:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+ "grid-2x2":'<rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/>',
+ "shopping-bag":'<path d="M5 8h14l1 13H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/>',
+ "user-round":'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+ search:'<circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/>',
+ "arrow-left":'<path d="M19 12H5m7 7-7-7 7-7"/>',
+ "external-link":'<path d="M13 5h6v6M19 5l-9 9"/><path d="M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5"/>',
+ "badge-check":'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+ sparkles:'<path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="m19 14 1.1 2.9L23 18l-2.9 1.1L19 22l-1.1-2.9L15 18l2.9-1.1z"/>',
+ "bell-ring":'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4M2 8l2-2m18 2-2-2"/>',
+ "chevron-right":'<path d="m15 18-6-6 6-6"/>',
+ "chevron-left":'<path d="m9 18 6-6-6-6"/>',
+ send:'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+ "message-circle":'<path d="M21 11.5a8.5 8.5 0 0 1-12.8 7.3L3 20l1.2-4.3A8.5 8.5 0 1 1 21 11.5Z"/>',
+ "clipboard-list":'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M9 9h6m-6 4h6m-6 4h3"/>',
+ crown:'<path d="m2 7 5 4 5-7 5 7 5-4-2 13H4L2 7Z"/>',
+ "car-front":'<path d="m5 11 2-6h10l2 6 2 2v6h-2v-2H5v2H3v-6z"/><path d="M7 11h10M7 15h.01M17 15h.01"/>',
+ fuel:'<path d="M4 21V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v17M3 21h14M7 6h6v5H7z"/><path d="M16 8h2l2 2v7a2 2 0 0 0 4 0v-5l-2-2"/>',
+ "receipt-text":'<path d="M4 2v20l3-2 3 2 2-2 3 2 3-2 2 2V2l-3 2-3-2-2 2-3-2z"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+ "file-text":'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/>',
+ "shield-check":'<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/>',
+ "calendar-check":'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 9h18m-12 5 2 2 4-4"/>',
+ "heart-pulse":'<path d="M20.8 8.8c0 5.5-8.8 11-8.8 11S3.2 14.3 3.2 8.8A4.8 4.8 0 0 1 12 6a4.8 4.8 0 0 1 8.8 2.8Z"/><path d="M3 12h5l2-3 3 6 2-3h6"/>',
+ "briefcase-business":'<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V4h8v3M3 12h18m-11 0v2h4v-2"/>',
+ calculator:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8v4H8zM8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>',
+ folder:'<path d="M3 6a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+ award:'<circle cx="12" cy="8" r="6"/><path d="m8 13-1 9 5-3 5 3-1-9"/>',
+ passport:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="5"/><path d="M7 12h10"/>',
+ contact:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M5.5 16a4 4 0 0 1 7 0m2-7h3m-3 4h3"/>',
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-3-3.9"/>',
+ landmark:'<path d="m3 10 9-7 9 7M4 10h16M5 10v9m5-9v9m4-9v9m5-9v9M3 21h18"/>',
+ "credit-card":'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20m-15 5h4"/>',
+ wrench:'<path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3 18l3 3 5.3-5.3a5 5 0 0 0 6.4-6.4L14 12l-3-3z"/>',
+ play:'<path d="m8 5 12 7-12 7z"/>',
+ "book-open-check":'<path d="M12 7v14m0-14C9 4 5 4 3 5v14c3-1 6-1 9 2m0-14c3-3 7-3 9-2v9"/><path d="m15 16 2 2 4-4"/>',
+ "arrow-up-left":'<path d="M7 17 17 7M7 7h10v10"/>'
+};
+function renderH24FallbackIcons(){
+ document.querySelectorAll("i[data-lucide]").forEach(node=>{
+  const name=node.getAttribute("data-lucide")||"sparkles";
+  const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("viewBox","0 0 24 24");svg.setAttribute("width","18");svg.setAttribute("height","18");
+  svg.setAttribute("class",((node.getAttribute("class")||"")+" lucide h24-fallback").trim());
+  svg.setAttribute("aria-hidden","true");svg.setAttribute("fill","none");svg.setAttribute("stroke","currentColor");
+  svg.setAttribute("stroke-width","1.8");svg.setAttribute("stroke-linecap","round");svg.setAttribute("stroke-linejoin","round");
+  svg.innerHTML=H24_FALLBACK_PATHS[name]||H24_FALLBACK_PATHS.sparkles;node.replaceWith(svg);
+ });
+}
+
 const refreshIcons=()=>{
  document.querySelectorAll("[data-icon]").forEach(node=>{
   const name=node.dataset.icon||"sparkles";
@@ -19,7 +70,7 @@ const refreshIcons=()=>{
   node.classList.add("icon-host");
   node.setAttribute("aria-hidden","true");
  });
- if(window.lucide?.createIcons) window.lucide.createIcons({attrs:{'stroke-width':1.8}});
+ if(window.lucide?.createIcons) window.lucide.createIcons({attrs:{'stroke-width':1.8}}); else renderH24FallbackIcons();
 };
 function openModal(html){ $("modalContent").innerHTML=html; refreshIcons(); $("modalBackdrop").hidden=false; document.body.classList.add("modal-open"); }
 function closeModal(){ $("modalBackdrop").hidden=true; $("modalContent").innerHTML=""; document.body.classList.remove("modal-open"); }
@@ -82,4 +133,5 @@ function wire(){
  $("loginBtn").onclick=showLogin;
 }
 async function init(){wire();refreshIcons();if(!window.supabase?.createClient){$("serviceStatus").textContent="کتابخانه ارتباط با پایگاه داده بارگذاری نشد.";return;}state.client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);const {data}=await state.client.auth.getSession();state.session=data.session;await loadContent();if(state.session)await loadFavorites();loadAccount();state.client.auth.onAuthStateChange(async(_event,session)=>{state.session=session;if(session){await ensureProfile(session.user);await loadFavorites();}else state.favorites.clear();loadAccount();});if("serviceWorker"in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(console.warn);}
+window.refreshH24Icons=refreshIcons;
 document.addEventListener("DOMContentLoaded",init);
