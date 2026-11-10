@@ -639,3 +639,5 @@ footer{border-top:1px solid rgba(166,196,211,.32);color:#78909f}
 .premium-card .membership-link{color:#7665b8}
 .premium-note{display:block;margin-top:8px;color:#98a3ad;font-size:9px}
 @media(max-width:760px){.hero-slider{min-height:280px;margin:10px 0 22px;border-radius:22px}.hero-slide{min-height:240px;padding:25px 23px 42px}.hero-slide-copy{max-width:100%}.hero-slide h2{font-size:24px;max-width:270px}.hero-slide p{font-size:10px;max-width:280px}.hero-slide-art{position:absolute;left:-38px;bottom:8px;width:145px;height:140px;opacity:.55;transform:scale(.8)}.hero-art-orbit{width:130px;height:130px}.hero-art-icon{width:66px;height:66px;border-radius:23px}.hero-art-icon svg{width:30px;height:30px}.hero-art-chip{font-size:7px;right:4px}.hero-slider-controls{left:16px;right:16px;bottom:9px}.membership-grid{grid-template-columns:1fr;gap:10px;margin-bottom:34px}.membership-card{min-height:0;padding:20px}.hero-autoplay-label{font-size:8px}}
+
+.service-icon svg{width:24px;height:24px;stroke-width:1.8}
