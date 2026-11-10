@@ -82,17 +82,24 @@ const refreshIcons=()=>{
  if(window.lucide?.createIcons) window.lucide.createIcons({attrs:{'stroke-width':1.8}}); else renderH24FallbackIcons();
 };
 function showContactOptions(mode="contact",serviceTitle=""){
- const isRequest=mode==="request";
- const heading=isRequest?"ثبت درخواست در:":"ارتباط در:";
- const intro=serviceTitle?'<p class="request-context">خدمت انتخاب‌شده: <b>'+esc(serviceTitle)+'</b></p>':"";
- const eitaaSub=isRequest?"ادامه ثبت درخواست در ایتا":"ورود به ارتباط ایتا";
- const telegramSub=isRequest?"ادامه ثبت درخواست در تلگرام":"پیام خصوصی مستقیم";
+ const headings={request:"ثبت درخواست در:",contact:"ارتباط در:",membership:"درخواست عضویت در:",alerts:"دریافت اطلاع‌رسانی در:",product:"ادامه دریافت محصول در:"};
+ const heading=headings[mode]||"ادامه در:";
+ const intro=serviceTitle?'<p class="request-context">موضوع انتخاب‌شده: <b>'+esc(serviceTitle)+'</b></p>':"";
+ const eitaaSub=mode==="request"?"ادامه ثبت درخواست در ایتا":mode==="membership"?"ارسال درخواست عضویت در ایتا":mode==="alerts"?"عضویت در اطلاع‌رسانی ایتا":mode==="product"?"پیگیری دریافت محصول در ایتا":"ادامه در ایتا";
+ const telegramSub=mode==="request"?"ادامه ثبت درخواست در تلگرام":mode==="membership"?"ارسال درخواست عضویت در تلگرام":mode==="alerts"?"دریافت اطلاع‌رسانی در تلگرام":mode==="product"?"پیگیری دریافت محصول در تلگرام":"ادامه در تلگرام";
  openModal('<span class="eyebrow">حورانت۲۴ · همراه دیجیتال شما</span><h2 id="modalTitle">'+heading+'</h2>'+intro+'<div class="contact-options"><a class="contact-choice contact-eitaa" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener"><span class="contact-choice-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 12.5A7.5 7.5 0 0 1 15.5 5h17A7.5 7.5 0 0 1 40 12.5v14a7.5 7.5 0 0 1-7.5 7.5H20l-9 8v-8.5A7.5 7.5 0 0 1 8 27Z" fill="currentColor" opacity=".18"/><path d="M15 17h18M15 24h12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span><b>ایتا</b><small>'+eitaaSub+'</small></span><i data-lucide="arrow-up-left"></i></a><a class="contact-choice contact-telegram" href="https://t.me/hojat_k82" target="_blank" rel="noopener"><span class="contact-choice-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="m5 22 36-14-8 33-11-9-7 6-1-12Z" fill="currentColor"/><path d="m14 26 20-13-13 18" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>تلگرام</b><small>'+telegramSub+'</small></span><i data-lucide="arrow-up-left"></i></a></div>');
 }
 function openModal(html){ $("modalContent").innerHTML=html; refreshIcons(); $("modalBackdrop").hidden=false; document.body.classList.add("modal-open"); }
 function closeModal(){ $("modalBackdrop").hidden=true; $("modalContent").innerHTML=""; document.body.classList.remove("modal-open"); }
-const TELEGRAM_CONTACT_URL="https://t.me/hojat_k82";
-function openTelegram(text){ window.open(TELEGRAM_CONTACT_URL,"_blank","noopener"); }
+function openTelegram(text){ showContactOptions("contact",text||"پشتیبانی حورانت۲۴"); }
+function showMembershipInfo(kind="premium"){
+ if(kind==="alerts"){
+  openModal('<span class="eyebrow">اطلاع‌رسانی حورانت۲۴</span><h2 id="modalTitle">عضویت در اطلاع‌رسانی رایگان</h2><p>با عضویت در کانال یا ربات اطلاع‌رسانی، خبر فعال‌شدن ثبت‌نام‌ها، طرح‌های مهم و اطلاعیه‌های خدماتی را دریافت می‌کنی.</p><div class="detail-block"><b>پیش از عضویت بدانید</b><ul><li>عضویت برای دریافت خبرها و اطلاعیه‌ها رایگان است.</li><li>برای ادامه، پیام‌رسان دلخواهت را انتخاب می‌کنی.</li><li>هر زمان بخواهی می‌توانی عضویت را لغو کنی.</li></ul></div><button class="primary-btn full" id="alertsJoin">عضویت در اطلاع‌رسانی</button>');
+  $("alertsJoin").onclick=()=>showContactOptions("alerts","اطلاع‌رسانی حورانت۲۴");return;
+ }
+ openModal('<span class="eyebrow">باشگاه ویژه حورانت۲۴</span><h2 id="modalTitle">شرایط عضویت در کانال ویژه</h2><p>کانال ویژه برای دسترسی به آموزش‌های کاربردی، تحلیل خدمات روز، نکته‌های اجرایی و اطلاعیه‌های منتخب در نظر گرفته شده است.</p><div class="detail-block membership-terms"><b>شرایط و روند عضویت</b><ul><li>ابتدا درخواست عضویت خود را ثبت می‌کنی.</li><li>هزینه عضویت، مدت دسترسی و روش پرداخت پیش از پرداخت به‌صورت شفاف اعلام می‌شود.</li><li>عضویت پس از تأیید شرایط و تکمیل فرایند اعلام‌شده فعال خواهد شد.</li><li>قبل از آگاهی از شرایط و هزینه، هیچ پرداختی انجام نده.</li></ul></div><p class="micro-note">با انتخاب پیام‌رسان، فقط وارد گفت‌وگوی پشتیبانی می‌شوی؛ عضویت یا پرداخت به‌صورت خودکار انجام نمی‌شود.</p><button class="primary-btn full" id="premiumJoin">درخواست عضویت</button>');
+ $("premiumJoin").onclick=()=>showContactOptions("membership","عضویت در کانال ویژه حورانت۲۴");
+}
 async function ensureProfile(user){ if(!user)return; try{ const {error}=await state.client.from("profiles").upsert({id:user.id,full_name:user.user_metadata?.full_name||user.email?.split("@")[0]||"کاربر حورانت"},{onConflict:"id",ignoreDuplicates:true}); if(error)console.warn("Profile bootstrap:",error.message); }catch(e){console.warn(e);} }
 function renderCategories(){ const row=$("categoryRow"); const icons={all:"layers-3",vehicle:"car-front",insurance:"shield-check",business:"briefcase-business",administrative:"folder-open",pos:"credit-card"}; const labels={vehicle:"خدمات خودرو",insurance:"بیمه",business:"خدمات کسب‌وکار",administrative:"خدمات اداری",pos:"کارت‌خوان"}; row.innerHTML='<button class="chip active" data-category="all"><span data-icon="'+icons.all+'"></span><b>همه</b></button>'+state.categories.map(c=>'<button class="chip" data-category="'+esc(c.slug)+'"><span data-icon="'+(icons[c.slug]||"grid-2x2")+'"></span><b>'+esc(labels[c.slug]||c.title)+'</b></button>').join(""); row.querySelectorAll(".chip").forEach(btn=>btn.addEventListener("click",()=>{state.activeCategory=btn.dataset.category;row.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x===btn));renderServices();}));refreshIcons();}
 function renderServices(){
@@ -116,8 +123,8 @@ function renderProducts(){
 }
 function showProduct(id){
  const p=state.products.find(x=>x.id===id);if(!p)return;
- openModal('<span class="eyebrow">محصول دیجیتال حورانت۲۴</span><h2 id="modalTitle">'+esc(p.title)+'</h2><p>'+esc(p.description||p.summary||"برای دریافت اطلاعات بیشتر پیام دهید.")+'</p><div class="notice-box">این مورد در حال حاضر به‌عنوان محصول نمونه در ویترین نمایش داده می‌شود. برای استعلام شرایط و دریافت محصول، پیام خصوصی تلگرام را باز کنید.</div><button class="primary-btn full" id="productRequest">ارسال پیام در تلگرام ←</button>');
- $("productRequest").onclick=()=>openTelegram("محصول: "+p.title);
+ openModal('<span class="eyebrow">محصول حورانت۲۴</span><h2 id="modalTitle">'+esc(p.title)+'</h2><p>'+esc(p.description||p.summary||"برای دریافت اطلاعات بیشتر پیام دهید.")+'</p><div class="notice-box">برای استعلام موجودی، شرایط تهیه و دریافت محصول، ابتدا پیام‌رسان دلخواهت را انتخاب کن. اطلاعات و پرداخت در این سایت انجام نمی‌شود.</div><button class="primary-btn full" id="productRequest">استعلام و درخواست دریافت</button>');
+ $("productRequest").onclick=()=>showContactOptions("product",p.title);
 }
 async function loadContent(){
  try{
@@ -235,6 +242,12 @@ function initThemeAndMusic(){
 function wire(){
  initThemeAndMusic();
  $("modalClose").onclick=closeModal;
+ document.addEventListener("click",event=>{
+  const infoLink=event.target.closest("[data-h24-info]");
+  if(infoLink){event.preventDefault();showMembershipInfo(infoLink.dataset.h24Info);return;}
+  const socialLink=event.target.closest('a[href*="eitaa.com"],a[href*="t.me"]');
+  if(socialLink&&!socialLink.closest(".contact-options")){event.preventDefault();showContactOptions("contact",socialLink.dataset.h24Title||socialLink.textContent.trim()||"ادامه در پیام‌رسان");}
+ });
  $("navCoreBtn").onclick=showContactOptions;
  $("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal();});
  $("serviceSearch").addEventListener("input",renderServices);
@@ -248,7 +261,7 @@ function wire(){
  $("exploreServices").onclick=()=>showView("services");
  $("allServices").onclick=()=>{state.activeCategory="all";document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x.dataset.category==="all"));showView("services");};
  $("searchToggle").onclick=()=>{showView("services");$("serviceSearch").focus();};
- $("assistantBtn").onclick=()=>window.openHoranetAssistant?window.openHoranetAssistant():openTelegram("پشتیبانی حورانت۲۴");
+ $("assistantBtn").onclick=()=>window.openHoranetAssistant?window.openHoranetAssistant():showContactOptions("contact","پشتیبانی حورانت۲۴");
  $("profileBtn").onclick=()=>showView("account");
  document.querySelectorAll("[data-view]").forEach(btn=>btn.addEventListener("click",e=>{e.preventDefault();showView(btn.dataset.view);}));
  $("loginBtn").onclick=showLogin;
