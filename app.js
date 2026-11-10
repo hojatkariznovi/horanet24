@@ -2,7 +2,7 @@
 const SUPABASE_URL = "https://iqrgqkluuhbyphtihsls.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jJeR9OBKSiQU4dBnQrGILA_I56-Npbf";
 /* Add the exact public Eitaa bot URL here when supplied by the owner. */
-const EITAA_BOT_URL = "";
+const EITAA_BOT_URL = "https://eitaa.com/huranet24_app";
 const $ = (id) => document.getElementById(id);
 const state = { client:null, session:null, services:[], products:[], categories:[], favorites:new Set(), activeCategory:"all", selectedService:null };
 const toast = (message) => { const el=$("toast"); el.textContent=message; el.classList.add("show"); clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>el.classList.remove("show"),3000); };
@@ -10,7 +10,7 @@ const esc = (value="") => String(value).replace(/[&<>"']/g, c=>({"&":"&amp;","<"
 const categoryIcon = (slug="") => ({vehicle:"🚘",insurance:"🛡",business:"▣",administrative:"◈",pos:"▤"}[slug]||"✦");
 function openModal(html){ $("modalContent").innerHTML=html; $("modalBackdrop").hidden=false; document.body.classList.add("modal-open"); }
 function closeModal(){ $("modalBackdrop").hidden=true; $("modalContent").innerHTML=""; document.body.classList.remove("modal-open"); }
-function openEitaa(text){ if(!EITAA_BOT_URL){openModal('<span class="eyebrow">اتصال به ایتا</span><h2 id="modalTitle">یک اتصال باقی مانده</h2><p>ساختار سایت آماده اتصال است؛ فقط نشانی عمومی ربات ایتای «حورانت ۲۴» هنوز در تنظیمات وارد نشده است.</p><div class="notice-box">لینک ربات را برای اتصال نهایی در اختیار مدیر سایت قرار دهید.</div><button class="secondary-btn full" id="modalDone">متوجه شدم</button>'); $("modalDone").onclick=closeModal; return; } window.open(EITAA_BOT_URL,"_blank","noopener"); }
+function openEitaa(text){ window.open(EITAA_BOT_URL,"_blank","noopener"); }
 async function ensureProfile(user){ if(!user)return; try{ const {error}=await state.client.from("profiles").upsert({id:user.id,full_name:user.user_metadata?.full_name||user.email?.split("@")[0]||"کاربر حورانت"},{onConflict:"id",ignoreDuplicates:true}); if(error)console.warn("Profile bootstrap:",error.message); }catch(e){console.warn(e);} }
 function renderCategories(){ const row=$("categoryRow"); row.innerHTML='<button class="chip active" data-category="all">همه</button>'+state.categories.map(c=>'<button class="chip" data-category="'+esc(c.slug)+'">'+esc(c.title)+'</button>').join(""); row.querySelectorAll(".chip").forEach(btn=>btn.addEventListener("click",()=>{state.activeCategory=btn.dataset.category;row.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x===btn));renderServices();})); }
 function renderServices(){ const q=$("serviceSearch").value.trim().toLocaleLowerCase("fa"); const items=state.services.filter(s=>(state.activeCategory==="all"||s.category?.slug===state.activeCategory)&&(!q||(s.title+" "+(s.summary||"")).toLocaleLowerCase("fa").includes(q))); const grid=$("serviceGrid"); grid.innerHTML=items.length?items.map(s=>'<article class="service-card service-live" data-id="'+s.id+'"><span class="service-icon">'+categoryIcon(s.category?.slug)+'</span><div><b>'+esc(s.title)+'</b><small>'+esc(s.summary||"برای آشنایی با مدارک و مراحل انتخاب کنید")+'</small></div><span class="card-arrow">↗</span></article>').join(""):'<div class="empty-state">خدمتی با این عبارت پیدا نشد.</div>'; grid.querySelectorAll(".service-live").forEach(card=>card.addEventListener("click",()=>showService(card.dataset.id))); $("serviceStatus").textContent=items.length+" خدمت در دسترس است."; }
