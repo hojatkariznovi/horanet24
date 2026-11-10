@@ -21,14 +21,14 @@
   <link rel="stylesheet" href="./styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
 </head>
-<body>
+<body class="font-sans antialiased">
 <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
 <header class="topbar">
   <a class="brand" href="#home" aria-label="حورانت۲۴، صفحه اصلی">
     <span class="brand-mark"><span></span><span></span><span></span></span>
     <span><b>حورانت<span>۲۴</span></b><small>خدمات دیجیتال، ساده و مطمئن</small></span>
   </a>
-  <nav class="desktop-nav" aria-label="ناوبری اصلی">
+  <nav class="desktop-nav flex items-center gap-6" aria-label="ناوبری اصلی">
     <a href="#servicesSection">خدمات</a><a href="#productsSection">محصولات</a><a href="#howItWorks">راهنمای دریافت</a><a href="#aboutSection">درباره ما</a>
   </nav>
   <div class="top-actions">
@@ -42,7 +42,7 @@
       <span class="eyebrow"><i></i> همراه دیجیتال شما</span>
       <h1>کارهای مهمت را<br><em>هوشمندانه‌تر</em> انجام بده.</h1>
       <p>از خدمات خودرو و بیمه تا امور اداری و کسب‌وکار؛ مسیر انجام هر خدمت را روشن و ساده دنبال کن.</p>
-      <div class="hero-actions">
+      <div class="hero-actions flex items-center gap-4">
         <button class="primary-btn" id="exploreServices">مشاهده خدمات <span>←</span></button>
         <a class="hero-secondary" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener">ورود به ربات ایتا ↗</a>
       </div>
@@ -67,13 +67,13 @@
   </section>
 
   <section class="section product-section" id="productsSection">
-    <div class="section-head"><div><span class="eyebrow">فروشگاه حورانت</span><h2>فایل‌ها و محصولات کاربردی</h2><p class="section-subtitle">نمونه محصولات دیجیتال؛ برای دریافت نسخه نهایی و شرایط تهیه به ایتا هدایت می‌شوی.</p></div><span class="mini-label">محصولات نمونه</span></div>
+    <div class="section-head"><div><span class="eyebrow">فروشگاه حورانت</span><h2>فایل‌ها و محصولات کاربردی</h2><p class="section-subtitle">نمونه محصولات دیجیتال؛ برای دریافت نسخه نهایی و شرایط تهیه به ایتا هدایت می‌شوی.</p></div><span class="mini-label inline-flex items-center rounded-full">محصولات نمونه</span></div>
     <div class="product-grid" id="productGrid"><div class="empty-state">در حال بارگذاری محصولات...</div></div>
   </section>
 
   <section class="how-section" id="howItWorks">
     <div class="how-heading"><span class="eyebrow">مسیر دریافت خدمت</span><h2>سه قدم تا شروع</h2><p>بدون فرم‌های پیچیده؛ اطلاعات هر خدمت را ببین و از مسیر رسمی درخواستت را مطرح کن.</p></div>
-    <div class="how-grid">
+    <div class="how-grid grid grid-cols-1 md:grid-cols-3 gap-4">
       <article class="how-card"><span class="how-number">۰۱</span><div class="how-icon">⌕</div><h3>انتخاب خدمت</h3><p>از دسته‌بندی‌ها یا جستجو، خدمت موردنظرت را پیدا کن.</p></article>
       <article class="how-card"><span class="how-number">۰۲</span><div class="how-icon">▤</div><h3>بررسی مدارک</h3><p>توضیحات، مدارک لازم و مراحل انجام را پیش از اقدام بخوان.</p></article>
       <article class="how-card"><span class="how-number">۰۳</span><div class="how-icon">↗</div><h3>ادامه در ایتا</h3><p>برای ثبت درخواست و هماهنگی، وارد ربات رسمی حورانت۲۴ شو.</p></article>
