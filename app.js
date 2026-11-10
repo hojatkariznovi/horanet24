@@ -2,7 +2,7 @@
 const SUPABASE_URL = "https://iqrgqkluuhbyphtihsls.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jJeR9OBKSiQU4dBnQrGILA_I56-Npbf";
 const $ = (id) => document.getElementById(id);
-// Lightweight synthesized UI sounds: no audio files, network requests, or startup work.
+// Lightweight UI sounds: resume the audio context before scheduling notes.
 let h24UiAudio=null,h24UiSoundsEnabled=true;
 function h24UiSound(kind="tap"){
  if(!h24UiSoundsEnabled)return;
@@ -11,22 +11,26 @@ function h24UiSound(kind="tap"){
   if(!AudioCtx)return;
   if(!h24UiAudio)h24UiAudio=new AudioCtx();
   const ctx=h24UiAudio;
-  if(ctx.state==="suspended")ctx.resume().catch(()=>{});
-  const patterns={
-   tap:[[740,0,.035,.010],[990,.012,.035,.006]],
-   open:[[523,0,.075,.008],[659,.035,.075,.007],[784,.07,.095,.006]],
-   close:[[784,0,.055,.006],[659,.035,.055,.006],[523,.07,.075,.005]]
+  const play=()=>{
+   if(!h24UiSoundsEnabled||ctx.state!=="running")return;
+   const patterns={
+    tap:[[740,0,.055,.035],[990,.018,.06,.026]],
+    open:[[523,0,.09,.028],[659,.045,.09,.024],[784,.09,.12,.02]],
+    close:[[784,0,.075,.024],[659,.045,.075,.022],[523,.09,.10,.02]]
+   };
+   const now=ctx.currentTime+.025;
+   (patterns[kind]||patterns.tap).forEach(([hz,offset,duration,volume])=>{
+    const osc=ctx.createOscillator(),gain=ctx.createGain();
+    osc.type="sine";osc.frequency.setValueAtTime(hz,now+offset);
+    gain.gain.setValueAtTime(.0001,now+offset);
+    gain.gain.exponentialRampToValueAtTime(volume,now+offset+.009);
+    gain.gain.exponentialRampToValueAtTime(.0001,now+offset+duration);
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.start(now+offset);osc.stop(now+offset+duration+.015);
+   });
   };
-  const now=ctx.currentTime+.012;
-  (patterns[kind]||patterns.tap).forEach(([hz,offset,duration,volume])=>{
-   const osc=ctx.createOscillator(),gain=ctx.createGain();
-   osc.type="sine";osc.frequency.setValueAtTime(hz,now+offset);
-   gain.gain.setValueAtTime(.0001,now+offset);
-   gain.gain.exponentialRampToValueAtTime(volume,now+offset+.008);
-   gain.gain.exponentialRampToValueAtTime(.0001,now+offset+duration);
-   osc.connect(gain);gain.connect(ctx.destination);
-   osc.start(now+offset);osc.stop(now+offset+duration+.01);
-  });
+  if(ctx.state==="suspended")ctx.resume().then(play).catch(()=>{});
+  else play();
  }catch(_){}
 }
 const state = { client:null, session:null, services:[], products:[], categories:[], favorites:new Set(), activeCategory:"all", selectedService:null, profileCache:null };
@@ -250,28 +254,34 @@ function initThemeAndMusic(){
   try{localStorage.setItem("h24-ui-sounds",h24UiSoundsEnabled?"on":"off");}catch(_){}
   paintSoundButton();
  };
- let audio=null,musicTimer=null,musicOn=false,musicBusy=false;
+ let audio=null,musicTimer=null,musicOn=false,musicBusy=false,musicIndex=0;
  const musicNodes=new Set();
- const melody=[587.33,739.99,880,739.99,659.25,587.33,493.88,587.33,659.25,739.99,880,739.99,659.25,587.33,493.88,440,493.88,587.33,659.25,587.33,493.88,440,493.88,587.33];
+ const melody=[587.33,739.99,880,739.99,659.25,587.33,493.88,587.33,659.25,739.99,880,739.99,659.25,587.33,493.88,440,493.88,587.33,659.25,587.33,493.88,440,493.88,587.33,659.25,783.99,880,783.99,698.46,659.25,587.33,659.25,739.99,880,987.77,880,783.99,739.99,659.25,587.33,523.25,587.33,659.25,739.99,659.25,587.33,493.88,587.33];
  const chords=[[146.83,220,293.66,369.99],[123.47,185,246.94,293.66],[98,146.83,196,246.94],[110,164.81,220,293.66]];
  function note(freq,when,duration,volume,type="sine"){
   const osc=audio.createOscillator(),gain=audio.createGain();
   osc.type=type;osc.frequency.setValueAtTime(freq,when);
   gain.gain.setValueAtTime(.0001,when);
-  gain.gain.exponentialRampToValueAtTime(volume,when+.16);
-  gain.gain.setValueAtTime(volume,when+Math.max(.17,duration-.22));
+  gain.gain.exponentialRampToValueAtTime(volume,when+.08);
+  gain.gain.setValueAtTime(volume,when+Math.max(.09,duration-.12));
   gain.gain.exponentialRampToValueAtTime(.0001,when+duration);
   osc.connect(gain);gain.connect(audio.destination);
   musicNodes.add(osc);osc.onended=()=>musicNodes.delete(osc);
-  osc.start(when);osc.stop(when+duration+.05);
+  osc.start(when);osc.stop(when+duration+.03);
  }
  function stopMusicNodes(){for(const node of musicNodes){try{node.stop();}catch(_){}}musicNodes.clear();}
- function scheduleMusicLoop(){
-  if(!audio||!musicOn||musicTimer!==null)return;
-  const start=audio.currentTime+.18,step=.62,loopSeconds=melody.length*step;
-  melody.forEach((freq,i)=>{const t=start+i*step;note(freq,t,.54,.014,"sine");note(freq,t,.48,.004,"triangle");if(i%2===0)note(freq/2,t,.68,.003,"sine");});
-  chords.forEach((ch,i)=>ch.forEach(freq=>note(freq,start+i*step*6,step*6-.18,.0038,"sine")));
-  musicTimer=setTimeout(()=>{musicTimer=null;scheduleMusicLoop();},Math.max(1000,loopSeconds*1000-180));
+ function playMusicStep(){
+  if(!audio||!musicOn)return;
+  const freq=melody[musicIndex];
+  const when=audio.currentTime+.035;
+  note(freq,when,.53,.018,"sine");
+  note(freq,when,.48,.005,"triangle");
+  if(musicIndex%6===0){
+   const chord=chords[Math.floor(musicIndex/6)%chords.length];
+   chord.forEach(hz=>note(hz,when,3.35,.0035,"sine"));
+  }
+  musicIndex=(musicIndex+1)%melody.length;
+  musicTimer=setTimeout(()=>{musicTimer=null;playMusicStep();},620);
  }
  function paintMusicButton(){
   if(!musicButton)return;
@@ -288,8 +298,16 @@ function initThemeAndMusic(){
    const Ctx=window.AudioContext||window.webkitAudioContext;
    if(!Ctx){toast("مرورگر شما پخش موسیقی را پشتیبانی نمی‌کند.");return;}
    if(!audio)audio=new Ctx();
-   if(musicOn){musicOn=false;if(musicTimer!==null){clearTimeout(musicTimer);musicTimer=null;}stopMusicNodes();await audio.suspend();}
-   else{await audio.resume();musicOn=true;scheduleMusicLoop();}
+   if(musicOn){
+    musicOn=false;
+    if(musicTimer!==null){clearTimeout(musicTimer);musicTimer=null;}
+    stopMusicNodes();
+    await audio.suspend();
+   }else{
+    await audio.resume();
+    musicOn=true;
+    playMusicStep();
+   }
    paintMusicButton();
   }finally{musicBusy=false;}
  }
