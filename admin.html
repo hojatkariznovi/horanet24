@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./tailwind.css"><link rel="stylesheet" href="./styles.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
 <body class="font-sans antialiased">
 <header class="topbar"><a class="brand" href="./"><span class="brand-mark"><span></span><span></span><span></span></span><span><b>حورانت<span>۲۴</span></b><small>پنل مدیریت محتوا</small></span></a><a class="hero-secondary" href="./">بازگشت به سایت ↗</a></header>
@@ -17,7 +18,8 @@
 <section id="adminDenied" class="admin-card" hidden><h2>دسترسی مدیر فعال نیست</h2><p>ورود انجام شده، اما این حساب هنوز در فهرست مدیران حورانت۲۴ ثبت نشده است. برای امنیت، هیچ امکان ویرایشی در اختیار این حساب قرار نمی‌گیرد.</p><button id="adminLogoutDenied" class="secondary-btn">خروج از حساب</button></section>
 <section id="adminWorkspace" hidden>
 <div class="admin-toolbar"><div><b id="adminEmail"></b><small>مدیریت محتوای زنده سایت</small></div><button id="adminLogout" class="secondary-btn">خروج</button></div>
-<div class="admin-tabs"><button class="chip active" data-tab="services">خدمات</button><button class="chip" data-tab="products">محصولات</button></div>
+<div class="admin-tabs"><button class="chip active" data-tab="services">خدمات</button><button class="chip" data-tab="products">محصولات</button><button class="chip" data-tab="hero_slides">اسلایدر و بنرها</button></div>
+<section class="admin-card premium-settings"><div class="section-head"><div><span class="eyebrow">تنظیمات عضویت ویژه</span><h2>کانال آموزشی پولی</h2></div></div><form id="premiumChannelForm" class="app-form"><label>عنوان کانال</label><input name="title" value="کانال ویژه حورانت۲۴"><label>توضیحات</label><textarea name="description" rows="2">آموزش‌های کاربردی، تحلیل خدمات روز و اطلاعیه‌های اختصاصی</textarea><label>لینک دعوت یا عضویت (پس از ساخت کانال)</label><input name="url" type="url" dir="ltr" placeholder="https://t.me/..."><button class="primary-btn" type="submit">ذخیره تنظیمات کانال</button><p id="premiumSaveMessage" class="micro-note"></p></form></section>
 <div class="admin-layout">
 <section class="admin-card"><div class="section-head"><div><span class="eyebrow" id="formEyebrow">مدیریت خدمات</span><h2 id="formTitle">افزودن خدمت</h2></div><button id="resetForm" class="text-btn">فرم تازه</button></div>
 <form id="contentForm" class="app-form">
@@ -31,6 +33,15 @@
 <label>مدارک موردنیاز (هر مورد در یک خط)</label><textarea name="required_documents" rows="4"></textarea>
 <label>مراحل انجام (هر مرحله در یک خط)</label><textarea name="steps" rows="4"></textarea>
 <label class="admin-check"><input type="checkbox" name="is_featured"> نمایش به‌عنوان خدمت منتخب</label>
+</div>
+<div id="slideFields" hidden>
+<label>برچسب بالای اسلاید</label><input name="eyebrow" placeholder="اطلاعیه مهم">
+<label>عنوان اسلاید</label><input name="slide_title" maxlength="140" placeholder="عنوان بنر">
+<label>توضیح اسلاید</label><textarea name="slide_description" rows="3" placeholder="توضیح کوتاه و روشن"></textarea>
+<label>نشان کوچک</label><input name="badge_label" placeholder="ثبت‌نام فعال شد">
+<label>متن دکمه</label><input name="button_text" placeholder="مشاهده جزئیات">
+<label>لینک دکمه</label><input name="button_url" dir="ltr" placeholder="https://...">
+<label>تصویر پس‌زمینه (اختیاری)</label><input name="image_url" dir="ltr" placeholder="https://...">
 </div>
 <div id="productFields" hidden>
 <label>برچسب قیمت / شرایط</label><input name="price_label" placeholder="برای استعلام به ایتا پیام دهید">
