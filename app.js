@@ -3,8 +3,9 @@ const SUPABASE_URL = "https://iqrgqkluuhbyphtihsls.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jJeR9OBKSiQU4dBnQrGILA_I56-Npbf";
 const $ = (id) => document.getElementById(id);
 // Lightweight synthesized UI sounds: no audio files, network requests, or startup work.
-let h24UiAudio=null;
+let h24UiAudio=null,h24UiSoundsEnabled=true;
 function h24UiSound(kind="tap"){
+ if(!h24UiSoundsEnabled)return;
  try{
   const AudioCtx=window.AudioContext||window.webkitAudioContext;
   if(!AudioCtx)return;
@@ -223,7 +224,7 @@ function showView(name){
  // Keep tab navigation in place; no page jump or anchor scrolling.
 }
 function initThemeAndMusic(){
- const themeButton=$("themeToggle"),musicButton=$("musicToggle"),root=document.documentElement;
+ const themeButton=$("themeToggle"),soundButton=$("soundToggle"),musicButton=$("musicToggle"),root=document.documentElement;
  const applyTheme=theme=>{
   const mode=theme==="dark"?"dark":"light";
   root.dataset.theme=mode;
@@ -234,9 +235,23 @@ function initThemeAndMusic(){
  let saved="light";try{saved=localStorage.getItem("h24-theme")||"light";}catch(_){}
  applyTheme(saved);
  if(themeButton)themeButton.onclick=()=>applyTheme(root.dataset.theme==="dark"?"light":"dark");
+ try{h24UiSoundsEnabled=localStorage.getItem("h24-ui-sounds")!=="off";}catch(_){}
+ function paintSoundButton(){
+  if(!soundButton)return;
+  soundButton.innerHTML='<span data-icon="'+(h24UiSoundsEnabled?"volume-2":"volume-x")+'"></span>';
+  soundButton.setAttribute("aria-label",h24UiSoundsEnabled?"خاموش‌کردن صداهای لمس و کلیک":"روشن‌کردن صداهای لمس و کلیک");
+  soundButton.title=h24UiSoundsEnabled?"صداهای رابط کاربری روشن":"صداهای رابط کاربری خاموش";
+  soundButton.setAttribute("aria-pressed",String(h24UiSoundsEnabled));
+  refreshIcons();
+ }
+ paintSoundButton();
+ if(soundButton)soundButton.onclick=()=>{
+  h24UiSoundsEnabled=!h24UiSoundsEnabled;
+  try{localStorage.setItem("h24-ui-sounds",h24UiSoundsEnabled?"on":"off");}catch(_){}
+  paintSoundButton();
+ };
  let audio=null,musicTimer=null,musicOn=false,musicBusy=false;
  const musicNodes=new Set();
- // Original calm ambient theme. A single scheduler and tracked oscillators prevent stacked playback.
  const melody=[587.33,739.99,880,739.99,659.25,587.33,493.88,587.33,659.25,739.99,880,739.99,659.25,587.33,493.88,440,493.88,587.33,659.25,587.33,493.88,440,493.88,587.33];
  const chords=[[146.83,220,293.66,369.99],[123.47,185,246.94,293.66],[98,146.83,196,246.94],[110,164.81,220,293.66]];
  function note(freq,when,duration,volume,type="sine"){
@@ -250,21 +265,21 @@ function initThemeAndMusic(){
   musicNodes.add(osc);osc.onended=()=>musicNodes.delete(osc);
   osc.start(when);osc.stop(when+duration+.05);
  }
- function stopMusicNodes(){
-  for(const node of musicNodes){try{node.stop();}catch(_){}}
-  musicNodes.clear();
- }
+ function stopMusicNodes(){for(const node of musicNodes){try{node.stop();}catch(_){}}musicNodes.clear();}
  function scheduleMusicLoop(){
   if(!audio||!musicOn||musicTimer!==null)return;
   const start=audio.currentTime+.18,step=.62,loopSeconds=melody.length*step;
-  melody.forEach((freq,i)=>{
-   const t=start+i*step;
-   note(freq,t,.54,.014,"sine");
-   note(freq,t,.48,.004,"triangle");
-   if(i%2===0)note(freq/2,t,.68,.003,"sine");
-  });
+  melody.forEach((freq,i)=>{const t=start+i*step;note(freq,t,.54,.014,"sine");note(freq,t,.48,.004,"triangle");if(i%2===0)note(freq/2,t,.68,.003,"sine");});
   chords.forEach((ch,i)=>ch.forEach(freq=>note(freq,start+i*step*6,step*6-.18,.0038,"sine")));
   musicTimer=setTimeout(()=>{musicTimer=null;scheduleMusicLoop();},Math.max(1000,loopSeconds*1000-180));
+ }
+ function paintMusicButton(){
+  if(!musicButton)return;
+  musicButton.innerHTML='<span data-icon="'+(musicOn?"pause":"play")+'"></span>';
+  musicButton.setAttribute("aria-label",musicOn?"توقف موسیقی اختصاصی حورانت۲۴":"پخش موسیقی اختصاصی حورانت۲۴");
+  musicButton.title=musicOn?"توقف موسیقی":"پخش موسیقی حورانت۲۴";
+  musicButton.setAttribute("aria-pressed",String(musicOn));
+  refreshIcons();
  }
  async function toggleMusic(){
   if(musicBusy)return;
@@ -273,20 +288,12 @@ function initThemeAndMusic(){
    const Ctx=window.AudioContext||window.webkitAudioContext;
    if(!Ctx){toast("مرورگر شما پخش موسیقی را پشتیبانی نمی‌کند.");return;}
    if(!audio)audio=new Ctx();
-   if(musicOn){
-    musicOn=false;
-    if(musicTimer!==null){clearTimeout(musicTimer);musicTimer=null;}
-    stopMusicNodes();
-    await audio.suspend();
-   }else{
-    await audio.resume();
-    musicOn=true;
-    scheduleMusicLoop();
-   }
-   if(musicButton){musicButton.innerHTML='<span data-icon="'+(musicOn?"pause":"volume-2")+'"></span>';musicButton.setAttribute("aria-label",musicOn?"توقف موسیقی حورانت۲۴":"پخش موسیقی حورانت۲۴");musicButton.title=musicOn?"توقف موسیقی":"پخش موسیقی حورانت۲۴";}
-   refreshIcons();
+   if(musicOn){musicOn=false;if(musicTimer!==null){clearTimeout(musicTimer);musicTimer=null;}stopMusicNodes();await audio.suspend();}
+   else{await audio.resume();musicOn=true;scheduleMusicLoop();}
+   paintMusicButton();
   }finally{musicBusy=false;}
  }
+ paintMusicButton();
  if(musicButton)musicButton.onclick=()=>toggleMusic().catch(error=>{console.warn("H24 music:",error);toast("پخش موسیقی آغاز نشد.");});
 }
 function wire(){
