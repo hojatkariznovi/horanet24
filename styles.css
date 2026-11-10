@@ -1136,3 +1136,56 @@ p{line-height:2}
  .modal-actions #serviceRequest{min-width:138px!important;max-width:170px!important;height:43px!important;min-height:43px!important;padding-inline:13px!important;font-size:11.5px!important}
  .modal-actions #favoriteBtn{font-size:9px!important;padding-inline:10px!important}
 }
+
+
+/* H24 compact top carousel: one fixed-height frame, reliable slide transitions */
+.shell{padding-top:0!important}
+.hero-slider{
+ width:100%!important;min-height:0!important;height:174px!important;
+ margin:8px 0 18px!important;border-radius:19px!important;overflow:hidden!important;
+}
+.hero-slides{height:174px!important;min-height:0!important}
+.hero-slide,.hero-slide.active{
+ height:174px!important;min-height:0!important;padding:17px 28px 31px!important;
+ align-items:center!important;
+}
+.hero-slide-copy{max-width:72%!important}
+.hero-kicker{font-size:9px!important}
+.hero-pill{font-size:8px!important;padding:3px 8px!important}
+.hero-slide h2{font-size:clamp(16px,2.1vw,22px)!important;line-height:1.45!important;margin:5px 0 3px!important}
+.hero-slide p{font-size:10px!important;line-height:1.65!important;max-width:520px!important;margin:0 0 8px!important}
+.hero-slide-cta{font-size:9px!important;padding:6px 11px!important;border-radius:9px!important;gap:6px!important}
+.hero-slide-art{width:155px!important;height:130px!important;flex-basis:155px!important;transform:scale(.76)!important}
+.hero-art-orbit{width:145px!important;height:145px!important}
+.hero-art-icon{width:68px!important;height:68px!important;border-radius:22px!important}
+.hero-art-icon svg{width:32px!important;height:32px!important}
+.hero-art-chip{font-size:7px!important;bottom:4px!important}
+.hero-slider-controls{left:17px!important;right:17px!important;bottom:7px!important}
+.hero-arrows button{width:24px!important;height:24px!important;min-width:24px!important;min-height:24px!important}
+.hero-dot{width:5px!important;height:5px!important}
+.hero-dot.active{width:18px!important}
+@media(max-width:760px){
+ .shell{padding-top:0!important}
+ .hero-slider{height:150px!important;min-height:0!important;margin:6px 0 15px!important;border-radius:16px!important}
+ .hero-slides{height:150px!important;min-height:0!important}
+ .hero-slide,.hero-slide.active{height:150px!important;min-height:0!important;padding:13px 15px 27px!important}
+ .hero-slide-copy{max-width:100%!important;width:100%!important;padding-inline-end:0!important}
+ .hero-kicker{font-size:8px!important}
+ .hero-pill{font-size:7px!important;padding:2px 7px!important;margin-right:6px!important}
+ .hero-slide h2{font-size:clamp(15px,4.4vw,18px)!important;line-height:1.45!important;max-width:calc(100% - 60px)!important;margin:5px 0 3px!important}
+ .hero-slide p{font-size:9px!important;line-height:1.6!important;max-width:calc(100% - 28px)!important;margin-bottom:6px!important}
+ .hero-slide-cta{min-height:27px!important;padding:4px 9px!important;font-size:8px!important}
+ .hero-slide-art{position:absolute!important;left:-32px!important;bottom:-15px!important;width:100px!important;height:100px!important;opacity:.28!important;transform:scale(.65)!important;transform-origin:left bottom!important}
+ .hero-art-orbit{width:105px!important;height:105px!important}
+ .hero-art-icon{width:52px!important;height:52px!important;border-radius:17px!important}
+ .hero-art-icon svg{width:24px!important;height:24px!important}
+ .hero-art-chip{display:none!important}
+ .hero-slider-controls{left:10px!important;right:10px!important;bottom:5px!important}
+ .hero-arrows button{width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important}
+}
+@media(max-width:380px){
+ .hero-slider{height:158px!important}
+ .hero-slides,.hero-slide,.hero-slide.active{height:158px!important}
+ .hero-slide h2{font-size:15px!important}
+ .hero-slide p{font-size:8.5px!important}
+}
