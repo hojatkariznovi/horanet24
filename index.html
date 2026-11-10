@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./tailwind.css">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=22">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
@@ -73,8 +73,12 @@
 </header>
 <main class="shell">
   <section class="hero-slider app-view" data-app-view="home" id="heroSlider" aria-label="اطلاعیه‌ها و پیشنهادهای مهم">
-    <div class="hero-slides" id="heroSlides"><article class="hero-slide active"><div class="hero-slide-copy"><span class="hero-kicker">اطلاعیه‌های حورانت۲۴</span><span class="hero-pill">به‌روز و کاربردی</span><h2>از فرصت‌های مهم جا نمان</h2><p>اطلاعیه ثبت‌نام‌ها، طرح‌های حمایتی و خدمات تازه را از یک مسیر دنبال کن.</p><a class="hero-slide-cta" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener">عضویت در اطلاع‌رسانی <i data-lucide="arrow-up-left"></i></a></div><div class="hero-slide-art"><span class="hero-art-orbit"></span><span class="hero-art-icon"><i data-lucide="bell-ring"></i></span><span class="hero-art-chip">H24 · ALERT</span></div></article></div>
-    <div class="hero-slider-controls"><div class="hero-dots" id="heroDots"></div><div class="hero-arrows"><button type="button" id="heroPrev" aria-label="اسلاید قبلی"><i data-lucide="chevron-right"></i></button><button type="button" id="heroNext" aria-label="اسلاید بعدی"><i data-lucide="chevron-left"></i></button></div></div>
+    <div class="hero-slides" id="heroSlides">
+      <article class="hero-slide active" aria-hidden="false"><div class="hero-slide-copy"><span class="hero-kicker">خدمات خودرو</span><span class="hero-pill">راهنمای آنلاین</span><h2>کارهای خودرویی، روشن و ساده</h2><p>نوبت تعویض پلاک، کارت سوخت و خدمات مرتبط با خودرو را با مدارک و مراحل مشخص دنبال کن.</p><a class="hero-slide-cta" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener">دریافت راهنمایی <i data-lucide="arrow-up-left"></i></a></div><div class="hero-slide-art"><span class="hero-art-orbit"></span><span class="hero-art-icon"><i data-lucide="car-front"></i></span><span class="hero-art-chip">HORANET24</span></div></article>
+      <article class="hero-slide" aria-hidden="true"><div class="hero-slide-copy"><span class="hero-kicker">بیمه</span><span class="hero-pill">نقدی و اقساطی</span><h2>برای بیمه، انتخاب آگاهانه‌تری داشته باش</h2><p>راهنمای بیمه شخص ثالث، بیمه بدنه و سایر خدمات بیمه‌ای را از حورانت۲۴ دریافت کن.</p><a class="hero-slide-cta" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener">مشاهده خدمات بیمه <i data-lucide="arrow-up-left"></i></a></div><div class="hero-slide-art"><span class="hero-art-orbit"></span><span class="hero-art-icon"><i data-lucide="shield-check"></i></span><span class="hero-art-chip">HORANET24</span></div></article>
+      <article class="hero-slide" aria-hidden="true"><div class="hero-slide-copy"><span class="hero-kicker">خدمات اداری و کسب‌وکار</span><span class="hero-pill">همراه دیجیتال شما</span><h2>از امور اداری تا خدمات کسب‌وکار</h2><p>مدارک، مراحل و راهنمای خدماتی مثل مجوز کسب و امور مالیاتی را یک‌جا بررسی کن.</p><a class="hero-slide-cta" href="https://eitaa.com/huranet24_app" target="_blank" rel="noopener">شروع از پشتیبانی <i data-lucide="arrow-up-left"></i></a></div><div class="hero-slide-art"><span class="hero-art-orbit"></span><span class="hero-art-icon"><i data-lucide="briefcase-business"></i></span><span class="hero-art-chip">HORANET24</span></div></article>
+    </div>
+    <div class="hero-slider-controls"><div class="hero-dots" id="heroDots"><button type="button" class="hero-dot active" data-slide="0" aria-label="رفتن به اسلاید ۱" aria-current="true"></button><button type="button" class="hero-dot" data-slide="1" aria-label="رفتن به اسلاید ۲" aria-current="false"></button><button type="button" class="hero-dot" data-slide="2" aria-label="رفتن به اسلاید ۳" aria-current="false"></button></div><div class="hero-arrows"><button type="button" id="heroPrev" aria-label="اسلاید قبلی"><i data-lucide="chevron-right"></i></button><button type="button" id="heroNext" aria-label="اسلاید بعدی"><i data-lucide="chevron-left"></i></button></div></div>
   </section>
   <section class="welcome app-view" data-app-view="home" id="home">
     <div class="welcome-copy">
@@ -184,5 +188,5 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="./app.js"></script>
 <script src="./assistant-chat.js"></script>
-<script src="./enhancements.js"></script>
+<script src="./enhancements.js?v=22"></script>
 </body></html>
