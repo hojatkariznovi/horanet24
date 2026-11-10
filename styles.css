@@ -1316,3 +1316,15 @@ p{line-height:2}
  .category-row .chip{padding:7px 12px;font-size:9px}
 }
 @media(hover:none){.home-category-story:active,.category-row .chip:active{transform:scale(.97)}}
+
+
+/* Services category navigation: match the compact stepper capsules below the intro */
+#servicesSection .category-row{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:center!important;gap:10px!important;width:100%!important;margin:2px 0 14px!important;padding:2px 2px 8px!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none!important;-webkit-overflow-scrolling:touch}
+#servicesSection .category-row::-webkit-scrollbar{display:none!important}
+#servicesSection .category-row .chip{flex:0 0 auto!important;min-height:39px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;padding:6px 14px!important;border:1px solid #dcebea!important;border-radius:999px!important;background:linear-gradient(145deg,#fff,#f0f8f7)!important;box-shadow:0 5px 15px rgba(62,135,150,.08)!important;color:#587889!important;font-size:10px!important;font-weight:650!important;white-space:nowrap!important;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease,background .2s ease,color .2s ease!important}
+#servicesSection .category-row .chip span,#servicesSection .category-row .chip svg{width:19px!important;height:19px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;color:#239b9d!important;stroke-width:1.8!important}
+#servicesSection .category-row .chip:hover,#servicesSection .category-row .chip:focus-visible{transform:translateY(-3px)!important;border-color:#75cfc4!important;background:linear-gradient(145deg,#fff,#e5f7f3)!important;box-shadow:0 9px 20px rgba(43,151,151,.17)!important;color:#247f83!important;outline:none!important}
+#servicesSection .category-row .chip.active{border-color:#75cfc4!important;background:linear-gradient(145deg,#e8f8f4,#eaf0fc)!important;color:#187f85!important;box-shadow:0 6px 15px rgba(43,151,151,.14)!important}
+#servicesSection .category-row .chip.active span,#servicesSection .category-row .chip.active svg{color:#168e91!important}
+@media(max-width:760px){#servicesSection .category-row{justify-content:flex-start!important;gap:7px!important;margin:0 0 12px!important;padding:2px 1px 8px!important}#servicesSection .category-row .chip{min-height:36px!important;padding:5px 11px!important;font-size:9px!important}}
+@media(hover:none){#servicesSection .category-row .chip:active{transform:scale(.97)!important}}
