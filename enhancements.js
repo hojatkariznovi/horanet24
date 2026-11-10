@@ -20,7 +20,7 @@
   dots.innerHTML=slides.length>1?slides.map((_,i)=>'<button type="button" class="hero-dot '+(i===index?"active":"")+'" data-slide="'+i+'" aria-label="رفتن به اسلاید '+(i+1)+'" aria-current="'+(i===index?"true":"false")+'"></button>').join(""):"";
   dots.querySelectorAll("[data-slide]").forEach(b=>b.addEventListener("click",()=>go(Number(b.dataset.slide))));
   if(arrows)arrows.hidden=slides.length<2;
-  if(window.refreshH24Icons)window.refreshH24Icons();else window.lucide?.createIcons?.({attrs:{"stroke-width":1.8}});
+  try{if(window.refreshH24Icons)window.refreshH24Icons();else window.lucide?.createIcons?.({attrs:{"stroke-width":1.8}});}catch(error){console.warn("Horanet slider icon refresh skipped:",error);}
  }
  function go(next){
   if(slides.length<2)return;
@@ -57,6 +57,8 @@
   }
  }
  // First render and autoplay are independent of Supabase and run as soon as the page loads.
- bind();render();start();
  window.initHoranetSlider=init;
+ bind();
+ try{render();}catch(error){console.error("Horanet slider render:",error);}
+ start();
 })();
