@@ -168,6 +168,7 @@ $("contentForm").onsubmit=async e=>{
  const {error}=await q;if(error){$("saveMessage").textContent="ذخیره ناموفق: "+error.message;return;}
  toast("محتوا با موفقیت ذخیره شد.");$("saveMessage").textContent="ذخیره شد و فهرست به‌روزرسانی شد.";reset();if(state.tab==="product_categories"||state.tab==="service_categories")await loadCategories();await loadItems();
 };
+$("timeLimitedToggle").addEventListener("change",e=>{$("timeLimitFields").hidden=!e.target.checked;});
 $("refreshList").onclick=loadItems;$("resetForm").onclick=reset;$("adminLogout").onclick=async()=>{await db.auth.signOut();};$("adminLogoutDenied").onclick=async()=>{await db.auth.signOut();};
 document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));$("refreshAssistantLeads").onclick=loadAssistantLeads;
 async function loadSettings(){const {data,error}=await db.from("site_settings").select("setting_value").eq("setting_key","premium_channel").maybeSingle();if(error||!data)return;const v=data.setting_value||{};const f=$("premiumChannelForm");f.elements.title.value=v.title||"کانال ویژه حورانت۲۴";f.elements.description.value=v.description||"";f.elements.url.value=v.url||"";}
