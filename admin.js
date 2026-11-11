@@ -83,6 +83,7 @@ function editItem(id){
  const keys=["id","title","slug","summary","description","category_id","price","price_label","compare_at_price","image_url","product_type","sku","stock_quantity","stock_status","badge","file_path","file_name","file_size","sort_order","eyebrow","badge_label","button_text","button_url","icon"];
  for(const key of keys)if(f.elements[key])f.elements[key].value=x[key]??"";
  if($("categorySelect"))$("categorySelect").value=x.category_id||"";if($("productCategorySelect"))$("productCategorySelect").value=x.category_id||"";
+ if(f.elements.category_icon)f.elements.category_icon.value=x.icon||"";
  if(f.elements.slide_title)f.elements.slide_title.value=x.title||"";
  if(f.elements.slide_image_url)f.elements.slide_image_url.value=x.image_url||"";
  if(f.elements.slide_description)f.elements.slide_description.value=x.description||"";
