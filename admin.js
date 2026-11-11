@@ -11,11 +11,11 @@ function reset(){
  const f=$("contentForm");f.reset();f.elements.id.value="";f.elements.sort_order.value="0";f.elements.is_active.checked=true;
  if(f.elements.stock_quantity)f.elements.stock_quantity.value="0";
  if(f.elements.stock_status)f.elements.stock_status.value="inquiry";
- $("formTitle").textContent=state.tab==="services"?"افزودن خدمت":state.tab==="products"?"افزودن محصول":state.tab==="product_categories"?"افزودن دسته‌بندی":"افزودن اسلاید";
+ $("formTitle").textContent=state.tab==="services"?"افزودن خدمت":state.tab==="products"?"افزودن محصول":(state.tab==="product_categories"||state.tab==="service_categories")?"افزودن دسته‌بندی":"افزودن اسلاید";
  $("saveMessage").textContent="";
 }
 function setTab(tab){
- state.tab=tab;const leads=tab==="assistant_leads",slide=tab==="hero_slides",service=tab==="services",product=tab==="products",category=tab==="product_categories";
+ state.tab=tab;const leads=tab==="assistant_leads",slide=tab==="hero_slides",service=tab==="services",product=tab==="products",category=tab==="product_categories"||tab==="service_categories";
  show("assistantLeadsPanel",leads);document.querySelector(".admin-layout").hidden=leads;document.querySelector(".premium-settings").hidden=leads;
  document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
  show("serviceFields",service);show("productFields",product);show("slideFields",slide);show("categoryFields",category);
@@ -29,8 +29,8 @@ function setTab(tab){
  if(f.elements.category_icon)f.elements.category_icon.disabled=!category;
  if(f.elements.category_description)f.elements.category_description.disabled=!category;
  if(category){f.elements.description.disabled=false;}
- $("formEyebrow").textContent=service?"مدیریت خدمات":product?"مدیریت محصولات":category?"مدیریت دسته‌بندی فروشگاه":"مدیریت اسلایدر";
- $("listTitle").textContent=service?"فهرست خدمات":product?"فهرست محصولات":category?"دسته‌بندی‌های فروشگاه":"اسلایدها و بنرها";
+ $("formEyebrow").textContent=service?"مدیریت خدمات":product?"مدیریت محصولات":category?(tab==="product_categories"?"مدیریت دسته‌بندی فروشگاه":"مدیریت دسته‌بندی خدمات"):"مدیریت اسلایدر";
+ $("listTitle").textContent=service?"فهرست خدمات":product?"فهرست محصولات":category?(tab==="product_categories"?"دسته‌بندی‌های فروشگاه":"دسته‌بندی‌های خدمات"):"اسلایدها و بنرها";
  reset();loadItems();
 }
 async function checkAdmin(session){
@@ -57,7 +57,7 @@ async function loadItems(){
  if(!state.admin)return;if(state.tab==="assistant_leads"){await loadAssistantLeads();return;}
  const cols=state.tab==="services"?"id,title,slug,summary,description,category_id,required_documents,steps,is_active,is_featured,sort_order":
  state.tab==="products"?"id,title,slug,summary,description,price,price_label,compare_at_price,image_url,product_type,category_id,sku,stock_quantity,stock_status,badge,specifications,file_path,file_name,file_size,is_active,is_featured,is_new,sort_order":
- state.tab==="product_categories"?"id,title,slug,description,icon,is_active,sort_order":"id,eyebrow,title,description,badge_label,button_text,button_url,image_url,is_active,sort_order";
+ (state.tab==="product_categories"||state.tab==="service_categories")?"id,title,slug,description,icon,is_active,sort_order":"id,eyebrow,title,description,badge_label,button_text,button_url,image_url,is_active,sort_order";
  const {data,error}=await db.from(state.tab).select(cols).order("sort_order");
  if(error){$("contentList").innerHTML='<div class="empty-state">خطا در دریافت محتوا: '+esc(error.message)+'</div>';return;}
  state.items=data||[];renderList();
@@ -73,10 +73,10 @@ function renderList(){
  const el=$("contentList");if(!state.items.length){el.innerHTML='<div class="empty-state">موردی ثبت نشده است.</div>';return;}
  el.innerHTML=state.items.map(x=>{
   const detail=state.tab==="products"?(x.price?Number(x.price).toLocaleString("fa-IR")+" تومان":(x.price_label||"قیمت استعلامی"))+" · "+(x.stock_status==="in_stock"?"موجود":x.stock_status==="out_of_stock"?"ناموجود":x.stock_status==="preorder"?"پیش‌سفارش":"استعلام موجودی"):
-  state.tab==="product_categories"?(x.slug||"دسته‌بندی"):state.tab==="services"?(x.slug||"خدمت"):(x.badge_label||x.eyebrow||"اسلاید");
-  return '<article class="admin-list-item"><div><b>'+esc(x.title)+'</b><small>'+esc(detail)+' · '+(x.is_active?"فعال":"غیرفعال")+'</small></div><div class="admin-item-actions"><button class="secondary-btn" data-edit="'+x.id+'">ویرایش</button><button class="secondary-btn" data-toggle="'+x.id+'">'+(x.is_active?"غیرفعال‌سازی":"فعال‌سازی")+'</button></div></article>';
+  (state.tab==="product_categories"||state.tab==="service_categories")?(x.slug||"دسته‌بندی"):state.tab==="services"?(x.slug||"خدمت"):(x.badge_label||x.eyebrow||"اسلاید");
+  return '<article class="admin-list-item"><div><b>'+esc(x.title)+'</b><small>'+esc(detail)+' · '+(x.is_active?"فعال":"غیرفعال")+'</small></div><div class="admin-item-actions"><button class="secondary-btn" data-edit="'+x.id+'">ویرایش</button><button class="secondary-btn" data-toggle="'+x.id+'">'+(x.is_active?"غیرفعال‌سازی":"فعال‌سازی")+'</button><button class="secondary-btn admin-delete-btn" data-delete="'+x.id+'">حذف</button></div></article>';
  }).join("");
- el.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editItem(b.dataset.edit));el.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>toggleItem(b.dataset.toggle));
+ el.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editItem(b.dataset.edit));el.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>toggleItem(b.dataset.toggle));el.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteItem(b.dataset.delete));
 }
 function editItem(id){
  const x=state.items.find(i=>i.id===id);if(!x)return;const f=$("contentForm");
@@ -100,6 +100,13 @@ async function toggleItem(id){
  const x=state.items.find(i=>i.id===id);if(!x)return;
  const {error}=await db.from(state.tab).update({is_active:!x.is_active,updated_at:new Date().toISOString()}).eq("id",id);
  if(error){toast("تغییر وضعیت ذخیره نشد: "+error.message);return;}toast("وضعیت محتوا تغییر کرد.");await loadItems();
+}
+async function deleteItem(id){
+ const item=state.items.find(x=>x.id===id);if(!item)return;
+ if(!window.confirm('مورد «'+item.title+'» برای همیشه حذف شود؟ اگر به سوابق یا موارد دیگر متصل باشد، پایگاه داده از حذف جلوگیری می‌کند.'))return;
+ const {error}=await db.from(state.tab).delete().eq("id",id);
+ if(error){toast("حذف انجام نشد؛ احتمالاً این مورد به اطلاعات دیگری متصل است. برای پنهان‌کردن، غیرفعالش کن.");return;}
+ toast("مورد حذف شد.");if(state.tab==="product_categories"||state.tab==="service_categories")await loadCategories();await loadItems();
 }
 async function uploadFile(bucket,file,slug){
  const safeName=file.name.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g,"-").replace(/^-+|-+$/g,"")||"file";
@@ -130,7 +137,7 @@ $("contentForm").onsubmit=async e=>{
   if(state.tab==="services"){
    payload.summary=(v.summary||"").trim();payload.description=(v.description||"").trim();payload.category_id=v.category_id||null;
    payload.required_documents=(v.required_documents||"").split("\n").map(x=>x.trim()).filter(Boolean);payload.steps=(v.steps||"").split("\n").map(x=>x.trim()).filter(Boolean);payload.is_featured=f.elements.is_featured.checked;
-  }else if(state.tab==="product_categories"){
+  }else if(state.tab==="product_categories"||state.tab==="service_categories"){
    payload.description=(v.description||"").trim();payload.icon=(v.category_icon||"").trim()||"package";
   }else{
    payload.summary=(v.summary||"").trim();payload.description=(v.description||"").trim();payload.category_id=v.category_id||null;
@@ -148,7 +155,7 @@ $("contentForm").onsubmit=async e=>{
  }
  const id=v.id;const q=id?db.from(state.tab).update(payload).eq("id",id):db.from(state.tab).insert(payload);
  const {error}=await q;if(error){$("saveMessage").textContent="ذخیره ناموفق: "+error.message;return;}
- toast("محتوا با موفقیت ذخیره شد.");$("saveMessage").textContent="ذخیره شد و فهرست به‌روزرسانی شد.";reset();await loadItems();
+ toast("محتوا با موفقیت ذخیره شد.");$("saveMessage").textContent="ذخیره شد و فهرست به‌روزرسانی شد.";reset();if(state.tab==="product_categories"||state.tab==="service_categories")await loadCategories();await loadItems();
 };
 $("refreshList").onclick=loadItems;$("resetForm").onclick=reset;$("adminLogout").onclick=async()=>{await db.auth.signOut();};$("adminLogoutDenied").onclick=async()=>{await db.auth.signOut();};
 document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));$("refreshAssistantLeads").onclick=loadAssistantLeads;
