@@ -22,10 +22,10 @@ function setTab(tab){
  const f=$("contentForm");
  ["title","slug"].forEach(n=>{f.elements[n].disabled=slide||leads;f.elements[n].required=!slide&&!leads;});
  ["summary","description"].forEach(n=>{f.elements[n].disabled=slide||category||leads;});
- f.elements.category_id.disabled=!service;
+ $("categorySelect").disabled=!service;$("productCategorySelect").disabled=!product;
  if(f.elements.slide_title){f.elements.slide_title.required=slide;f.elements.slide_title.disabled=!slide;}
  ["slide_description","eyebrow","badge_label","button_text","button_url","slide_image_url"].forEach(n=>{if(f.elements[n])f.elements[n].disabled=!slide;});
- ["price","compare_at_price","price_label","image_url","image_upload","file_upload","product_type","productCategorySelect","sku","stock_quantity","stock_status","badge","specifications_text","file_path","file_name","file_size","is_featured","is_new"].forEach(n=>{if(f.elements[n])f.elements[n].disabled=!product;});
+ ["price","compare_at_price","price_label","image_url","image_upload","file_upload","product_type","productCategorySelect","sku","stock_quantity","stock_status","badge","specifications_text","file_path","file_name","file_size","product_is_featured","product_is_new"].forEach(n=>{if(f.elements[n])f.elements[n].disabled=!product;});
  if(f.elements.category_icon)f.elements.category_icon.disabled=!category;
  if(f.elements.category_description)f.elements.category_description.disabled=!category;
  if(category){f.elements.description.disabled=false;}
@@ -82,6 +82,7 @@ function editItem(id){
  const x=state.items.find(i=>i.id===id);if(!x)return;const f=$("contentForm");
  const keys=["id","title","slug","summary","description","category_id","price","price_label","compare_at_price","image_url","product_type","sku","stock_quantity","stock_status","badge","file_path","file_name","file_size","sort_order","eyebrow","badge_label","button_text","button_url","icon"];
  for(const key of keys)if(f.elements[key])f.elements[key].value=x[key]??"";
+ if($("categorySelect"))$("categorySelect").value=x.category_id||"";if($("productCategorySelect"))$("productCategorySelect").value=x.category_id||"";
  if(f.elements.slide_title)f.elements.slide_title.value=x.title||"";
  if(f.elements.slide_image_url)f.elements.slide_image_url.value=x.image_url||"";
  if(f.elements.slide_description)f.elements.slide_description.value=x.description||"";
@@ -90,7 +91,8 @@ function editItem(id){
  if(f.elements.steps)f.elements.steps.value=(x.steps||[]).join("\n");
  if(f.elements.is_active)f.elements.is_active.checked=!!x.is_active;
  if(f.elements.is_featured)f.elements.is_featured.checked=!!x.is_featured;
- if(f.elements.is_new)f.elements.is_new.checked=!!x.is_new;
+ if(f.elements.product_is_featured)f.elements.product_is_featured.checked=!!x.is_featured;
+ if(f.elements.product_is_new)f.elements.product_is_new.checked=!!x.is_new;
  $("formTitle").textContent="ویرایش: "+x.title;window.scrollTo({top:0,behavior:"smooth"});
 }
 async function toggleItem(id){
@@ -134,7 +136,7 @@ $("contentForm").onsubmit=async e=>{
    payload.product_type=v.product_type||"physical";payload.price=v.price?Number(v.price):null;payload.compare_at_price=v.compare_at_price?Number(v.compare_at_price):null;
    payload.price_label=(v.price_label||"").trim()||null;payload.sku=(v.sku||"").trim()||null;payload.stock_quantity=Math.max(0,Number(v.stock_quantity||0));payload.stock_status=v.stock_status||"inquiry";
    payload.badge=(v.badge||"").trim()||null;payload.specifications=parseSpecifications(v.specifications_text);
-   payload.is_featured=f.elements.is_featured.checked;payload.is_new=f.elements.is_new.checked;
+   payload.is_featured=f.elements.product_is_featured.checked;payload.is_new=f.elements.product_is_new.checked;
    payload.image_url=(v.image_url||"").trim()||null;payload.file_path=(v.file_path||"").trim()||null;payload.file_name=(v.file_name||"").trim()||null;payload.file_size=(v.file_size||"").trim()||null;
    const imageFile=f.elements.image_upload.files?.[0],digitalFile=f.elements.file_upload.files?.[0];
    try{

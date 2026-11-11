@@ -58,8 +58,8 @@
 <label>فایل دیجیتال محصول (PDF، Excel، Word یا ZIP؛ حداکثر ۲۰ مگابایت)</label><input name="file_upload" type="file" accept=".pdf,.xlsx,.xls,.doc,.docx,.csv,.zip">
 <input type="hidden" name="file_path"><input type="hidden" name="file_name"><input type="hidden" name="file_size">
 <p class="micro-note">فایل دیجیتال در فضای خصوصی ذخیره می‌شود و لینک عمومی مستقیم ندارد؛ تحویل آن پس از هماهنگی پشتیبانی انجام می‌شود.</p>
-<label class="admin-check"><input type="checkbox" name="is_featured"> محصول منتخب فروشگاه</label>
-<label class="admin-check"><input type="checkbox" name="is_new"> نمایش نشان «جدید»</label>
+<label class="admin-check"><input type="checkbox" name="product_is_featured"> محصول منتخب فروشگاه</label>
+<label class="admin-check"><input type="checkbox" name="product_is_new"> نمایش نشان «جدید»</label>
 </div>
 <div id="categoryFields" hidden>
 <label>آیکون دسته‌بندی (نام آیکون Lucide)</label><input name="category_icon" dir="ltr" placeholder="router">
@@ -75,5 +75,5 @@
 </section>
 </main>
 <div class="toast" id="adminToast" role="status" aria-live="polite"></div>
-<script src="./admin.js"></script>
+<script src="./admin.js?v=2"></script>
 </body></html>
