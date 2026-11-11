@@ -11,6 +11,7 @@ function reset(){
  const f=$("contentForm");f.reset();f.elements.id.value="";f.elements.sort_order.value="0";f.elements.is_active.checked=true;
  if(f.elements.stock_quantity)f.elements.stock_quantity.value="0";
  if(f.elements.stock_status)f.elements.stock_status.value="inquiry";
+  if(f.elements.is_time_limited)f.elements.is_time_limited.checked=false;if(f.elements.registration_deadline)f.elements.registration_deadline.value="";$("timeLimitFields").hidden=true;
  $("formTitle").textContent=state.tab==="services"?"افزودن خدمت":state.tab==="products"?"افزودن محصول":(state.tab==="product_categories"||state.tab==="service_categories")?"افزودن دسته‌بندی":"افزودن اسلاید";
  $("saveMessage").textContent="";
 }
@@ -18,10 +19,11 @@ function setTab(tab){
  state.tab=tab;const leads=tab==="assistant_leads",slide=tab==="hero_slides",service=tab==="services",product=tab==="products",category=tab==="product_categories"||tab==="service_categories";
  show("assistantLeadsPanel",leads);document.querySelector(".admin-layout").hidden=leads;document.querySelector(".premium-settings").hidden=leads;
  document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
- show("serviceFields",service);show("productFields",product);show("slideFields",slide);show("categoryFields",category);
+ show("serviceFields",service);show("timeLimitFields",false);show("productFields",product);show("slideFields",slide);show("categoryFields",category);
  const f=$("contentForm");
  ["title","slug"].forEach(n=>{f.elements[n].disabled=slide||leads;f.elements[n].required=!slide&&!leads;});
  ["summary","description"].forEach(n=>{f.elements[n].disabled=slide||category||leads;});
+  ["is_time_limited","registration_deadline"].forEach(n=>{if(f.elements[n])f.elements[n].disabled=!service;});
  $("categorySelect").disabled=!service;$("productCategorySelect").disabled=!product;
  if(f.elements.slide_title){f.elements.slide_title.required=slide;f.elements.slide_title.disabled=!slide;}
  ["slide_description","eyebrow","badge_label","button_text","button_url","slide_image_url"].forEach(n=>{if(f.elements[n])f.elements[n].disabled=!slide;});
@@ -55,7 +57,7 @@ async function loadCategories(){
 }
 async function loadItems(){
  if(!state.admin)return;if(state.tab==="assistant_leads"){await loadAssistantLeads();return;}
- const cols=state.tab==="services"?"id,title,slug,summary,description,category_id,required_documents,steps,is_active,is_featured,sort_order":
+ const cols=state.tab==="services"?"id,title,slug,summary,description,category_id,required_documents,steps,is_active,is_featured,is_time_limited,registration_deadline,sort_order":
  state.tab==="products"?"id,title,slug,summary,description,price,price_label,compare_at_price,image_url,product_type,category_id,sku,stock_quantity,stock_status,badge,specifications,file_path,file_name,file_size,is_active,is_featured,is_new,sort_order":
  (state.tab==="product_categories"||state.tab==="service_categories")?"id,title,slug,description,icon,is_active,sort_order":"id,eyebrow,title,description,badge_label,button_text,button_url,image_url,is_active,sort_order";
  const {data,error}=await db.from(state.tab).select(cols).order("sort_order");
@@ -73,7 +75,7 @@ function renderList(){
  const el=$("contentList");if(!state.items.length){el.innerHTML='<div class="empty-state">موردی ثبت نشده است.</div>';return;}
  el.innerHTML=state.items.map(x=>{
   const detail=state.tab==="products"?(x.price?Number(x.price).toLocaleString("fa-IR")+" تومان":(x.price_label||"قیمت استعلامی"))+" · "+(x.stock_status==="in_stock"?"موجود":x.stock_status==="out_of_stock"?"ناموجود":x.stock_status==="preorder"?"پیش‌سفارش":"استعلام موجودی"):
-  (state.tab==="product_categories"||state.tab==="service_categories")?(x.slug||"دسته‌بندی"):state.tab==="services"?(x.slug||"خدمت"):(x.badge_label||x.eyebrow||"اسلاید");
+  (state.tab==="product_categories"||state.tab==="service_categories")?(x.slug||"دسته‌بندی"):state.tab==="services"?(x.is_time_limited?(new Date(x.registration_deadline)<=new Date()?"مهلت پایان‌یافته · موقتاً غیرفعال":"زمان‌دار تا "+new Date(x.registration_deadline).toLocaleString("fa-IR")):(x.slug||"خدمت")):(x.badge_label||x.eyebrow||"اسلاید");
   const fileAction=state.tab==="products"&&x.file_path?'<button class="secondary-btn" data-file="'+esc(x.file_path)+'">دریافت فایل</button>':"";return '<article class="admin-list-item"><div><b>'+esc(x.title)+'</b><small>'+esc(detail)+(x.file_name?" · فایل: "+esc(x.file_name):"")+(x.is_active?" · فعال":" · غیرفعال")+'</small></div><div class="admin-item-actions">'+fileAction+'<button class="secondary-btn" data-edit="'+x.id+'">ویرایش</button><button class="secondary-btn" data-toggle="'+x.id+'">'+(x.is_active?"غیرفعال‌سازی":"فعال‌سازی")+'</button><button class="secondary-btn admin-delete-btn" data-delete="'+x.id+'">حذف</button></div></article>';
  }).join("");
  el.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editItem(b.dataset.edit));el.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>toggleItem(b.dataset.toggle));el.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteItem(b.dataset.delete));el.querySelectorAll("[data-file]").forEach(b=>b.onclick=()=>openPrivateProductFile(b.dataset.file));
@@ -92,6 +94,8 @@ function editItem(id){
  if(f.elements.steps)f.elements.steps.value=(x.steps||[]).join("\n");
  if(f.elements.is_active)f.elements.is_active.checked=!!x.is_active;
  if(f.elements.is_featured)f.elements.is_featured.checked=!!x.is_featured;
+  if(f.elements.is_time_limited){f.elements.is_time_limited.checked=!!x.is_time_limited;$("timeLimitFields").hidden=!x.is_time_limited;}
+  if(f.elements.registration_deadline)f.elements.registration_deadline.value=x.registration_deadline?(()=>{const d=new Date(x.registration_deadline);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);})():"";
  if(f.elements.product_is_featured)f.elements.product_is_featured.checked=!!x.is_featured;
  if(f.elements.product_is_new)f.elements.product_is_new.checked=!!x.is_new;
  $("formTitle").textContent="ویرایش: "+x.title;window.scrollTo({top:0,behavior:"smooth"});
@@ -142,6 +146,8 @@ $("contentForm").onsubmit=async e=>{
   if(state.tab==="services"){
    payload.summary=(v.summary||"").trim();payload.description=(v.description||"").trim();payload.category_id=v.category_id||null;
    payload.required_documents=(v.required_documents||"").split("\n").map(x=>x.trim()).filter(Boolean);payload.steps=(v.steps||"").split("\n").map(x=>x.trim()).filter(Boolean);payload.is_featured=f.elements.is_featured.checked;
+    payload.is_time_limited=f.elements.is_time_limited.checked;
+    if(payload.is_time_limited){const deadline=new Date(v.registration_deadline);if(!v.registration_deadline||!Number.isFinite(deadline.getTime())||deadline.getTime()<=Date.now()){$("saveMessage").textContent="برای خدمت زمان‌دار، تاریخ و ساعت آینده را وارد کنید.";return;}payload.registration_deadline=deadline.toISOString();}else payload.registration_deadline=null;
   }else if(state.tab==="product_categories"||state.tab==="service_categories"){
    payload.description=(v.description||"").trim();payload.icon=(v.category_icon||"").trim()||"package";
   }else{

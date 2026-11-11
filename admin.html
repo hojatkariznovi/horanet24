@@ -34,6 +34,8 @@
 <label>مدارک موردنیاز (هر مورد در یک خط)</label><textarea name="required_documents" rows="4"></textarea>
 <label>مراحل انجام (هر مرحله در یک خط)</label><textarea name="steps" rows="4"></textarea>
 <label class="admin-check"><input type="checkbox" name="is_featured"> نمایش به‌عنوان خدمت منتخب</label>
+<label class="admin-check time-limit-toggle"><input type="checkbox" name="is_time_limited" id="timeLimitedToggle"> فعال‌سازی مهلت ثبت‌نام و شمارش معکوس</label>
+<div id="timeLimitFields" class="time-limit-fields" hidden><label>آخرین مهلت ثبت‌نام (تاریخ و ساعت محلی)</label><input name="registration_deadline" id="registrationDeadline" type="datetime-local"><p class="micro-note">زمان پایان بر اساس ساعت سرور محاسبه می‌شود. پس از پایان مهلت، خدمت به‌صورت خودکار «موقتاً غیرفعال» نمایش داده می‌شود.</p></div>
 </div>
 <div id="slideFields" hidden>
 <label>برچسب بالای اسلاید</label><input name="eyebrow" placeholder="اطلاعیه مهم">
@@ -75,5 +77,5 @@
 </section>
 </main>
 <div class="toast" id="adminToast" role="status" aria-live="polite"></div>
-<script src="./admin.js?v=5"></script>
+<script src="./admin.js?v=6"></script>
 </body></html>

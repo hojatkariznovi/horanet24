@@ -1570,3 +1570,18 @@ html[data-theme="dark"] .product-spec-grid b{color:#d9e8ed}
 .admin-field-row>div{min-width:0}
 .admin-field-row input{width:100%}
 @media(max-width:560px){.admin-field-row{grid-template-columns:1fr}}
+
+
+/* Time-limited service registration */
+.service-deadline{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border:1px solid #d9efeb;border-radius:11px;background:linear-gradient(100deg,#effaf7,#f1f5ff);color:#438b8d;font-size:10px}
+.service-deadline strong{font-size:12px;direction:ltr;font-variant-numeric:tabular-nums;color:#187f83}
+.service-deadline-modal{margin:16px 0;padding:13px 15px;font-size:12px}
+.service-deadline-modal strong{font-size:16px}
+.service-deadline.is-expired{background:#fff2f0;border-color:#f2d2cd;color:#a45b52}
+.service-deadline.is-expired strong{color:#b34e43;direction:rtl}
+.service-request-expired,.primary-btn:disabled{opacity:.55;cursor:not-allowed;filter:grayscale(.25)}
+html[data-theme="dark"] .service-deadline{background:#193b3e;border-color:#31595a;color:#b5d9d7}
+html[data-theme="dark"] .service-deadline strong{color:#81ded3}
+html[data-theme="dark"] .service-deadline.is-expired{background:#482d30;border-color:#704447;color:#f0b9b4}
+html[data-theme="dark"] .service-deadline.is-expired strong{color:#ffc1b9}
+
