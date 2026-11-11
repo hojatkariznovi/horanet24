@@ -33,7 +33,7 @@ function h24UiSound(kind="tap"){
   else play();
  }catch(_){}
 }
-const state = { client:null, session:null, services:[], products:[], categories:[], favorites:new Set(), activeCategory:"all", selectedService:null, profileCache:null };
+const state = { client:null, session:null, services:[], products:[], categories:[], productCategories:[], favorites:new Set(), activeCategory:"all", activeProductCategory:"all", productSearch:"", productSort:"featured", selectedService:null, profileCache:null };
 const toast = (message) => { const el=$("toast"); el.textContent=message; el.classList.add("show"); clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>el.classList.remove("show"),3000); };
 const esc = (value="") => String(value).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const LUCIDE_ICON_MAP={"car-front":"car-front","receipt":"receipt-text","fuel":"fuel","car-document":"file-text","shield-car":"shield-check","shield-check":"shield-check","shield-calendar":"calendar-check","heart-chart":"heart-pulse","briefcase-check":"briefcase-business","calculator":"calculator","folder":"folder","certificate":"award","passport":"passport","user-card":"contact","users":"users","bank":"landmark","credit-card":"credit-card","wrench":"wrench"};
@@ -145,30 +145,64 @@ function renderServices(){
 
 function showService(id){ const s=state.services.find(x=>x.id===id); if(!s)return; state.selectedService=s; const docs=Array.isArray(s.required_documents)?s.required_documents:[]; const steps=Array.isArray(s.steps)?s.steps:[]; const fav=state.favorites.has(id); openModal('<span class="eyebrow">جزئیات خدمت</span><h2 id="modalTitle">'+esc(s.title)+'</h2><p>'+esc(s.description||s.summary||"برای دریافت راهنمایی بیشتر، درخواست خود را از طریق پشتیبانی ثبت کنید.")+'</p><div class="detail-block"><b>مدارک و اطلاعات موردنیاز</b><ul>'+ (docs.length?docs.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>پس از بررسی نوع درخواست اعلام می‌شود.</li>')+'</ul></div><div class="detail-block"><b>مراحل انجام</b><ol>'+(steps.length?steps.map(x=>'<li>'+esc(x)+'</li>').join(""):'<li>ارسال درخواست در پیام‌رسان انتخابی</li><li>بررسی و اعلام مراحل</li>')+'</ol></div><div class="modal-actions"><button class="primary-btn" id="serviceRequest" type="button"><span class="service-request-label">ثبت درخواست</span><span data-icon="send"></span></button><button class="secondary-btn" id="favoriteBtn"><span data-icon="heart"></span> '+(fav?"★ حذف از علاقه‌مندی‌ها":"☆ افزودن به علاقه‌مندی‌ها")+'</button></div><p class="micro-note">پس از انتخاب ایتا یا تلگرام، درخواست خود را در پیام‌رسان انتخابی ارسال کن؛ این وب‌سایت اطلاعات یا مدارک شما را دریافت نمی‌کند.</p>'); $("serviceRequest").onclick=()=>showContactOptions("request",s.title); $("favoriteBtn").onclick=()=>toggleFavorite(id); }
 async function toggleFavorite(id){ if(!state.session){toast("برای ذخیره علاقه‌مندی ابتدا وارد حساب شوید.");showLogin();return;} const exists=state.favorites.has(id); try{if(exists){const {error}=await state.client.from("favorites").delete().eq("user_id",state.session.user.id).eq("service_id",id);if(error)throw error;state.favorites.delete(id);}else{const {error}=await state.client.from("favorites").insert({user_id:state.session.user.id,service_id:id});if(error)throw error;state.favorites.add(id);} if(state.selectedService?.id===id)showService(id);toast(exists?"از علاقه‌مندی‌ها حذف شد.":"به علاقه‌مندی‌ها اضافه شد.");}catch(e){toast("ذخیره انجام نشد: "+e.message);} }
+function renderProductCategories(){
+ const root=$("productCategoryFilters");if(!root)return;
+ const buttons=[{id:"all",title:"همه محصولات"},...state.productCategories.map(c=>({id:c.id,title:c.title}))];
+ root.innerHTML=buttons.map(c=>'<button type="button" class="product-filter-chip'+(String(state.activeProductCategory)===String(c.id)?" active":"")+'" data-product-category="'+esc(c.id)+'">'+esc(c.title)+'</button>').join("");
+ refreshIcons();
+}
+const productStockLabel=status=>({in_stock:"موجود",out_of_stock:"ناموجود",preorder:"پیش‌سفارش",inquiry:"استعلام موجودی"}[status]||"استعلام موجودی");
+const productTypeLabel=type=>type==="digital"?"فایل و ابزار دیجیتال":type==="physical"?"کالای فیزیکی":"محصول";
+const productPriceLabel=p=>p.price!==null&&p.price!==undefined&&p.price!==""?Number(p.price).toLocaleString("fa-IR")+" تومان":(p.price_label||"استعلام قیمت");
 function renderProducts(){
- const grid=$("productGrid");
- if(!state.products.length){grid.innerHTML='<div class="empty-state">محصولی برای نمایش ثبت نشده است.</div>';return;}
- const glyph=p=>/plate|vehicle/i.test(p.slug||"")?iconSvg("car-front"):/fuel/i.test(p.slug||"")?iconSvg("fuel"):/business/i.test(p.slug||"")?iconSvg("briefcase-business"):iconSvg("sparkles");
- grid.innerHTML=state.products.map(p=>'<article class="product-card"><div class="product-visual">'+(p.image_url?'<img src="'+esc(p.image_url)+'" alt="'+esc(p.title)+'" loading="lazy">':'<div class="product-art"><span>'+glyph(p)+'</span></div>')+'</div><div class="product-copy"><span class="product-tag">'+(p.product_type==="digital"?"فایل و محصول دیجیتال":"محصول حورانت")+'</span><b>'+esc(p.title)+'</b><p>'+esc(p.summary||"محصول کاربردی حورانت۲۴")+'</p><strong>'+esc(p.price_label||"استعلام شرایط از پیام‌رسان دلخواه")+'</strong><button class="secondary-btn product-cta" data-id="'+p.id+'">جزئیات و دریافت <span data-icon="arrow-left"></span></button></div></article>').join("");
+ const grid=$("productGrid");if(!grid)return;
+ const query=(state.productSearch||"").trim().toLocaleLowerCase("fa");
+ let items=state.products.filter(p=>{
+  const categoryOk=state.activeProductCategory==="all"||String(p.category_id||"")===String(state.activeProductCategory);
+  const hay=[p.title,p.summary,p.description,p.category?.title,p.sku].filter(Boolean).join(" ").toLocaleLowerCase("fa");
+  return categoryOk&&(!query||hay.includes(query));
+ });
+ const sort=state.productSort||"featured";
+ items.sort((a,b)=>{
+  if(sort==="price-asc")return (Number(a.price)||Number.MAX_SAFE_INTEGER)-(Number(b.price)||Number.MAX_SAFE_INTEGER);
+  if(sort==="price-desc")return (Number(b.price)||0)-(Number(a.price)||0);
+  if(sort==="newest")return Number(b.is_new)-Number(a.is_new)||new Date(b.created_at||0)-new Date(a.created_at||0);
+  if(sort==="name")return String(a.title).localeCompare(String(b.title),"fa");
+  return Number(b.is_featured)-Number(a.is_featured)||Number(b.is_new)-Number(a.is_new)||Number(a.sort_order||0)-Number(b.sort_order||0);
+ });
+ const count=$("productResultsCount");if(count)count.textContent=items.length.toLocaleString("fa-IR")+" محصول";
+ if(!items.length){grid.innerHTML='<div class="empty-state">محصولی با این جست‌وجو پیدا نشد. عبارت دیگری امتحان کن.</div>';return;}
+ const glyph=p=>/pos|pax|centerm|anfu|morefun/i.test(p.slug||"")?iconSvg("credit-card"):/modem|router|neterbit|dlink|tp-link/i.test(p.slug||"")?iconSvg("router"):p.product_type==="digital"?iconSvg("file-spreadsheet"):iconSvg("package");
+ grid.innerHTML=items.map(p=>{
+  const badge=p.badge|| (p.is_new?"جدید":p.is_featured?"پیشنهاد حورانت":"");
+  const visual=p.image_url?'<img src="'+esc(p.image_url)+'" alt="'+esc(p.title)+'" loading="lazy">':'<div class="product-art"><span>'+glyph(p)+'</span><small>HORANET24</small></div>';
+  const oldPrice=p.compare_at_price?'<del>'+Number(p.compare_at_price).toLocaleString("fa-IR")+' تومان</del>':"";
+  return '<article class="product-card'+(p.is_featured?" product-card-featured":"")+'"><div class="product-visual">'+visual+(badge?'<span class="product-badge">'+esc(badge)+'</span>':"")+'</div><div class="product-copy"><div class="product-card-kicker"><span>'+esc(p.category?.title||productTypeLabel(p.product_type))+'</span><span class="product-stock '+esc(p.stock_status||"inquiry")+'">'+productStockLabel(p.stock_status)+'</span></div><b>'+esc(p.title)+'</b><p>'+esc(p.summary||"برای مشاهده مشخصات و شرایط تهیه، جزئیات محصول را بررسی کن.")+'</p><div class="product-price-line"><strong>'+esc(productPriceLabel(p))+'</strong>'+oldPrice+'</div><button class="secondary-btn product-cta" data-id="'+p.id+'">مشاهده مشخصات و شرایط <span data-icon="arrow-left"></span></button></div></article>';
+ }).join("");
  grid.querySelectorAll(".product-cta").forEach(b=>b.onclick=()=>showProduct(b.dataset.id));refreshIcons();
 }
 function showProduct(id){
  const p=state.products.find(x=>x.id===id);if(!p)return;
- openModal('<span class="eyebrow">محصول حورانت۲۴</span><h2 id="modalTitle">'+esc(p.title)+'</h2><p>'+esc(p.description||p.summary||"برای دریافت اطلاعات بیشتر پیام دهید.")+'</p><div class="notice-box">برای استعلام موجودی، شرایط تهیه و دریافت محصول، ابتدا پیام‌رسان دلخواهت را انتخاب کن. اطلاعات و پرداخت در این سایت انجام نمی‌شود.</div><button class="primary-btn full" id="productRequest">استعلام و درخواست دریافت</button>');
+ const specs=p.specifications&&typeof p.specifications==="object"?Object.entries(p.specifications):[];
+ const specHtml=specs.length?'<div class="product-spec-grid">'+specs.map(([k,v])=>'<div><small>'+esc(k)+'</small><b>'+esc(v)+'</b></div>').join("")+'</div>':"";
+ const image=p.image_url?'<div class="product-detail-visual"><img src="'+esc(p.image_url)+'" alt="'+esc(p.title)+'"></div>':'';
+ const oldPrice=p.compare_at_price?'<del>'+Number(p.compare_at_price).toLocaleString("fa-IR")+' تومان</del>':"";
+ openModal('<span class="eyebrow">فروشگاه حورانت۲۴ · '+esc(p.category?.title||productTypeLabel(p.product_type))+'</span><h2 id="modalTitle">'+esc(p.title)+'</h2>'+image+'<p>'+esc(p.description||p.summary||"برای دریافت اطلاعات بیشتر پیام دهید.")+'</p><div class="product-detail-price"><b>'+esc(productPriceLabel(p))+'</b>'+oldPrice+'<span class="product-stock '+esc(p.stock_status||"inquiry")+'">'+productStockLabel(p.stock_status)+'</span></div>'+specHtml+'<div class="notice-box">قیمت و موجودی کالا پیش از سفارش تأیید می‌شود. برای محصولات فیزیکی، شرایط ارسال و گارانتی نیز استعلام خواهد شد. فایل‌های دیجیتال پس از هماهنگی از پشتیبانی دریافت می‌شوند؛ پرداخت و ثبت سفارش در این سایت انجام نمی‌شود.</div><button class="primary-btn full" id="productRequest">استعلام و درخواست دریافت</button>');
  $("productRequest").onclick=()=>showContactOptions("product",p.title);
 }
 async function loadContent(){
  try{
-  const [cats,services,products]=await Promise.all([
+  const [cats,services,productCats,products]=await Promise.all([
    state.client.from("service_categories").select("id,title,slug,icon").eq("is_active",true).order("sort_order"),
    state.client.from("services").select("id,title,slug,summary,description,required_documents,steps,price_label,category:service_categories(title,slug)").eq("is_active",true).order("sort_order"),
-   state.client.from("products").select("id,title,summary,description,price_label,image_url,product_type,slug").eq("is_active",true).order("sort_order")
+   state.client.from("product_categories").select("id,title,slug,description,icon").eq("is_active",true).order("sort_order"),
+   state.client.from("products").select("id,title,slug,summary,description,price,price_label,compare_at_price,image_url,product_type,category_id,category:product_categories(title,slug),stock_quantity,stock_status,badge,specifications,is_featured,is_new,sort_order,created_at").eq("is_active",true).order("sort_order")
   ]);
-  if(cats.error)throw cats.error;if(services.error)throw services.error;if(products.error)throw products.error;
-  state.categories=cats.data||[];state.services=services.data||[];state.products=products.data||[];
-  renderCategories();renderServices();renderProducts();
+  if(cats.error)throw cats.error;if(services.error)throw services.error;if(productCats.error)throw productCats.error;if(products.error)throw products.error;
+  state.categories=cats.data||[];state.services=services.data||[];state.productCategories=productCats.data||[];state.products=products.data||[];
+  renderCategories();renderServices();renderProductCategories();renderProducts();
   const grid=$("serviceGrid");if(grid)grid.setAttribute("aria-busy","false");
- }catch(e){console.error(e);$("serviceStatus").textContent="دریافت فهرست خدمات با خطا روبه‌رو شد. لطفاً کمی بعد دوباره تلاش کنید.";$("serviceGrid").innerHTML='<div class="empty-state">اتصال به فهرست خدمات برقرار نشد.</div>';}
+ }catch(e){console.error(e);$("serviceStatus").textContent="دریافت فهرست خدمات با خطا روبه‌رو شد. لطفاً کمی بعد دوباره تلاش کنید.";$("serviceGrid").innerHTML='<div class="empty-state">اتصال به فهرست خدمات برقرار نشد.</div>';const products=$("productGrid");if(products)products.innerHTML='<div class="empty-state">فروشگاه موقتاً در دسترس نیست. کمی بعد دوباره تلاش کن.</div>';}
 }
 let optionalHomeContentLoaded=false;
 async function loadOptionalHomeContent(){
@@ -332,6 +366,9 @@ function wire(){
  $("navCoreBtn").onclick=showContactOptions;
  $("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal();});
  $("serviceSearch").addEventListener("input",renderServices);
+ $("productSearch")?.addEventListener("input",e=>{state.productSearch=e.target.value;renderProducts();});
+ $("productSort")?.addEventListener("change",e=>{state.productSort=e.target.value;renderProducts();});
+ $("productCategoryFilters")?.addEventListener("click",e=>{const b=e.target.closest("[data-product-category]");if(!b)return;state.activeProductCategory=b.dataset.productCategory;renderProductCategories();renderProducts();});
  document.querySelectorAll("[data-home-category]").forEach(btn=>btn.addEventListener("click",()=>{
   state.activeCategory=btn.dataset.homeCategory;
   $("serviceSearch").value="";

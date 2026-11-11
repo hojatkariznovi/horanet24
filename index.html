@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./tailwind.css">
-  <link rel="stylesheet" href="./styles.css?v=32">
+  <link rel="stylesheet" href="./styles.css?v=33">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
@@ -179,9 +179,19 @@
   </section>
 
   <section class="section product-section app-view" data-app-view="products" id="productsSection" hidden>
-    <div class="section-head"><div><span class="eyebrow">فروشگاه حورانت</span><h2>فایل‌ها و محصولات کاربردی</h2><p class="section-subtitle">نمونه محصولات دیجیتال؛ برای مشاهده جزئیات و انتخاب مسیر دریافت، ابتدا اطلاعات محصول را بررسی کن.</p></div><span class="mini-label inline-flex items-center rounded-full">محصولات نمونه</span></div>
-    <div class="product-grid" id="productGrid"><div class="empty-state">در حال بارگذاری محصولات...</div></div>
-  </section>
+  <div class="store-hero">
+    <div><span class="eyebrow">HORANET24 · STORE</span><h2>فروشگاه هوشمند حورانت۲۴</h2><p>تجهیزات اینترنت، کارت‌خوان و ابزارهای دیجیتال؛ با مشخصات روشن و استعلام پیش از سفارش.</p></div>
+    <div class="store-hero-mark"><i data-lucide="shopping-bag"></i><span>H24</span></div>
+  </div>
+  <div class="store-toolbar">
+    <label class="store-search"><i data-lucide="search"></i><input id="productSearch" type="search" placeholder="جست‌وجو در محصولات و فایل‌ها..." autocomplete="off" aria-label="جست‌وجوی محصولات"></label>
+    <label class="store-sort"><span>مرتب‌سازی</span><select id="productSort" aria-label="مرتب‌سازی محصولات"><option value="featured">پیشنهاد حورانت</option><option value="newest">جدیدترین</option><option value="price-asc">ارزان‌تر</option><option value="price-desc">گران‌تر</option><option value="name">نام محصول</option></select></label>
+  </div>
+  <div class="product-category-filters" id="productCategoryFilters" aria-label="دسته‌بندی محصولات"><button class="product-filter-chip active" data-product-category="all">همه محصولات</button></div>
+  <div class="store-results-head"><span id="productResultsCount">در حال آماده‌سازی فروشگاه...</span><span>قیمت و موجودی برخی کالاها پس از استعلام تأیید می‌شود</span></div>
+  <div class="product-grid" id="productGrid"><div class="empty-state">در حال بارگذاری فروشگاه...</div></div>
+  <div class="store-assurance"><span><i data-lucide="shield-check"></i> استعلام پیش از سفارش</span><span><i data-lucide="message-circle"></i> پشتیبانی در ایتا و تلگرام</span><span><i data-lucide="package-check"></i> بررسی موجودی و شرایط ارسال</span></div>
+</section>
 
 <section class="seo-content app-view" data-app-view="services" aria-labelledby="seoServicesTitle" hidden><div class="seo-content-head"><span class="eyebrow">راهنمای خدمات آنلاین</span><h2 id="seoServicesTitle">خدمات حورانت۲۴ در یک نگاه</h2><p>در حورانت۲۴ می‌توانید پیش از شروع، با حوزه‌های مختلف خدمات آنلاین آشنا شوید و مدارک و مراحل موردنیاز را بررسی کنید. ثبت درخواست و هماهنگی نهایی پس از انتخاب ایتا یا تلگرام انجام می‌شود.</p></div><div class="seo-columns"><div><h3>خدمات خودرو</h3><p>نوبت تعویض پلاک، خلافی و عوارض خودرو، کارت سوخت، انتقال مالکیت و مدارک پس از تعویض پلاک و امور بیمه و عوارض خودرو.</p></div><div><h3>خدمات بیمه</h3><p>بیمه شخص ثالث نقدی و اقساطی، بیمه بدنه خودرو و بیمه عمر و سرمایه‌گذاری.</p></div><div><h3>خدمات کسب‌وکار</h3><p>صدور و تمدید مجوز کسب، امور مالیاتی و حسابداری و خدمات مرتبط با دستگاه کارت‌خوان.</p></div><div><h3>خدمات اداری</h3><p>گواهی انحصار وراثت، درخواست گذرنامه، خدمات شناسنامه و سجلی، تفکیک یارانه و افتتاح حساب بانکی.</p></div></div><div class="seo-service-links" aria-label="صفحات تخصصی خدمات">
 <a href="/services/online-cafenet.html">خدمات اینترنتی و کافی‌نت آنلاین</a>
@@ -237,7 +247,7 @@
 </nav>
 <div class="modal-backdrop" id="modalBackdrop" hidden><section class="app-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="بستن">×</button><div id="modalContent"></div></section></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="./app.js?v=37"></script>
+<script src="./app.js?v=38"></script>
 <script src="./assistant-chat.js"></script>
 
 </body></html>
