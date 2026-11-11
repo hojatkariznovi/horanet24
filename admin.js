@@ -74,9 +74,9 @@ function renderList(){
  el.innerHTML=state.items.map(x=>{
   const detail=state.tab==="products"?(x.price?Number(x.price).toLocaleString("fa-IR")+" تومان":(x.price_label||"قیمت استعلامی"))+" · "+(x.stock_status==="in_stock"?"موجود":x.stock_status==="out_of_stock"?"ناموجود":x.stock_status==="preorder"?"پیش‌سفارش":"استعلام موجودی"):
   (state.tab==="product_categories"||state.tab==="service_categories")?(x.slug||"دسته‌بندی"):state.tab==="services"?(x.slug||"خدمت"):(x.badge_label||x.eyebrow||"اسلاید");
-  return '<article class="admin-list-item"><div><b>'+esc(x.title)+'</b><small>'+esc(detail)+' · '+(x.is_active?"فعال":"غیرفعال")+'</small></div><div class="admin-item-actions"><button class="secondary-btn" data-edit="'+x.id+'">ویرایش</button><button class="secondary-btn" data-toggle="'+x.id+'">'+(x.is_active?"غیرفعال‌سازی":"فعال‌سازی")+'</button><button class="secondary-btn admin-delete-btn" data-delete="'+x.id+'">حذف</button></div></article>';
+  const fileAction=state.tab==="products"&&x.file_path?'<button class="secondary-btn" data-file="'+esc(x.file_path)+'">دریافت فایل</button>':"";return '<article class="admin-list-item"><div><b>'+esc(x.title)+'</b><small>'+esc(detail)+(x.file_name?" · فایل: "+esc(x.file_name):"")+(x.is_active?" · فعال":" · غیرفعال")+'</small></div><div class="admin-item-actions">'+fileAction+'<button class="secondary-btn" data-edit="'+x.id+'">ویرایش</button><button class="secondary-btn" data-toggle="'+x.id+'">'+(x.is_active?"غیرفعال‌سازی":"فعال‌سازی")+'</button><button class="secondary-btn admin-delete-btn" data-delete="'+x.id+'">حذف</button></div></article>';
  }).join("");
- el.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editItem(b.dataset.edit));el.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>toggleItem(b.dataset.toggle));el.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteItem(b.dataset.delete));
+ el.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editItem(b.dataset.edit));el.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>toggleItem(b.dataset.toggle));el.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteItem(b.dataset.delete));el.querySelectorAll("[data-file]").forEach(b=>b.onclick=()=>openPrivateProductFile(b.dataset.file));
 }
 function editItem(id){
  const x=state.items.find(i=>i.id===id);if(!x)return;const f=$("contentForm");
@@ -100,6 +100,11 @@ async function toggleItem(id){
  const x=state.items.find(i=>i.id===id);if(!x)return;
  const {error}=await db.from(state.tab).update({is_active:!x.is_active,updated_at:new Date().toISOString()}).eq("id",id);
  if(error){toast("تغییر وضعیت ذخیره نشد: "+error.message);return;}toast("وضعیت محتوا تغییر کرد.");await loadItems();
+}
+async function openPrivateProductFile(path){
+ const {data,error}=await db.storage.from("product-files").createSignedUrl(path,3600);
+ if(error||!data?.signedUrl){toast("ساخت لینک امن فایل ناموفق بود.");return;}
+ window.open(data.signedUrl,"_blank","noopener");
 }
 async function deleteItem(id){
  const item=state.items.find(x=>x.id===id);if(!item)return;
