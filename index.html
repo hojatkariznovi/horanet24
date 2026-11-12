@@ -63,7 +63,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./tailwind.css">
-  <link rel="stylesheet" href="./styles.css?v=41">
+  <link rel="stylesheet" href="./styles.css?v=42">
   <link rel="stylesheet" href="./music-widget.css?v=3">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
@@ -82,8 +82,9 @@
     <button class="icon-btn" id="searchToggle" aria-label="جستجوی خدمات" title="جستجوی خدمات"><span data-icon="search"></span></button>
     <button class="icon-btn" id="themeToggle" aria-label="فعال‌کردن حالت تاریک" title="تغییر پوسته"><span data-icon="moon"></span></button>
     <button class="icon-btn" id="soundToggle" aria-label="خاموش‌کردن صداهای لمس و کلیک" title="صداهای رابط کاربری روشن"><span data-icon="volume-2"></span></button>
-    <button class="profile-btn" id="profileBtn" aria-label="حساب کاربری"><span data-icon="user-round"></span></button>
+    
   </div>
+  <div class="topbar-left-actions"><button class="profile-btn" id="profileBtn" aria-label="حساب کاربری"><span data-icon="user-round"></span></button><span id="h24MusicSlot" class="h24-music-slot" aria-label="موسیقی حورانت۲۴"></span></div>
 </header>
 <main class="shell">
   <section class="hero-slider app-view" data-app-view="home" id="heroSlider" aria-label="اطلاعیه‌ها و پیشنهادهای مهم">
@@ -301,7 +302,7 @@
 <div class="modal-backdrop" id="modalBackdrop" hidden><section class="app-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="بستن">×</button><div id="modalContent"></div></section></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="./music-widget.js?v=2"></script>
-<script src="./app.js?v=46"></script>
+<script src="./app.js?v=47"></script>
 <script src="./assistant-chat.js"></script>
 
 </body></html>
