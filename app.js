@@ -132,7 +132,21 @@ function showMembershipInfo(kind="premium"){
  $("premiumJoin").onclick=()=>showContactOptions("membership","عضویت در کانال ویژه حورانت۲۴");
 }
 async function ensureProfile(user){ if(!user)return; try{ const {error}=await state.client.from("profiles").upsert({id:user.id,full_name:user.user_metadata?.full_name||user.email?.split("@")[0]||"کاربر حورانت"},{onConflict:"id",ignoreDuplicates:true}); if(error)console.warn("Profile bootstrap:",error.message); }catch(e){console.warn(e);} }
-function renderCategories(){ const row=$("categoryRow"); const icons={all:"layers-3",vehicle:"car-front",insurance:"shield-check",business:"briefcase-business",administrative:"folder-open",pos:"credit-card"}; const labels={vehicle:"خدمات خودرو",insurance:"بیمه",business:"خدمات کسب‌وکار",administrative:"خدمات اداری",pos:"کارت‌خوان"}; row.innerHTML='<button class="chip active" data-category="all"><span data-icon="'+icons.all+'"></span><b>همه</b></button>'+state.categories.map(c=>'<button class="chip" data-category="'+esc(c.slug)+'"><span data-icon="'+(icons[c.slug]||"grid-2x2")+'"></span><b>'+esc(labels[c.slug]||c.title)+'</b></button>').join(""); row.querySelectorAll(".chip").forEach(btn=>btn.addEventListener("click",()=>{state.activeCategory=btn.dataset.category;row.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x===btn));renderServices();}));refreshIcons();}
+function renderCategories(){
+ const row=$("categoryRow");if(!row)return;
+ const icons={vehicle:"car-front",insurance:"shield-check",business:"briefcase-business",administrative:"folder-open",pos:"credit-card"};
+ const roots=state.categories.filter(c=>!c.parent_id);
+ row.innerHTML='<button class="chip active" data-category="all"><span data-icon="layers-3"></span><b>همه خدمات</b></button>'+roots.map(c=>'<button class="chip" data-category="'+esc(c.slug)+'"><span data-icon="'+(icons[c.slug]||"grid-2x2")+'"></span><b>'+esc(c.title)+'</b></button>').join("");
+ row.querySelectorAll(".chip").forEach(btn=>btn.addEventListener("click",()=>{state.activeCategory=btn.dataset.category;state.activeSubcategory="all";row.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x===btn));renderSubcategories();renderServices();}));
+ renderSubcategories();refreshIcons();
+}
+function renderSubcategories(){
+ let row=$("subcategoryRow");if(!row){row=document.createElement("div");row.id="subcategoryRow";row.className="category-row subcategory-row";$("categoryRow")?.after(row);}
+ const root=state.categories.find(c=>c.slug===state.activeCategory),children=state.categories.filter(c=>root&&c.parent_id===root.id);
+ row.hidden=!root||!children.length;
+ row.innerHTML=children.length?'<button class="chip active" data-subcategory="all">همه زیرگروه‌ها</button>'+children.map(c=>'<button class="chip" data-subcategory="'+esc(c.id)+'">'+esc(c.title)+'</button>').join(""):"";
+ row.querySelectorAll("[data-subcategory]").forEach(btn=>btn.addEventListener("click",()=>{state.activeSubcategory=btn.dataset.subcategory;row.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x===btn));renderServices();}));
+}
 function serviceNow(){return Date.now()+(state.serverOffsetMs||0);}
 function serviceExpired(s){return !!(s?.is_time_limited&&s.registration_deadline&&new Date(s.registration_deadline).getTime()<=serviceNow());}
 function formatServiceRemaining(ms){const total=Math.max(0,Math.floor(ms/1000));const d=Math.floor(total/86400),h=Math.floor(total%86400/3600),m=Math.floor(total%3600/60),s=total%60;return (d?d.toLocaleString("fa-IR")+" روز و ":"")+[h,m,s].map(n=>String(n).padStart(2,"0")).join(":").replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);}
@@ -140,7 +154,7 @@ function updateServiceCountdowns(){document.querySelectorAll("[data-service-dead
 setInterval(updateServiceCountdowns,1000);
 function renderServices(){
  const q=$("serviceSearch").value.trim().toLocaleLowerCase("fa");
- const items=state.services.filter(s=>(state.activeCategory==="all"||s.category?.slug===state.activeCategory)&&(!q||(s.title+" "+(s.summary||"")).toLocaleLowerCase("fa").includes(q)));
+ const items=state.services.filter(s=>((state.activeCategory==="all"||s.category?.parent_id===state.categories.find(c=>c.slug===state.activeCategory)?.id)&&(state.activeSubcategory==="all"||s.category?.id===state.activeSubcategory))&&(!q||(s.title+" "+(s.summary||"")).toLocaleLowerCase("fa").includes(q)));
  const grid=$("serviceGrid");
  grid.innerHTML=items.length?items.map(s=>'<article class="service-card service-live" data-id="'+s.id+'"><div class="service-card-main"><span class="service-icon">'+categoryIcon(s.category?.slug,s.slug)+'</span><span class="service-copy"><b>'+esc(s.title)+'</b><small>'+esc(s.summary||"برای آشنایی با مدارک و مراحل انتخاب کنید")+'</small></span></div><button type="button" class="service-card-action" aria-label="مشاهده جزئیات '+esc(s.title)+'">مشاهده جزئیات <span data-icon="arrow-left"></span></button></article>').join(""):'<div class="empty-state">خدمتی با این عبارت پیدا نشد.</div>';
  grid.querySelectorAll(".service-live").forEach(card=>{card.addEventListener("click",()=>showService(card.dataset.id));card.querySelector(".service-card-action").addEventListener("click",e=>{e.stopPropagation();showService(card.dataset.id);});});
@@ -198,8 +212,8 @@ function showProduct(id){
 async function loadContent(){
  try{
   const [cats,services,productCats,products]=await Promise.all([
-   state.client.from("service_categories").select("id,title,slug,icon").eq("is_active",true).order("sort_order"),
-   state.client.from("services").select("id,title,slug,summary,description,required_documents,steps,price_label,is_time_limited,registration_deadline,category:service_categories(title,slug)").eq("is_active",true).order("sort_order"),
+   state.client.from("service_categories").select("id,title,slug,icon,parent_id").eq("is_active",true).order("sort_order"),
+   state.client.from("services").select("id,title,slug,summary,description,required_documents,steps,price_label,is_time_limited,registration_deadline,category:service_categories(id,title,slug,parent_id)").eq("is_active",true).order("sort_order"),
    state.client.from("product_categories").select("id,title,slug,description,icon").eq("is_active",true).order("sort_order"),
    state.client.from("products").select("id,title,slug,summary,description,price,price_label,compare_at_price,image_url,product_type,category_id,category:product_categories(title,slug),stock_quantity,stock_status,badge,specifications,is_featured,is_new,sort_order,created_at").eq("is_active",true).order("sort_order")
   ]);
