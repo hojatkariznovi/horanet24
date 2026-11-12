@@ -2,7 +2,7 @@ const SUPABASE_URL="https://iqrgqkluuhbyphtihsls.supabase.co";
 const SUPABASE_KEY="sb_publishable_jJeR9OBKSiQU4dBnQrGILA_I56-Npbf";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
-const state={session:null,admin:false,tab:"dashboard",categories:[],productCategories:[],items:[]};
+const state={session:null,admin:false,tab:"dashboard",customerPage:1,customerQuery:"",customers:[],selectedCustomer:null,categories:[],productCategories:[],items:[]};
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function toast(msg){const el=$("adminToast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2800);}
 function show(id,on=true){$(id).hidden=!on;}
@@ -17,9 +17,9 @@ function reset(){
 }
 function setTab(tab){
  state.tab=tab;
- const dashboard=tab==="dashboard",leads=tab==="assistant_leads",slide=tab==="hero_slides",service=tab==="services",product=tab==="products",story=tab==="stories",explore=tab==="explore_posts",challenge=tab==="challenges",category=tab==="product_categories"||tab==="service_categories";
- show("adminOverview",dashboard);show("assistantLeadsPanel",leads);
- document.querySelector(".admin-layout").hidden=leads||dashboard;
+ const dashboard=tab==="dashboard",customers=tab==="customers",customerAudit=tab==="customer_audit",customerDetail=tab==="customer_detail",leads=tab==="assistant_leads",slide=tab==="hero_slides",service=tab==="services",product=tab==="products",story=tab==="stories",explore=tab==="explore_posts",challenge=tab==="challenges",category=tab==="product_categories"||tab==="service_categories";
+ show("adminOverview",dashboard);show("customersPanel",customers);show("customerAuditPanel",customerAudit);show("customerDetailPanel",customerDetail);show("assistantLeadsPanel",leads);
+ document.querySelector(".admin-layout").hidden=leads||dashboard||customers||customerAudit||customerDetail;
  document.querySelector(".premium-settings").hidden=!dashboard;
  document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
  show("serviceFields",service);show("timeLimitFields",false);show("productFields",product);show("slideFields",slide);show("categoryFields",category);show("storyFields",story);show("exploreFields",explore);show("challengeFields",challenge);
@@ -40,9 +40,54 @@ function setTab(tab){
  if(category){f.elements.description.disabled=false;}
  $("formEyebrow").textContent=service?"مدیریت خدمات":product?"مدیریت محصولات":category?(tab==="product_categories"?"مدیریت دسته‌بندی فروشگاه":"مدیریت دسته‌بندی خدمات"):story?"مدیریت استوری‌ها":explore?"مدیریت اکسپلور":challenge?"مدیریت چالش‌ها":"مدیریت اسلایدر";
  $("listTitle").textContent=service?"فهرست خدمات":product?"فهرست محصولات":category?(tab==="product_categories"?"دسته‌بندی‌های فروشگاه":"دسته‌بندی‌های خدمات"):story?"فهرست استوری‌ها":explore?"فهرست اکسپلور":challenge?"فهرست چالش‌ها":"اسلایدها و بنرها";
- reset();if(!dashboard&&!leads)loadItems();if(leads)loadAssistantLeads();if(dashboard)loadDashboard();
+ reset();if(!dashboard&&!leads&&!customers&&!customerAudit&&!customerDetail)loadItems();if(leads)loadAssistantLeads();if(dashboard)loadDashboard();if(customers)loadCustomers();if(customerAudit)loadCustomerAudit();
 }
-async function checkAdmin(session){
+async function customerAdminCall(body){
+ const {data,error}=await db.functions.invoke("horanet-customer-admin",{body});
+ if(error)throw new Error(error.message||"ارتباط با سرویس مدیریت مشتری ناموفق بود.");
+ if(data?.error)throw new Error(data.error);
+ return data;
+}
+const faNum=n=>Number(n||0).toLocaleString("fa-IR");
+function fmtDate(v){return v?new Date(v).toLocaleString("fa-IR"):"ثبت نشده";}
+async function loadCustomers(){
+ const list=$("customersList");list.innerHTML='<div class="empty-state">در حال دریافت کاربران...</div>';
+ try{
+  const data=await customerAdminCall({action:"list",page:state.customerPage,perPage:20,query:state.customerQuery});
+  state.customers=data.users||[];
+  $("customerTotal").textContent=faNum(data.total);$("customerVisible").textContent=faNum(state.customers.length);
+  $("customerVerified").textContent=faNum(state.customers.filter(u=>u.email_confirmed_at||u.phone).length);
+  $("customerBanned").textContent=faNum(state.customers.filter(u=>u.banned_until&&new Date(u.banned_until)>new Date()).length);
+  $("customerPageLabel").textContent="صفحه "+faNum(state.customerPage)+" · "+faNum(data.total)+" نتیجه";
+  $("customerPrev").disabled=state.customerPage<=1;$("customerNext").disabled=state.customerPage*20>=data.total;
+  $("customerStatus").textContent=data.searchLimited?"جست‌وجو در بیش از ۱۰۰۰ حساب به بخش‌های بعدی نیاز دارد.":"فهرست از اطلاعات احراز هویت و پروفایل همگام شده است.";
+  if(!state.customers.length){list.innerHTML='<div class="empty-state">کاربری با این مشخصات پیدا نشد.</div>';return;}
+  list.innerHTML=state.customers.map(u=>'<article class="customer-row"><div class="customer-avatar">'+esc((u.full_name||u.email||"؟").trim().slice(0,1))+'</div><div class="customer-row-main"><b>'+esc(u.full_name||"بدون نام")+'</b><small>'+esc(u.email||u.phone||"بدون راه ارتباطی")+' · '+esc(u.customer_code||"بدون کد مشتری")+'</small><small>عضویت: '+fmtDate(u.created_at)+' · امتیاز: '+faNum(u.points_balance)+'</small></div><div class="customer-row-tags">'+(u.is_admin?'<span class="customer-tag admin">مدیر</span>':"")+(u.banned_until&&new Date(u.banned_until)>new Date()?'<span class="customer-tag banned">مسدود</span>':'<span class="customer-tag">فعال</span>')+'</div><button class="secondary-btn" type="button" data-customer-detail="'+u.id+'">پرونده مشتری</button></article>').join("");
+  list.querySelectorAll("[data-customer-detail]").forEach(b=>b.onclick=()=>openCustomerDetail(b.dataset.customerDetail));
+ }catch(e){list.innerHTML='<div class="empty-state">دریافت کاربران ناموفق بود: '+esc(e.message)+'</div>';$("customerStatus").textContent="سرویس مدیریت مشتری در دسترس نیست.";}
+}
+async function openCustomerDetail(id){
+ try{
+  const d=await customerAdminCall({action:"detail",userId:id});state.selectedCustomer=d;
+  const u=d.user,p=d.profile||{};
+  $("customerDetailName").textContent=p.full_name||u.email||"پرونده مشتری";
+  $("customerDetailMeta").textContent=(p.customer_code||"بدون کد مشتری")+" · "+(u.email||"بدون ایمیل");
+  $("customerEditName").value=p.full_name||"";$("customerEditPhone").value=p.phone||u.auth_phone||"";
+  $("customerDetailSummary").innerHTML='<div><small>کد مشتری</small><b>'+esc(p.customer_code||"—")+'</b></div><div><small>امتیاز فعلی</small><b>'+faNum(p.points_balance)+'</b></div><div><small>تاریخ عضویت</small><b>'+fmtDate(u.created_at)+'</b></div><div><small>آخرین ورود</small><b>'+fmtDate(u.last_sign_in_at)+'</b></div><div><small>دعوت‌شدگان</small><b>'+faNum(d.invitedCount)+'</b></div><div><small>دعوت‌شده توسط</small><b>'+faNum(d.inviterCount?"بله":"خیر")+'</b></div>';
+  const banned=u.banned_until&&new Date(u.banned_until)>new Date();
+  $("customerSecurityState").textContent=banned?"این حساب در حال حاضر مسدود است. تا: "+fmtDate(u.banned_until):"این حساب در حال حاضر مسدود نیست.";
+  $("toggleCustomerBan").textContent=banned?"رفع مسدودی حساب":"مسدودسازی حساب";$("toggleCustomerBan").dataset.blocked=String(!banned);$("toggleCustomerBan").classList.toggle("danger-btn",!banned);
+  $("customerNotes").innerHTML=(d.notes||[]).length?d.notes.map(n=>'<div class="customer-history-item"><p>'+esc(n.note)+'</p><small>'+fmtDate(n.created_at)+'</small></div>').join(""):'<p class="micro-note">هنوز یادداشتی ثبت نشده است.</p>';
+  $("customerLedger").innerHTML=(d.ledger||[]).length?d.ledger.map(x=>'<div class="customer-history-item"><b class="'+(x.delta>0?"positive":"negative")+'">'+(x.delta>0?"+":"")+faNum(x.delta)+' امتیاز</b><p>'+esc(x.reason)+'</p><small>مانده: '+faNum(x.balance_after)+' · '+fmtDate(x.created_at)+'</small></div>').join(""):'<p class="micro-note">تراکنش امتیازی ثبت‌شده‌ای وجود ندارد.</p>';
+  $("customersPanel").hidden=true;$("customerDetailPanel").hidden=false;document.querySelector(".admin-layout").hidden=true;
+  document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab==="customers"));
+ }catch(e){toast("دریافت پرونده ناموفق: "+e.message);}
+}
+async function loadCustomerAudit(){
+ const el=$("customerAuditList");el.innerHTML='<div class="empty-state">در حال دریافت گزارش...</div>';
+ try{const d=await customerAdminCall({action:"audit"});el.innerHTML=(d.logs||[]).length?d.logs.map(x=>'<div class="customer-history-item"><b>'+esc(({points_adjusted:"تغییر امتیاز",customer_note_added:"یادداشت مشتری",customer_blocked:"مسدودسازی حساب",customer_unblocked:"رفع مسدودی",customer_profile_updated:"ویرایش مشخصات"}[x.action]||x.action))+'</b><p>شناسه مشتری: '+esc(x.target_user_id||"—")+'</p><small>'+fmtDate(x.created_at)+' · '+esc(JSON.stringify(x.details||{}))+'</small></div>').join(""):'<div class="empty-state">هنوز فعالیت مدیریتی ثبت نشده است.</div>';}catch(e){el.innerHTML='<div class="empty-state">دریافت گزارش ناموفق: '+esc(e.message)+'</div>';}
+}
+\nasync function checkAdmin(session){
  state.session=session;show("adminLogin",false);
  if(!session){state.admin=false;show("adminDenied",false);show("adminWorkspace",false);show("adminLogin",true);return;}
  $("adminEmail").textContent=session.user.email||"مدیر";
@@ -200,7 +245,12 @@ $("contentForm").onsubmit=async e=>{
 };
 $("timeLimitedToggle").addEventListener("change",e=>{$("timeLimitFields").hidden=!e.target.checked;});
 $("refreshList").onclick=loadItems;$("refreshDashboard").onclick=loadDashboard;document.querySelectorAll("[data-go-tab]").forEach(b=>b.onclick=()=>{const tab=b.dataset.goTab;setTab(tab);});$("resetForm").onclick=reset;$("adminLogout").onclick=async()=>{await db.auth.signOut();};$("adminLogoutDenied").onclick=async()=>{await db.auth.signOut();};
-document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));$("refreshAssistantLeads").onclick=loadAssistantLeads;
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));$("refreshAssistantLeads").onclick=loadAssistantLeads;$("refreshCustomers").onclick=()=>loadCustomers();$("customerSearchBtn").onclick=()=>{state.customerQuery=$("customerSearch").value.trim();state.customerPage=1;loadCustomers();};$("customerSearch").addEventListener("keydown",e=>{if(e.key==="Enter")$("customerSearchBtn").click();});$("customerClearBtn").onclick=()=>{$("customerSearch").value="";state.customerQuery="";state.customerPage=1;loadCustomers();};$("customerPrev").onclick=()=>{if(state.customerPage>1){state.customerPage--;loadCustomers();}};$("customerNext").onclick=()=>{state.customerPage++;loadCustomers();};$("closeCustomerDetail").onclick=()=>{setTab("customers");};$("refreshCustomerAudit").onclick=loadCustomerAudit;
+$("saveCustomerProfile").onclick=async()=>{if(!state.selectedCustomer)return;try{await customerAdminCall({action:"profile",userId:state.selectedCustomer.user.id,full_name:$("customerEditName").value,phone:$("customerEditPhone").value});toast("مشخصات مشتری ذخیره شد.");await openCustomerDetail(state.selectedCustomer.user.id);await loadCustomers();}catch(e){toast("ذخیره مشخصات ناموفق: "+e.message);}};
+$("adjustCustomerPoints").onclick=async()=>{if(!state.selectedCustomer)return;const delta=Number($("customerPointDelta").value),reason=$("customerPointReason").value.trim();if(!Number.isInteger(delta)||!delta||!reason){toast("مقدار امتیاز و دلیل را کامل وارد کن.");return;}if(!confirm((delta>0?"افزودن ":"کسر ")+Math.abs(delta)+" امتیاز؟"))return;try{await customerAdminCall({action:"points",userId:state.selectedCustomer.user.id,delta,reason});$("customerPointDelta").value="";$("customerPointReason").value="";toast("امتیاز مشتری به‌روزرسانی شد.");await openCustomerDetail(state.selectedCustomer.user.id);await loadCustomers();}catch(e){toast("تغییر امتیاز ناموفق: "+e.message);}};
+$("addCustomerNote").onclick=async()=>{if(!state.selectedCustomer)return;const note=$("customerNoteInput").value.trim();if(!note){toast("متن یادداشت را وارد کن.");return;}try{await customerAdminCall({action:"note",userId:state.selectedCustomer.user.id,note});$("customerNoteInput").value="";toast("یادداشت داخلی ثبت شد.");await openCustomerDetail(state.selectedCustomer.user.id);}catch(e){toast("ثبت یادداشت ناموفق: "+e.message);}};
+$("toggleCustomerBan").onclick=async()=>{if(!state.selectedCustomer)return;const blocked=$("toggleCustomerBan").dataset.blocked==="true",reason=$("customerBanReason").value.trim();if(blocked&&!reason){toast("برای ثبت اقدام، دلیل را وارد کن.");return;}if(!confirm(blocked?"حساب این مشتری مسدود شود؟":"مسدودی این حساب برداشته شود؟"))return;try{await customerAdminCall({action:"ban",userId:state.selectedCustomer.user.id,blocked,reason});$("customerBanReason").value="";toast(blocked?"حساب مسدود شد.":"مسدودی حساب برداشته شد.");await openCustomerDetail(state.selectedCustomer.user.id);await loadCustomers();}catch(e){toast("تغییر وضعیت حساب ناموفق: "+e.message);}};
+
 async function loadSettings(){const {data,error}=await db.from("site_settings").select("setting_value").eq("setting_key","premium_channel").maybeSingle();if(error||!data)return;const v=data.setting_value||{};const f=$("premiumChannelForm");f.elements.title.value=v.title||"کانال ویژه حورانت۲۴";f.elements.description.value=v.description||"";f.elements.url.value=v.url||"";}
 $("premiumChannelForm").onsubmit=async e=>{e.preventDefault();const f=e.currentTarget;const setting_value={title:f.elements.title.value.trim(),description:f.elements.description.value.trim(),url:f.elements.url.value.trim()};const {error}=await db.from("site_settings").upsert({setting_key:"premium_channel",setting_value,updated_at:new Date().toISOString()},{onConflict:"setting_key"});$("premiumSaveMessage").textContent=error?"ذخیره ناموفق: "+error.message:"تنظیمات کانال ذخیره شد.";};
 db.auth.getSession().then(({data})=>checkAdmin(data.session));db.auth.onAuthStateChange((_event,session)=>{setTimeout(()=>checkAdmin(session),0);});
