@@ -1834,3 +1834,67 @@ html[data-theme="dark"] .referral-live-stats b{color:#8ddbd1}
 .hero-slide-prime .hero-art-icon{color:#e1c58a;background:linear-gradient(145deg,#26394a,#182a3b);border-color:#c5a96e88;box-shadow:0 0 38px #d4b77a20}
 .hero-slide-prime .hero-art-orbit{border-color:#d4b77a55}
 .hero-slide-prime .hero-art-chip{color:#e4d2aa;border-color:#d4b77a55}
+
+
+/* Homepage clarity pass: tighter hierarchy, less repetition, keep every destination */
+#heroSlider{margin-bottom:18px}
+#heroSlider #heroSlides{min-height:226px!important}
+.welcome{margin-top:0!important;margin-bottom:16px!important;padding-top:clamp(22px,4vw,42px)!important;padding-bottom:clamp(22px,4vw,42px)!important}
+.welcome-copy>p{max-width:560px;line-height:1.95}
+.welcome .founder-home-cta{margin-top:8px}
+.home-category-stories{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin:8px 0 15px;padding:0}
+.home-category-story{min-height:42px;padding:7px 13px;border-radius:999px;box-shadow:0 4px 12px rgba(45,105,126,.055)}
+.home-story-ring{width:27px;height:27px;flex-basis:27px}
+.home-destinations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:8px 0 14px}
+.home-destination-card{min-height:92px;padding:13px 15px;gap:12px;border-radius:16px;box-shadow:0 7px 20px rgba(45,105,126,.06)}
+.home-destination-icon{width:40px;height:40px;flex-basis:40px}
+.home-destination-copy strong{font-size:12px}
+.home-destination-copy>span{font-size:9px;line-height:1.7}
+.quick-stats{margin:0 auto 20px;padding:10px 16px;max-width:760px;border-radius:14px;box-shadow:none}
+.seo-intro{max-width:930px;margin:0 auto 22px;padding:18px 22px!important;border-radius:18px}
+.seo-intro p{font-size:11px;line-height:2;margin:8px 0}
+.popular-links{margin:18px 0 26px}
+.popular-links .section-head{margin-bottom:12px}
+.popular-links .seo-service-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.popular-links .seo-service-links a{min-height:42px;padding:8px 11px;border-radius:11px;font-size:10px;box-shadow:none}
+.feature-banner{margin-top:22px;margin-bottom:20px}
+.membership-grid{gap:12px;margin:18px 0 24px}
+.membership-card{padding:19px 20px;border-radius:17px}
+#storiesSection,#exploreSection,#challengesSection{margin-top:22px;margin-bottom:22px}
+#storiesSection:has(#storyRow:empty),#exploreSection:has(#exploreGrid:empty),#challengesSection:has(#challengeList:empty){display:none}
+.about-panel{margin-top:20px}
+@media(max-width:760px){
+ #heroSlider #heroSlides{min-height:218px!important}
+ .welcome{padding:21px 17px!important;margin-bottom:12px!important}
+ .welcome h1{font-size:clamp(25px,7vw,34px);line-height:1.55}
+ .welcome-copy>p{font-size:11px;line-height:1.9}
+ .home-category-stories{justify-content:center;gap:6px;margin:7px 0 12px}
+ .home-category-story{min-height:36px;padding:5px 9px;font-size:9px}
+ .home-story-ring{width:22px;height:22px;flex-basis:22px}
+ .home-destinations{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:5px 0 11px}
+ .home-destination-card{min-height:104px;align-items:flex-start;padding:11px 9px;gap:7px;flex-direction:column}
+ .home-destination-icon{width:31px;height:31px;flex-basis:31px;border-radius:10px}
+ .home-destination-icon svg{width:17px;height:17px}
+ .home-destination-copy small{font-size:8px}
+ .home-destination-copy strong{font-size:10px;line-height:1.6}
+ .home-destination-copy>span{font-size:8px;line-height:1.5}
+ .home-destination-arrow{position:absolute;left:9px;bottom:9px;width:22px;height:22px}
+ .quick-stats{padding:8px 9px;margin-bottom:14px}
+ .quick-stats strong{font-size:13px}
+ .quick-stats span{font-size:8px}
+ .seo-intro{padding:14px 13px!important;margin-bottom:15px}
+ .seo-intro .section-head h2{font-size:16px}
+ .seo-intro p{font-size:10px;line-height:1.9}
+ .popular-links{margin:14px 0 20px}
+ .popular-links .seo-service-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ .popular-links .seo-service-links a{min-height:42px;padding:7px 8px;font-size:9px}
+ .membership-grid{gap:9px}
+ .membership-card{padding:14px}
+ .membership-card h2{font-size:15px}
+ .membership-card p{font-size:10px;line-height:1.8}
+}
+@media(max-width:360px){
+ .home-destination-copy>span{display:none}
+ .home-destination-card{min-height:90px}
+ .home-category-story{padding-inline:7px;font-size:8px}
+}
