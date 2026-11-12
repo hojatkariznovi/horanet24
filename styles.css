@@ -1825,3 +1825,12 @@ html[data-theme="dark"] .referral-live-stats b{color:#8ddbd1}
 .h24-enamad-caption{padding:11px 4px 2px;display:flex;flex-direction:column;align-items:center;gap:5px}
 .h24-enamad-caption-mark{width:28px;height:2px;border-radius:4px;background:linear-gradient(90deg,#42c7c0,#468fe8)}
 .h24-enamad-caption b{font-size:11px;color:#52616d;font-weight:700}.h24-enamad-caption small{font-size:9px;color:#9aa6ad}
+
+/* Horanet24 Prime slider identity */
+.hero-slide-prime{background:radial-gradient(circle at 18% 22%,rgba(217,190,133,.18),transparent 32%),linear-gradient(115deg,#111d2c 0%,#1c3446 55%,#142334 100%);border:1px solid rgba(211,184,126,.35)}
+.hero-slide-prime .hero-kicker{color:#dfc58f}
+.hero-slide-prime .hero-pill{background:rgba(218,190,133,.12);border-color:rgba(218,190,133,.35);color:#e6d2a9}
+.hero-slide-prime .hero-slide-cta{background:linear-gradient(110deg,#e4ce9c,#c4a66e);color:#18283a;border-color:#e5cf9c}
+.hero-slide-prime .hero-art-icon{color:#e1c58a;background:linear-gradient(145deg,#26394a,#182a3b);border-color:#c5a96e88;box-shadow:0 0 38px #d4b77a20}
+.hero-slide-prime .hero-art-orbit{border-color:#d4b77a55}
+.hero-slide-prime .hero-art-chip{color:#e4d2aa;border-color:#d4b77a55}
