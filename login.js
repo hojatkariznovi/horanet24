@@ -2,7 +2,7 @@
   "use strict";
   const SUPABASE_URL="https://iqrgqkluuhbyphtihsls.supabase.co";
   const SUPABASE_KEY="sb_publishable_jJeR9OBKSiQU4dBnQrGILA_I56-Npbf";
-  const HOME_URL=new URL("./index.html",window.location.href).href;
+  const HOME_URL=new URL("./",window.location.href).href;
   const $=id=>document.getElementById(id);
   const area=$("loginFormArea"),state=$("loginState"),message=$("loginMessage");
   const client=window.supabase?.createClient?.(SUPABASE_URL,SUPABASE_KEY);
@@ -21,7 +21,7 @@
   function showSignedIn(user){
     area.hidden=true;state.hidden=false;
     state.innerHTML='<h3>ورود شما با موفقیت انجام شده است</h3><p>'+escapeHtml(user?.email||"حساب کاربری شما")+'<br>اکنون می‌توانید به فضای شخصی خود در حورانت۲۴ بروید.</p><button type="button" id="goAccount">ورود به سایت و مشاهده حساب</button>';
-    $("goAccount").addEventListener("click",()=>window.location.replace(HOME_URL+"#account"));
+    $("goAccount").addEventListener("click",()=>window.location.replace(HOME_URL));
   }
   function escapeHtml(value){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
   async function init(){
