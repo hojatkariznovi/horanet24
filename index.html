@@ -36,6 +36,15 @@
         "contactPoint":{"@type":"ContactPoint","telephone":"+989157592892","contactType":"customer service","availableLanguage":["Persian"]}
       },
       {
+        "@type":"Person",
+        "@id":"https://horanet24.ir/founder.html#person",
+        "name":"حجت",
+        "jobTitle":"بنیان‌گذار و مدیر حورانت۲۴",
+        "url":"https://horanet24.ir/founder.html",
+        "sameAs":["https://t.me/hojat_k82","https://github.com/hojatkariznovi"],
+        "worksFor":{"@id":"https://horanet24.ir/#organization"}
+      },
+      {
         "@type":"WebSite",
         "@id":"https://horanet24.ir/#website",
         "url":"https://horanet24.ir/",
@@ -52,7 +61,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./tailwind.css">
-  <link rel="stylesheet" href="./styles.css?v=40">
+  <link rel="stylesheet" href="./styles.css?v=41">
   <link rel="stylesheet" href="./music-widget.css?v=1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
@@ -65,7 +74,7 @@
     <span><b>حورانت<span>۲۴</span></b><small>خدمات دیجیتال، ساده و مطمئن</small></span>
   </a>
   <nav class="desktop-nav flex items-center gap-6" aria-label="ناوبری اصلی">
-    <a href="#home" data-view="home">خانه</a><a href="#servicesSection" data-view="services">خدمات</a><a href="#productsSection" data-view="products">محصولات</a><a href="#howItWorks" data-view="services">راهنمای دریافت</a><a href="#aboutSection" data-view="home">درباره ما</a><a href="./founder.html">بنیان‌گذار</a><a href="#contactSection" data-view="contact">ارتباط</a>
+    <a href="#home" data-view="home">خانه</a><a href="#servicesSection" data-view="services">خدمات</a><a href="#productsSection" data-view="products">محصولات</a><a href="#howItWorks" data-view="services">راهنمای دریافت</a><a href="#aboutSection" data-view="home">درباره ما</a><a href="./founder.html" class="founder-nav-link">درباره حجت</a><a href="#contactSection" data-view="contact">ارتباط</a>
   </nav>
   <div class="top-actions">
     <button class="icon-btn" id="searchToggle" aria-label="جستجوی خدمات" title="جستجوی خدمات"><span data-icon="search"></span></button>
@@ -230,6 +239,7 @@
   </section>
   <section class="section app-view" data-app-view="home" id="storiesSection"><div class="section-head"><div><span class="eyebrow">تازه‌های حورانت</span><h2>اطلاعیه‌ها و استوری‌ها</h2><p class="section-subtitle">اطلاع‌رسانی‌های کوتاه و زمان‌دار.</p></div></div><div class="story-row" id="storyRow"><span class="section-note">محتوای تازه به‌زودی نمایش داده می‌شود.</span></div></section>
   <section class="section app-view" data-app-view="home" id="exploreSection"><div class="section-head"><div><span class="eyebrow">دانستنی‌های کاربردی</span><h2>یاد بگیر، آگاهانه اقدام کن</h2><p class="section-subtitle">راهنماها و محتوای آموزشی کوتاه.</p></div></div><div class="explore-grid" id="exploreGrid"><div class="empty-state">محتوای آموزشی به‌زودی منتشر می‌شود.</div></div></section>
+  <a class="founder-home-shortcut app-view" data-app-view="home" href="./founder.html"><span class="founder-shortcut-avatar">ح</span><span class="founder-shortcut-copy"><small>آشنایی با بنیان‌گذار حورانت۲۴</small><strong>حجت؛ پشت صحنه حورانت۲۴</strong></span><span class="founder-shortcut-arrow" aria-hidden="true">←</span></a>
   <section class="section app-view" data-app-view="home" id="challengesSection"><div class="section-head"><div><span class="eyebrow">تعامل با حورانت</span><h2>چالش‌ها و امتیازها</h2></div></div><div class="challenge-list" id="challengeList"><div class="empty-state">چالش فعالی ثبت نشده است.</div></div></section>
 
   <section class="about-panel app-view" data-app-view="home" id="aboutSection">
