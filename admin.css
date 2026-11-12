@@ -49,3 +49,26 @@ html[data-theme="dark"] .referral-live-stats b{color:#8ddbd1}
 .messenger-dot{width:9px;height:9px;border-radius:50%;display:block}.messenger-dot.eitaa{background:#24c9bd;box-shadow:0 0 12px #24c9bd}.messenger-dot.telegram{background:#438fff;box-shadow:0 0 12px #438fff}.messenger-dot.total{background:#c38aff;box-shadow:0 0 12px #c38aff}
 .messenger-chart-wrap{height:240px;position:relative}.messenger-analytics-card .micro-note{color:#91a9ce}
 @media(max-width:560px){.messenger-analytics-card{padding:15px}.messenger-analytics-head{flex-direction:column}.messenger-kpis{gap:6px}.messenger-kpis>div{padding:9px}.messenger-kpis b{font-size:19px}.messenger-chart-wrap{height:210px}}
+
+/* Premium navy dashboard theme inspired by the approved reference */
+body:has(#adminWorkspace){background:radial-gradient(ellipse at 78% 0%,#183b68 0%,#0a1b34 42%,#061225 100%)!important;color:#eaf2ff}
+body:has(#adminWorkspace) .topbar{background:rgba(7,20,40,.92)!important;border-bottom:1px solid #29466f!important;box-shadow:0 8px 28px #020b19a8}
+body:has(#adminWorkspace) .brand,body:has(#adminWorkspace) .brand b{color:#eaf2ff!important}
+body:has(#adminWorkspace) .admin-intro h1,body:has(#adminWorkspace) .admin-intro p{color:#eaf2ff!important}
+body:has(#adminWorkspace) .admin-intro .eyebrow{color:#49d4d0!important}
+body:has(#adminWorkspace) .admin-card,body:has(#adminWorkspace) .overview-panel{background:linear-gradient(145deg,#142b4b,#0c1d37)!important;border:1px solid #29466f!important;box-shadow:0 16px 42px #020b1970!important;color:#eaf2ff!important}
+body:has(#adminWorkspace) .admin-card h2,body:has(#adminWorkspace) .admin-card h3,body:has(#adminWorkspace) .overview-panel h3{color:#f1f6ff!important}
+body:has(#adminWorkspace) .admin-card p,body:has(#adminWorkspace) .admin-card label,body:has(#adminWorkspace) .overview-notes{color:#a9bddb!important}
+body:has(#adminWorkspace) .admin-toolbar{background:linear-gradient(110deg,#142d50,#10213d)!important;border:1px solid #29466f;color:#eaf2ff}
+body:has(#adminWorkspace) .admin-tabs{align-items:stretch;flex-wrap:wrap}
+body:has(#adminWorkspace) .admin-tabs .chip{background:#122746;border-color:#29466f;color:#b8c9e4}
+body:has(#adminWorkspace) .admin-tabs .chip.active,body:has(#adminWorkspace) .admin-tabs .chip:hover{background:linear-gradient(110deg,#173f68,#164f60);border-color:#2ec9c0;color:#fff;box-shadow:0 0 18px #20bdb52b}
+body:has(#adminWorkspace) .overview-stat,body:has(#adminWorkspace) .customer-stats article{background:linear-gradient(145deg,#1a3559,#102440)!important;border-color:#29466f!important}
+body:has(#adminWorkspace) .overview-stat span,body:has(#adminWorkspace) .overview-stat small,body:has(#adminWorkspace) .customer-stats span{color:#a9bddb!important}
+body:has(#adminWorkspace) .overview-stat b,body:has(#adminWorkspace) .customer-stats b{color:#f4f8ff!important}
+body:has(#adminWorkspace) .overview-shortcuts button,body:has(#adminWorkspace) .customer-row,body:has(#adminWorkspace) .customer-tool-card,body:has(#adminWorkspace) .customer-history-item{background:#102440!important;border-color:#29466f!important;color:#eaf2ff}
+body:has(#adminWorkspace) .overview-shortcuts button b,body:has(#adminWorkspace) .customer-row-main b,body:has(#adminWorkspace) .customer-tool-card h3{color:#eaf2ff!important}
+body:has(#adminWorkspace) .admin-card .app-form input,body:has(#adminWorkspace) .admin-card .app-form textarea,body:has(#adminWorkspace) .admin-card .app-form select,body:has(#adminWorkspace) .customer-tool-card input,body:has(#adminWorkspace) .customer-tool-card textarea,body:has(#adminWorkspace) .customer-toolbar input{background:#0b1c34!important;border-color:#34537b!important;color:#f1f6ff!important}
+body:has(#adminWorkspace) .admin-list-item{background:#102440!important;border:1px solid #29466f!important;color:#eaf2ff}
+body:has(#adminWorkspace) .admin-list-item small,body:has(#adminWorkspace) .admin-list-item p{color:#a9bddb!important}
+body:has(#adminWorkspace) .dashboard-updated{color:#91a9ce!important}
