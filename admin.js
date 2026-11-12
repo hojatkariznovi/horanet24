@@ -56,7 +56,7 @@ async function loadCustomers(){
   const data=await customerAdminCall({action:"list",page:state.customerPage,perPage:20,query:state.customerQuery});
   state.customers=data.users||[];
   $("customerTotal").textContent=faNum(data.total);$("customerVisible").textContent=faNum(state.customers.length);
-  $("customerVerified").textContent=faNum(state.customers.filter(u=>u.email_confirmed_at||u.phone).length);
+  $("customerVerified").textContent=faNum(state.customers.filter(u=>u.email_confirmed_at||u.phone_confirmed_at).length);
   $("customerBanned").textContent=faNum(state.customers.filter(u=>u.banned_until&&new Date(u.banned_until)>new Date()).length);
   $("customerPageLabel").textContent="صفحه "+faNum(state.customerPage)+" · "+faNum(data.total)+" نتیجه";
   $("customerPrev").disabled=state.customerPage<=1;$("customerNext").disabled=state.customerPage*20>=data.total;
