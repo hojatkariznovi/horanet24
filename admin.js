@@ -108,6 +108,20 @@ async function loadCategories(){
  $("categorySelect").innerHTML=state.categories.map(c=>'<option value="'+c.id+'">'+esc(c.title)+'</option>').join("");
  $("productCategorySelect").innerHTML='<option value="">بدون دسته‌بندی</option>'+state.productCategories.map(c=>'<option value="'+c.id+'">'+esc(c.title)+'</option>').join("");
 }
+let messengerChart=null;
+async function loadMessengerAnalytics(){
+ if(!state.admin)return;
+ const days=Number($("messengerRange")?.value||30);
+ const from=new Date();from.setDate(from.getDate()-days+1);from.setHours(0,0,0,0);
+ const {data,error}=await db.from("messenger_click_events").select("platform,created_at,page_path,source_label").gte("created_at",from.toISOString()).order("created_at",{ascending:true}).limit(10000);
+ if(error){$("messengerAnalyticsNote").textContent="دریافت آمار ممکن نشد: "+error.message;return;}
+ const rows=data||[],labels=[],eitaa=Array(days).fill(0),telegram=Array(days).fill(0),counts={eitaa:0,telegram:0};
+ for(let i=0;i<days;i++){const d=new Date(from);d.setDate(from.getDate()+i);labels.push(d.toLocaleDateString("fa-IR",{month:"numeric",day:"numeric"}));}
+ rows.forEach(r=>{const d=new Date(r.created_at);const ix=Math.floor((new Date(d.getFullYear(),d.getMonth(),d.getDate())-new Date(from.getFullYear(),from.getMonth(),from.getDate()))/86400000);if(ix>=0&&ix<days){if(r.platform==="eitaa"){eitaa[ix]++;counts.eitaa++;}else if(r.platform==="telegram"){telegram[ix]++;counts.telegram++;}}});
+ $("statEitaaClicks").textContent=faNum(counts.eitaa);$("statTelegramClicks").textContent=faNum(counts.telegram);$("statMessengerTotal").textContent=faNum(counts.eitaa+counts.telegram);
+ if(window.Chart){if(messengerChart)messengerChart.destroy();messengerChart=new Chart($("messengerClicksChart"),{type:"line",data:{labels,datasets:[{label:"ایتا",data:eitaa,borderColor:"#24c9bd",backgroundColor:"rgba(36,201,189,.12)",tension:.35,fill:true},{label:"تلگرام",data:telegram,borderColor:"#438fff",backgroundColor:"rgba(67,143,255,.10)",tension:.35,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},plugins:{legend:{labels:{color:"#c5d7f3",font:{family:"Vazirmatn"}}}},scales:{x:{ticks:{color:"#91a9ce",maxTicksLimit:8},grid:{color:"rgba(125,160,205,.10)"}},y:{beginAtZero:true,ticks:{precision:0,color:"#91a9ce"},grid:{color:"rgba(125,160,205,.10)"}}}}});}
+ $("messengerAnalyticsNote").textContent="مجموع "+faNum(rows.length)+" کلیک ثبت‌شده در "+faNum(days)+" روز اخیر؛ آمار بر اساس انتخاب لینک پیام‌رسان است، نه پیام ارسالی یا سفارش قطعی.";
+}
 async function loadDashboard(){
  if(!state.admin)return;
  const specs=[["services","is_active"],["products","is_active"],["hero_slides","is_active"],["assistant_leads",null]];
@@ -116,6 +130,7 @@ async function loadDashboard(){
  results.forEach((r,i)=>{const el=$(ids[i]);if(el)el.textContent=r.error?"—":Number(r.count||0).toLocaleString("fa-IR");});
  const failed=results.some(r=>r.error);
  $("dashboardUpdated").textContent=(failed?"بخشی از آمار به‌دلیل محدودیت دسترسی دریافت نشد. ":"آخرین به‌روزرسانی: ")+new Date().toLocaleString("fa-IR");
+ await loadMessengerAnalytics();
 }
 async function loadItems(){
  if(!state.admin)return;if(state.tab==="assistant_leads"){await loadAssistantLeads();return;}
@@ -245,7 +260,7 @@ $("contentForm").onsubmit=async e=>{
  toast("محتوا با موفقیت ذخیره شد.");$("saveMessage").textContent="ذخیره شد و فهرست به‌روزرسانی شد.";reset();if(state.tab==="product_categories"||state.tab==="service_categories")await loadCategories();await loadItems();
 };
 $("timeLimitedToggle").addEventListener("change",e=>{$("timeLimitFields").hidden=!e.target.checked;});
-$("refreshList").onclick=loadItems;$("refreshDashboard").onclick=loadDashboard;document.querySelectorAll("[data-go-tab]").forEach(b=>b.onclick=()=>{const tab=b.dataset.goTab;setTab(tab);});$("resetForm").onclick=reset;$("adminLogout").onclick=async()=>{await db.auth.signOut();};$("adminLogoutDenied").onclick=async()=>{await db.auth.signOut();};
+$("refreshList").onclick=loadItems;$("refreshDashboard").onclick=loadDashboard;$("messengerRange")?.addEventListener("change",loadMessengerAnalytics);document.querySelectorAll("[data-go-tab]").forEach(b=>b.onclick=()=>{const tab=b.dataset.goTab;setTab(tab);});$("resetForm").onclick=reset;$("adminLogout").onclick=async()=>{await db.auth.signOut();};$("adminLogoutDenied").onclick=async()=>{await db.auth.signOut();};
 document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));$("refreshAssistantLeads").onclick=loadAssistantLeads;$("refreshCustomers").onclick=()=>loadCustomers();$("customerSearchBtn").onclick=()=>{state.customerQuery=$("customerSearch").value.trim();state.customerPage=1;loadCustomers();};$("customerSearch").addEventListener("keydown",e=>{if(e.key==="Enter")$("customerSearchBtn").click();});$("customerClearBtn").onclick=()=>{$("customerSearch").value="";state.customerQuery="";state.customerPage=1;loadCustomers();};$("customerPrev").onclick=()=>{if(state.customerPage>1){state.customerPage--;loadCustomers();}};$("customerNext").onclick=()=>{state.customerPage++;loadCustomers();};$("closeCustomerDetail").onclick=()=>{setTab("customers");};$("refreshCustomerAudit").onclick=loadCustomerAudit;
 $("saveCustomerProfile").onclick=async()=>{if(!state.selectedCustomer)return;try{await customerAdminCall({action:"profile",userId:state.selectedCustomer.user.id,full_name:$("customerEditName").value,phone:$("customerEditPhone").value});toast("مشخصات مشتری ذخیره شد.");await openCustomerDetail(state.selectedCustomer.user.id);await loadCustomers();}catch(e){toast("ذخیره مشخصات ناموفق: "+e.message);}};
 $("adjustCustomerPoints").onclick=async()=>{if(!state.selectedCustomer)return;const delta=Number($("customerPointDelta").value),reason=$("customerPointReason").value.trim();if(!Number.isInteger(delta)||!delta||!reason){toast("مقدار امتیاز و دلیل را کامل وارد کن.");return;}if(!confirm((delta>0?"افزودن ":"کسر ")+Math.abs(delta)+" امتیاز؟"))return;try{await customerAdminCall({action:"points",userId:state.selectedCustomer.user.id,delta,reason});$("customerPointDelta").value="";$("customerPointReason").value="";toast("امتیاز مشتری به‌روزرسانی شد.");await openCustomerDetail(state.selectedCustomer.user.id);await loadCustomers();}catch(e){toast("تغییر امتیاز ناموفق: "+e.message);}};
