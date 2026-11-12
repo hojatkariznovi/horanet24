@@ -1795,3 +1795,12 @@ html[data-theme="dark"] .popular-links .seo-service-links a{background:linear-gr
 
 /* H24 topbar left controls: account and music */
 .topbar{position:relative}.topbar-left-actions{display:flex;align-items:center;gap:9px;flex:0 0 auto}.topbar-left-actions .profile-btn{order:0}.topbar-left-actions .h24-music-slot{order:1}.top-actions{margin-inline-start:auto}@media(max-width:760px){.topbar{gap:8px}.topbar-left-actions{gap:6px}.topbar-left-actions .profile-btn{width:36px;height:36px}.top-actions{gap:5px}.top-actions .icon-btn{width:34px;height:34px;border-radius:11px}.brand{gap:7px}.brand b{font-size:16px}.brand small{font-size:8px}}
+
+/* Referral center inside the personal account */
+.profile-referral-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:8px}
+.referral-live-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:11px}
+.referral-live-stats span{display:block;padding:8px 9px;border:1px solid #e5efef;border-radius:10px;background:#f7fbfb;color:#718992;font-size:9px}
+.referral-live-stats b{color:#238e8d;font-size:12px;margin-left:4px}
+html[data-theme="dark"] .referral-live-stats span{background:#203a43;border-color:#35545d;color:#a9c0c7}
+html[data-theme="dark"] .referral-live-stats b{color:#8ddbd1}
+@media(max-width:430px){.profile-referral-actions .profile-copy-btn{font-size:8px;padding:7px 8px}.referral-live-stats span{font-size:8px;padding:7px}}
