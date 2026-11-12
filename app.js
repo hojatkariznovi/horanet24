@@ -33,7 +33,7 @@ function h24UiSound(kind="tap"){
   else play();
  }catch(_){}
 }
-const state = { client:null, session:null, services:[], products:[], categories:[], productCategories:[], favorites:new Set(), serverOffsetMs:0, activeCategory:"all", activeProductCategory:"all", productSearch:"", productSort:"featured", selectedService:null, profileCache:null };
+const state = { client:null, session:null, services:[], products:[], categories:[], productCategories:[], favorites:new Set(), serverOffsetMs:0, activeCategory:"all", activeSubcategory:"all", activeProductCategory:"all", productSearch:"", productSort:"featured", selectedService:null, profileCache:null };
 const toast = (message) => { const el=$("toast"); el.textContent=message; el.classList.add("show"); clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>el.classList.remove("show"),3000); };
 const esc = (value="") => String(value).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const LUCIDE_ICON_MAP={"car-front":"car-front","receipt":"receipt-text","fuel":"fuel","car-document":"file-text","shield-car":"shield-check","shield-check":"shield-check","shield-calendar":"calendar-check","heart-chart":"heart-pulse","briefcase-check":"briefcase-business","calculator":"calculator","folder":"folder","certificate":"award","passport":"passport","user-card":"contact","users":"users","bank":"landmark","credit-card":"credit-card","wrench":"wrench"};
