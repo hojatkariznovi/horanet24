@@ -2,7 +2,7 @@ const SUPABASE_URL="https://iqrgqkluuhbyphtihsls.supabase.co";
 const SUPABASE_KEY="sb_publishable_jJeR9OBKSiQU4dBnQrGILA_I56-Npbf";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
-const state={session:null,admin:false,tab:"services",categories:[],productCategories:[],items:[]};
+const state={session:null,admin:false,tab:"dashboard",categories:[],productCategories:[],items:[]};
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function toast(msg){const el=$("adminToast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2800);}
 function show(id,on=true){$(id).hidden=!on;}
@@ -42,7 +42,7 @@ async function checkAdmin(session){
  const {data,error}=await db.from("site_admins").select("user_id").eq("user_id",session.user.id).maybeSingle();
  state.admin=!!data&&!error;
  if(!state.admin){show("adminDenied",true);show("adminWorkspace",false);return;}
- show("adminDenied",false);show("adminWorkspace",true);await loadCategories();await loadSettings();await loadItems();
+ show("adminDenied",false);show("adminWorkspace",true);await loadCategories();await loadSettings();await loadDashboard();await setTab("dashboard");
 }
 async function loadCategories(){
  const [services,products]=await Promise.all([
@@ -54,6 +54,15 @@ async function loadCategories(){
  state.categories=services.data||[];state.productCategories=products.data||[];
  $("categorySelect").innerHTML=state.categories.map(c=>'<option value="'+c.id+'">'+esc(c.title)+'</option>').join("");
  $("productCategorySelect").innerHTML='<option value="">بدون دسته‌بندی</option>'+state.productCategories.map(c=>'<option value="'+c.id+'">'+esc(c.title)+'</option>').join("");
+}
+async function loadDashboard(){
+ if(!state.admin)return;
+ const specs=[["services","is_active"],["products","is_active"],["hero_slides","is_active"],["assistant_leads",null]];
+ const results=await Promise.all(specs.map(([table,field])=>{let q=db.from(table).select("id",{count:"exact",head:true});if(field)q=q.eq(field,true);else q=q.eq("status","new");return q;}));
+ const ids=["statServices","statProducts","statSlides","statLeads"];
+ results.forEach((r,i)=>{const el=$(ids[i]);if(el)el.textContent=r.error?"—":Number(r.count||0).toLocaleString("fa-IR");});
+ const failed=results.some(r=>r.error);
+ $("dashboardUpdated").textContent=(failed?"بخشی از آمار به‌دلیل محدودیت دسترسی دریافت نشد. ":"آخرین به‌روزرسانی: ")+new Date().toLocaleString("fa-IR");
 }
 async function loadItems(){
  if(!state.admin)return;if(state.tab==="assistant_leads"){await loadAssistantLeads();return;}
@@ -169,7 +178,7 @@ $("contentForm").onsubmit=async e=>{
  toast("محتوا با موفقیت ذخیره شد.");$("saveMessage").textContent="ذخیره شد و فهرست به‌روزرسانی شد.";reset();if(state.tab==="product_categories"||state.tab==="service_categories")await loadCategories();await loadItems();
 };
 $("timeLimitedToggle").addEventListener("change",e=>{$("timeLimitFields").hidden=!e.target.checked;});
-$("refreshList").onclick=loadItems;$("resetForm").onclick=reset;$("adminLogout").onclick=async()=>{await db.auth.signOut();};$("adminLogoutDenied").onclick=async()=>{await db.auth.signOut();};
+$("refreshList").onclick=loadItems;$("refreshDashboard").onclick=loadDashboard;document.querySelectorAll("[data-go-tab]").forEach(b=>b.onclick=()=>{const tab=b.dataset.goTab;setTab(tab);});$("resetForm").onclick=reset;$("adminLogout").onclick=async()=>{await db.auth.signOut();};$("adminLogoutDenied").onclick=async()=>{await db.auth.signOut();};
 document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));$("refreshAssistantLeads").onclick=loadAssistantLeads;
 async function loadSettings(){const {data,error}=await db.from("site_settings").select("setting_value").eq("setting_key","premium_channel").maybeSingle();if(error||!data)return;const v=data.setting_value||{};const f=$("premiumChannelForm");f.elements.title.value=v.title||"کانال ویژه حورانت۲۴";f.elements.description.value=v.description||"";f.elements.url.value=v.url||"";}
 $("premiumChannelForm").onsubmit=async e=>{e.preventDefault();const f=e.currentTarget;const setting_value={title:f.elements.title.value.trim(),description:f.elements.description.value.trim(),url:f.elements.url.value.trim()};const {error}=await db.from("site_settings").upsert({setting_key:"premium_channel",setting_value,updated_at:new Date().toISOString()},{onConflict:"setting_key"});$("premiumSaveMessage").textContent=error?"ذخیره ناموفق: "+error.message:"تنظیمات کانال ذخیره شد.";};
