@@ -237,17 +237,56 @@ const AUTH_SITE_URL="https://horanet24.ir/";
 function showLogin(){window.location.href="./login.html?next=account";}
 async function loadAccount(){
  const card=$("accountCard");
- if(!state.session){state.profileCache=null;card.innerHTML='<div><b>به حورانت۲۴ بپیوندید</b><p>برای ساخت حساب، ذخیره علاقه‌مندی‌ها و دریافت کد مشتری وارد شوید.</p></div><button class="primary-btn" id="loginBtn">ورود / عضویت</button>';$("loginBtn").onclick=showLogin;return;}
+ if(!state.session){
+  state.profileCache=null;
+  card.innerHTML='<div class="account-welcome"><span class="account-welcome-icon"><i data-lucide="user-round"></i></span><div><b>فضای شخصی حورانت۲۴</b><p>برای ساخت پروفایل، ذخیره علاقه‌مندی‌ها و دریافت کد مشتری وارد حساب خود شوید.</p></div><button class="primary-btn" id="loginBtn">ورود / عضویت</button></div>';
+  $("loginBtn").onclick=showLogin;refreshIcons();return;
+ }
  const user=state.session.user;let profile=state.profileCache;
- if(!profile){const {data,error}=await state.client.from("profiles").select("full_name,phone,birth_date,customer_code,points_balance,referral_code,created_at").eq("id",user.id).maybeSingle();if(error)console.warn("Profile load:",error.message);profile=data||null;if(!profile){await ensureProfile(user);const retry=await state.client.from("profiles").select("full_name,phone,birth_date,customer_code,points_balance,referral_code,created_at").eq("id",user.id).maybeSingle();profile=retry.data||null;}state.profileCache=profile;}
- const name=profile?.full_name||user.user_metadata?.full_name||user.email||"کاربر حورانت";
+ if(!profile){
+  const {data,error}=await state.client.from("profiles").select("full_name,phone,birth_date,customer_code,points_balance,referral_code,created_at").eq("id",user.id).maybeSingle();
+  if(error)console.warn("Profile load:",error.message);
+  profile=data||null;
+  if(!profile){await ensureProfile(user);const retry=await state.client.from("profiles").select("full_name,phone,birth_date,customer_code,points_balance,referral_code,created_at").eq("id",user.id).maybeSingle();profile=retry.data||null;}
+  state.profileCache=profile;
+ }
+ const name=profile?.full_name||user.user_metadata?.full_name||user.email?.split("@")[0]||"کاربر حورانت";
  const joined=new Date(profile?.created_at||user.created_at).toLocaleDateString("fa-IR",{year:"numeric",month:"long",day:"numeric"});
- const points=Number(profile?.points_balance||0).toLocaleString("fa-IR"),customerCode=profile?.customer_code||"در حال تخصیص",phone=profile?.phone||"ثبت نشده",birth=profile?.birth_date?new Date(profile.birth_date+"T12:00:00").toLocaleDateString("fa-IR"):"ثبت نشده";
- card.innerHTML='<div class="account-profile-head"><span class="account-avatar"><i data-lucide="user-round"></i></span><div class="account-identity"><b>'+esc(name)+'</b><p>عضو حورانت۲۴ از '+esc(joined)+'</p></div><div class="account-points"><strong>'+points+'</strong><small>امتیاز</small></div></div><div class="account-details-grid"><div class="account-detail customer-code-detail"><small>کد مشتری اختصاصی</small><b dir="ltr">'+esc(customerCode)+'</b></div><div class="account-detail"><small>ایمیل حساب</small><b dir="ltr">'+esc(user.email||"ثبت نشده")+'</b></div><div class="account-detail"><small>شماره همراه</small><b dir="ltr">'+esc(phone)+'</b></div><div class="account-detail"><small>تاریخ تولد</small><b>'+esc(birth)+'</b></div></div><div class="account-actions"><button class="secondary-btn" id="editProfileBtn">ویرایش اطلاعات</button><button class="secondary-btn" id="myFavorites">علاقه‌مندی‌ها</button><button class="secondary-btn" id="logoutBtn">خروج از حساب</button></div>';
- refreshIcons();$("editProfileBtn").onclick=()=>editAccountProfile(profile,user);
- $("myFavorites").onclick=()=>{const items=state.services.filter(s=>state.favorites.has(s.id));openModal('<span class="eyebrow">حساب من</span><h2 id="modalTitle">علاقه‌مندی‌ها</h2>'+(items.length?items.map(s=>'<button class="favorite-row" data-id="'+s.id+'">'+esc(s.title)+' <span>←</span></button>').join(""):'<p>هنوز خدمتی ذخیره نکرده‌اید.</p>'));document.querySelectorAll(".favorite-row").forEach(b=>b.onclick=()=>showService(b.dataset.id));};
+ const points=Number(profile?.points_balance||0).toLocaleString("fa-IR");
+ const customerCode=profile?.customer_code||"در حال تخصیص";
+ const phone=profile?.phone||"ثبت نشده";
+ const birth=profile?.birth_date?new Date(profile.birth_date+"T12:00:00").toLocaleDateString("fa-IR"):"ثبت نشده";
+ const favorites=state.services.filter(s=>state.favorites.has(s.id));
+ const completion=[!!(profile?.full_name||user.user_metadata?.full_name),!!profile?.phone,!!profile?.birth_date].filter(Boolean).length;
+ const percent=Math.round(completion/3*100);
+ const avatarLetter=Array.from(name.trim())[0]||"ح";
+ const favoriteMarkup=favorites.length?favorites.map(s=>'<button class="profile-favorite-item" data-service-id="'+esc(s.id)+'"><span class="profile-favorite-icon">'+categoryIcon(s.category_slug||s.category?.slug||"",s.slug||"")+'</span><span class="profile-favorite-copy"><b>'+esc(s.title)+'</b><small>'+esc(s.summary||"مشاهده جزئیات خدمت")+'</small></span><i data-lucide="chevron-left"></i></button>').join(""):'<div class="profile-empty"><i data-lucide="bookmark"></i><b>هنوز موردی ذخیره نکرده‌اید</b><p>در صفحه خدمات، موارد دلخواهتان را با علامت نشانک ذخیره کنید.</p><button class="secondary-btn" id="browseServicesBtn">مشاهده خدمات</button></div>';
+ const referral=profile?.referral_code?'<div class="profile-referral-code" dir="ltr">'+esc(profile.referral_code)+'</div><button class="profile-copy-btn" id="copyReferralBtn"><i data-lucide="copy"></i> کپی کد دعوت</button>':'<span class="profile-muted">کد دعوت پس از فعال‌سازی این قابلیت نمایش داده می‌شود.</span>';
+ card.innerHTML=
+ '<div class="profile-dashboard">'+
+  '<section class="profile-hero-card"><div class="profile-hero-glow"></div><div class="profile-hero-top"><span class="profile-status"><i></i> حساب کاربری فعال</span><button class="profile-edit-quick" id="editProfileTop"><i data-lucide="pencil"></i> ویرایش پروفایل</button></div>'+
+   '<div class="profile-main-identity"><span class="profile-avatar">'+esc(avatarLetter)+'</span><div><span class="profile-hello">خوش آمدید</span><h3>'+esc(name)+'</h3><p dir="ltr">'+esc(user.email||"ایمیل ثبت نشده")+'</p></div></div>'+
+   '<div class="profile-member-line"><span><i data-lucide="calendar-days"></i> عضویت از '+esc(joined)+'</span><span><i data-lucide="shield-check"></i> حساب امن</span></div></section>'+
+  '<div class="profile-stats-grid"><article class="profile-stat"><span class="profile-stat-icon points"><i data-lucide="medal"></i></span><div><strong>'+points+'</strong><small>امتیاز مشتری</small></div></article><article class="profile-stat"><span class="profile-stat-icon saved"><i data-lucide="bookmark"></i></span><div><strong>'+favorites.length.toLocaleString("fa-IR")+'</strong><small>علاقه‌مندی‌ها</small></div></article><article class="profile-stat"><span class="profile-stat-icon complete"><i data-lucide="user-round-check"></i></span><div><strong>'+percent.toLocaleString("fa-IR")+'٪</strong><small>تکمیل پروفایل</small></div></article></div>'+
+  '<div class="profile-content-grid"><section class="profile-panel profile-personal"><div class="profile-panel-head"><div><span class="eyebrow">اطلاعات حساب</span><h3>مشخصات شخصی</h3></div><button class="profile-icon-action" id="editProfileBtn" aria-label="ویرایش مشخصات"><i data-lucide="pencil"></i></button></div>'+
+   '<div class="profile-info-list"><div><small>نام و نام خانوادگی</small><b>'+esc(profile?.full_name||"تکمیل نشده")+'</b></div><div><small>شماره همراه</small><b dir="ltr">'+esc(phone)+'</b></div><div><small>تاریخ تولد</small><b>'+esc(birth)+'</b></div><div><small>ایمیل حساب</small><b dir="ltr">'+esc(user.email||"ثبت نشده")+'</b></div></div>'+
+   '<div class="profile-completion"><div><span>تکمیل اطلاعات پروفایل</span><b>'+percent.toLocaleString("fa-IR")+'٪</b></div><span class="profile-progress"><i style="width:'+percent+'%"></i></span><small>با تکمیل شماره همراه و تاریخ تولد، اطلاعات حساب شما کامل‌تر می‌شود.</small></div></section>'+
+  '<section class="profile-panel profile-customer"><div class="profile-panel-head"><div><span class="eyebrow">شناسه اختصاصی</span><h3>کد مشتری شما</h3></div><span class="profile-code-icon"><i data-lucide="fingerprint"></i></span></div><p>برای پیگیری سریع‌تر در ارتباط با پشتیبانی، این کد را همراه داشته باشید.</p><div class="profile-customer-code" dir="ltr">'+esc(customerCode)+'</div><button class="profile-copy-btn" id="copyCustomerBtn"><i data-lucide="copy"></i> کپی کد مشتری</button><div class="profile-referral"><div><b>کد دعوت دوستان</b><small>دعوت دوستان در حساب شما</small></div>'+referral+'</div></section></div>'+
+  '<section class="profile-panel profile-favorites"><div class="profile-panel-head"><div><span class="eyebrow">انتخاب‌های شما</span><h3>علاقه‌مندی‌ها</h3></div><span class="profile-count">'+favorites.length.toLocaleString("fa-IR")+' مورد</span></div><div class="profile-favorite-list">'+favoriteMarkup+'</div></section>'+
+  '<div class="profile-support-grid"><button class="profile-support-card" id="profileSupportBtn"><span><i data-lucide="headset"></i></span><div><b>پشتیبانی و راهنمایی</b><small>ارتباط از طریق ایتا یا تلگرام</small></div><i data-lucide="arrow-up-left"></i></button><div class="profile-support-card profile-request-note"><span><i data-lucide="clipboard-list"></i></span><div><b>پیگیری درخواست خدمات</b><small>ثبت و پیگیری درخواست از طریق پیام‌رسان انجام می‌شود؛ سابقه‌ای در سایت ثبت نمی‌شود.</small></div></div></div>'+
+  '<div class="profile-footer-actions"><span><i data-lucide="lock-keyhole"></i> اطلاعات حساب شما فقط برای ارائه خدمات حورانت۲۴ استفاده می‌شود.</span><button id="logoutBtn"><i data-lucide="log-out"></i> خروج از حساب</button></div>'+
+ '</div>';
+ refreshIcons();
+ $("editProfileBtn").onclick=()=>editAccountProfile(profile,user);
+ $("editProfileTop").onclick=()=>editAccountProfile(profile,user);
+ $("copyCustomerBtn").onclick=()=>{if(customerCode==="در حال تخصیص"){toast("کد مشتری هنوز تخصیص داده نشده است.");return;}navigator.clipboard?.writeText(customerCode).then(()=>toast("کد مشتری کپی شد.")).catch(()=>toast("کپی خودکار در این مرورگر در دسترس نیست."));};
+ const referralBtn=$("copyReferralBtn");if(referralBtn)referralBtn.onclick=()=>navigator.clipboard?.writeText(profile.referral_code).then(()=>toast("کد دعوت کپی شد.")).catch(()=>toast("کپی خودکار در دسترس نیست."));
+ $("profileSupportBtn").onclick=()=>showContactOptions("contact","پشتیبانی حساب کاربری");
+ const browse=$("browseServicesBtn");if(browse)browse.onclick=()=>showView("services");
+ document.querySelectorAll(".profile-favorite-item").forEach(btn=>btn.onclick=()=>showService(btn.dataset.serviceId));
  $("logoutBtn").onclick=async()=>{await state.client.auth.signOut();state.session=null;state.profileCache=null;state.favorites.clear();loadAccount();toast("از حساب خارج شدید.");};
 }
+
 function editAccountProfile(profile,user){
  const currentName=profile?.full_name||user.user_metadata?.full_name||"";
  const currentPhone=profile?.phone||"",currentBirth=profile?.birth_date||"";
