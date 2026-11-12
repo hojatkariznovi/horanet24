@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./tailwind.css">
-  <link rel="stylesheet" href="./styles.css?v=38">
+  <link rel="stylesheet" href="./styles.css?v=39">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
@@ -147,6 +147,18 @@
     <button type="button" class="home-category-story" data-home-category="business"><span class="home-story-ring"><i data-lucide="briefcase-business"></i></span><span>کسب‌وکار</span></button>
     <button type="button" class="home-category-story" data-home-category="pos"><span class="home-story-ring"><i data-lucide="credit-card"></i></span><span>کارت‌خوان</span></button>
   </section>
+  <section class="home-destinations app-view" data-app-view="home" aria-label="انتخاب مسیر در حورانت۲۴">
+    <button type="button" class="home-destination-card home-destination-services" id="homeServicesCta">
+      <span class="home-destination-icon"><i data-lucide="layers-3"></i></span>
+      <span class="home-destination-copy"><small>راهنمای خدمات</small><strong>خدمت موردنیازت را پیدا کن</strong><span>مدارک، مراحل و شرایط هر خدمت را ببین</span></span>
+      <span class="home-destination-arrow"><i data-lucide="arrow-up-left"></i></span>
+    </button>
+    <button type="button" class="home-destination-card home-destination-store" id="homeStoreCta">
+      <span class="home-destination-icon"><i data-lucide="shopping-bag"></i></span>
+      <span class="home-destination-copy"><small>فروشگاه حورانت۲۴</small><strong>تجهیزات و محصولات دیجیتال</strong><span>مشخصات محصولات را ببین و استعلام بگیر</span></span>
+      <span class="home-destination-arrow"><i data-lucide="arrow-up-left"></i></span>
+    </button>
+  </section>
   <section class="quick-stats app-view" data-app-view="home" aria-label="ویژگی‌های حورانت۲۴">
     <div><strong>۲۴/۷</strong><span>دسترسی به اطلاعات خدمات</span></div><i></i>
     <div><strong>آنلاین</strong><span>شروع درخواست از راه دور</span></div><i></i>
@@ -154,7 +166,7 @@
   </section>
 
   <section class="popular-links app-view" data-app-view="home" aria-labelledby="popularServicesTitle">
-  <div class="section-head"><div><span class="eyebrow">شروع سریع</span><h2 id="popularServicesTitle">خدمات پرکاربرد</h2><p class="section-subtitle">برای دیدن مدارک و مراحل، موضوع موردنظرت را انتخاب کن.</p></div></div>
+  <div class="section-head"><div><span class="eyebrow">شروع سریع</span><h2 id="popularServicesTitle">خدمات پرکاربرد</h2><p class="section-subtitle">برای دیدن مدارک و مراحل، موضوع موردنظرت را انتخاب کن.</p></div><button type="button" class="text-btn" id="homeAllServices">همه خدمات <span data-icon="arrow-left"></span></button></div>
   <div class="seo-service-links">
     <a href="/services/online-cafenet.html">خدمات اینترنتی و کافی‌نت آنلاین</a>
     <a href="/services/fuel-card.html">ثبت‌نام و پیگیری کارت سوخت</a>
