@@ -87,7 +87,7 @@ async function loadCustomerAudit(){
  const el=$("customerAuditList");el.innerHTML='<div class="empty-state">در حال دریافت گزارش...</div>';
  try{const d=await customerAdminCall({action:"audit"});el.innerHTML=(d.logs||[]).length?d.logs.map(x=>'<div class="customer-history-item"><b>'+esc(({points_adjusted:"تغییر امتیاز",customer_note_added:"یادداشت مشتری",customer_blocked:"مسدودسازی حساب",customer_unblocked:"رفع مسدودی",customer_profile_updated:"ویرایش مشخصات"}[x.action]||x.action))+'</b><p>شناسه مشتری: '+esc(x.target_user_id||"—")+'</p><small>'+fmtDate(x.created_at)+' · '+esc(JSON.stringify(x.details||{}))+'</small></div>').join(""):'<div class="empty-state">هنوز فعالیت مدیریتی ثبت نشده است.</div>';}catch(e){el.innerHTML='<div class="empty-state">دریافت گزارش ناموفق: '+esc(e.message)+'</div>';}
 }
-\nasync function checkAdmin(session){
+async function checkAdmin(session){
  state.session=session;show("adminLogin",false);
  if(!session){state.admin=false;show("adminDenied",false);show("adminWorkspace",false);show("adminLogin",true);return;}
  $("adminEmail").textContent=session.user.email||"مدیر";
