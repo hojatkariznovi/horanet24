@@ -461,6 +461,9 @@ function wire(){
   $("servicesSection").scrollIntoView({behavior:"smooth",block:"start"});
  }));
  $("exploreServices").onclick=()=>showView("services");
+ $("homeServicesCta")?.addEventListener("click",()=>showView("services"));
+ $("homeAllServices")?.addEventListener("click",()=>{state.activeCategory="all";document.querySelectorAll("#categoryRow .chip").forEach(x=>x.classList.toggle("active",x.dataset.category==="all"));showView("services");});
+ $("homeStoreCta")?.addEventListener("click",()=>showView("products"));
  $("allServices").onclick=()=>{state.activeCategory="all";document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x.dataset.category==="all"));showView("services");};
  $("searchToggle").onclick=()=>{showView("services");$("serviceSearch").focus();};
  $("assistantBtn").onclick=()=>window.openHoranetAssistant?window.openHoranetAssistant():showContactOptions("contact","پشتیبانی حورانت۲۴");
