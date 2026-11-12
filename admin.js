@@ -99,13 +99,13 @@ async function checkAdmin(session){
 }
 async function loadCategories(){
  const [services,products]=await Promise.all([
-  db.from("service_categories").select("id,title").eq("is_active",true).order("sort_order"),
+  db.from("service_categories").select("id,title,parent_id").eq("is_active",true).order("sort_order"),
   db.from("product_categories").select("id,title").eq("is_active",true).order("sort_order")
  ]);
  if(services.error){toast("دریافت دسته‌بندی خدمات ناموفق بود.");return;}
  if(products.error){toast("دریافت دسته‌بندی فروشگاه ناموفق بود.");return;}
  state.categories=services.data||[];state.productCategories=products.data||[];
- $("categorySelect").innerHTML=state.categories.map(c=>'<option value="'+c.id+'">'+esc(c.title)+'</option>').join("");
+ $("categorySelect").innerHTML=state.categories.filter(c=>c.parent_id).map(c=>{const p=state.categories.find(x=>x.id===c.parent_id);return '<option value="'+c.id+'">'+esc(p?p.title:"")+" / "+esc(c.title)+'</option>';}).join("");
  $("productCategorySelect").innerHTML='<option value="">بدون دسته‌بندی</option>'+state.productCategories.map(c=>'<option value="'+c.id+'">'+esc(c.title)+'</option>').join("");
 }
 let messengerChart=null;
