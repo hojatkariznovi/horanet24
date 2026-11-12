@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./tailwind.css">
-  <link rel="stylesheet" href="./styles.css?v=36">
+  <link rel="stylesheet" href="./styles.css?v=37">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
@@ -64,7 +64,7 @@
     <span><b>حورانت<span>۲۴</span></b><small>خدمات دیجیتال، ساده و مطمئن</small></span>
   </a>
   <nav class="desktop-nav flex items-center gap-6" aria-label="ناوبری اصلی">
-    <a href="#home" data-view="home">خانه</a><a href="#servicesSection" data-view="services">خدمات</a><a href="#productsSection" data-view="products">محصولات</a><a href="#howItWorks" data-view="services">راهنمای دریافت</a><a href="#aboutSection" data-view="home">درباره ما</a>
+    <a href="#home" data-view="home">خانه</a><a href="#servicesSection" data-view="services">خدمات</a><a href="#productsSection" data-view="products">محصولات</a><a href="#howItWorks" data-view="services">راهنمای دریافت</a><a href="#aboutSection" data-view="home">درباره ما</a><a href="#contactSection" data-view="contact">ارتباط</a>
   </nav>
   <div class="top-actions">
     <button class="icon-btn" id="searchToggle" aria-label="جستجوی خدمات" title="جستجوی خدمات"><span data-icon="search"></span></button>
@@ -232,6 +232,43 @@
 
   <section class="section app-view profile-page app-view-account" data-app-view="account" id="accountSection" hidden><div class="section-head profile-page-heading"><div><span class="eyebrow">حساب کاربری · HORANET24</span><h2>داشبورد شخصی شما</h2><p>اطلاعات حساب، کد مشتری و علاقه‌مندی‌ها در یک نگاه</p></div><span class="profile-heading-mark"><i data-lucide="user-round-cog"></i></span></div><div class="account-card" id="accountCard"><div><b>فضای شخصی حورانت۲۴</b><p>برای ورود به حساب کاربری اقدام کنید.</p></div><button class="primary-btn" id="loginBtn">ورود / عضویت</button></div></section>
 
+
+  <section class="section app-view contact-page" data-app-view="contact" id="contactSection" hidden>
+    <div class="contact-page-heading">
+      <div><span class="eyebrow">پشتیبانی و راهنمایی · HORANET24</span><h2>هر سؤالی داری، از همین‌جا شروع کن.</h2><p>پاسخ پرسش‌های پرتکرار را در گفت‌وگوی زیر پیدا کن یا مستقیم با پشتیبانی ارتباط بگیر.</p></div>
+      <span class="contact-heading-mark"><i data-lucide="messages-square"></i></span>
+    </div>
+    <div class="contact-layout">
+      <aside class="contact-support-panel">
+        <div class="contact-support-orb"><i data-lucide="headset"></i></div>
+        <span class="contact-panel-kicker">ارتباط مستقیم</span>
+        <h3>نیاز به راهنمایی بیشتر داری؟</h3>
+        <p>برای بررسی شرایط خدمت، پیگیری موضوع یا دریافت راهنمایی اختصاصی، پیام‌رسان دلخواهت را انتخاب کن.</p>
+        <button type="button" class="contact-support-action contact-eitaa-action" id="contactEitaaBtn"><span class="contact-social-icon"><i data-lucide="message-circle"></i></span><span><b>پشتیبانی در ایتا</b><small>گفت‌وگو با پشتیبانی حورانت۲۴</small></span><i data-lucide="arrow-up-left"></i></button>
+        <button type="button" class="contact-support-action contact-telegram-action" id="contactTelegramBtn"><span class="contact-social-icon"><i data-lucide="send"></i></span><span><b>پشتیبانی در تلگرام</b><small>ارسال پیام به پشتیبانی</small></span><i data-lucide="arrow-up-left"></i></button>
+        <div class="contact-support-note"><i data-lucide="shield-check"></i><span>انتخاب پیام‌رسان فقط شما را به گفت‌وگوی پشتیبانی هدایت می‌کند؛ ثبت درخواست و ارسال مدارک در سایت انجام نمی‌شود.</span></div>
+      </aside>
+      <section class="faq-chat-panel" aria-label="گفت‌وگو و سؤالات متداول">
+        <div class="faq-chat-head"><span class="faq-chat-avatar"><i data-lucide="bot"></i><i class="faq-online-dot"></i></span><div><b>راهنمای هوشمند حورانت۲۴</b><small><i></i> پاسخ‌گویی به سؤالات پرتکرار</small></div><span class="faq-chat-tag">راهنمای آنلاین</span></div>
+        <div class="faq-chat-messages" id="faqChatMessages" aria-live="polite">
+          <div class="faq-chat-message assistant"><span class="faq-message-avatar"><i data-lucide="sparkles"></i></span><div class="faq-bubble"><b>سلام! به راهنمای حورانت۲۴ خوش آمدی.</b><p>موضوع موردنظرت را از سؤال‌های زیر انتخاب کن تا راهنمایی‌ات کنم.</p><small>همین حالا</small></div></div>
+        </div>
+        <div class="faq-chat-suggestions" id="faqChatSuggestions" aria-label="سؤالات متداول">
+          <span>سؤال‌های پرتکرار</span>
+          <button type="button" data-faq="services">چه خدماتی ارائه می‌کنید؟</button>
+          <button type="button" data-faq="documents">مدارک لازم را از کجا ببینم؟</button>
+          <button type="button" data-faq="request">چطور درخواست ثبت کنم؟</button>
+          <button type="button" data-faq="payment">هزینه و پرداخت چگونه است؟</button>
+          <button type="button" data-faq="tracking">چطور پیگیری کنم؟</button>
+          <button type="button" data-faq="online">خدمات در سراسر ایران ارائه می‌شود؟</button>
+          <button type="button" data-faq="account">کد مشتری و حساب کاربری چیست؟</button>
+          <button type="button" data-faq="human">می‌خواهم با پشتیبان صحبت کنم.</button>
+        </div>
+        <div class="faq-chat-compose"><span><i data-lucide="message-square-text"></i></span><p>برای دریافت پاسخ، یکی از سؤال‌های آماده را انتخاب کن.</p><span class="faq-compose-lock"><i data-lucide="lock-keyhole"></i></span></div>
+      </section>
+    </div>
+  </section>
+
   <footer class="app-view" data-app-view="home">
     <div class="footer-top"><div><div class="footer-brand">حورانت۲۴</div><p>کیفیت خدمات، از شفافیت مسیر شروع می‌شود.</p></div><a class="footer-bot" href="#" data-h24-title="راهنمای خدمات حورانت۲۴">ربات رسمی ایتا <span data-icon="external-link"></span></a></div>
     <div class="footer-contact"><a href="tel:09157592892">۰۹۱۵۷۵۹۲۸۹۲</a><a href="#" data-h24-title="راهنمای خدمات حورانت۲۴">ایتـا</a><a href="https://t.me/hojat_k82" target="_blank" rel="noopener">تلگرام</a><a href="https://rubika.ir/Hojat_k82" target="_blank" rel="noopener">روبیکا</a></div>
@@ -247,7 +284,7 @@
 </nav>
 <div class="modal-backdrop" id="modalBackdrop" hidden><section class="app-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="بستن">×</button><div id="modalContent"></div></section></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="./app.js?v=42"></script>
+<script src="./app.js?v=43"></script>
 <script src="./assistant-chat.js"></script>
 
 </body></html>
