@@ -52,7 +52,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./tailwind.css">
-  <link rel="stylesheet" href="./styles.css?v=39">
+  <link rel="stylesheet" href="./styles.css?v=40">
+  <link rel="stylesheet" href="./music-widget.css?v=1">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
@@ -64,7 +65,7 @@
     <span><b>حورانت<span>۲۴</span></b><small>خدمات دیجیتال، ساده و مطمئن</small></span>
   </a>
   <nav class="desktop-nav flex items-center gap-6" aria-label="ناوبری اصلی">
-    <a href="#home" data-view="home">خانه</a><a href="#servicesSection" data-view="services">خدمات</a><a href="#productsSection" data-view="products">محصولات</a><a href="#howItWorks" data-view="services">راهنمای دریافت</a><a href="#aboutSection" data-view="home">درباره ما</a><a href="#contactSection" data-view="contact">ارتباط</a>
+    <a href="#home" data-view="home">خانه</a><a href="#servicesSection" data-view="services">خدمات</a><a href="#productsSection" data-view="products">محصولات</a><a href="#howItWorks" data-view="services">راهنمای دریافت</a><a href="#aboutSection" data-view="home">درباره ما</a><a href="./founder.html">بنیان‌گذار</a><a href="#contactSection" data-view="contact">ارتباط</a>
   </nav>
   <div class="top-actions">
     <button class="icon-btn" id="searchToggle" aria-label="جستجوی خدمات" title="جستجوی خدمات"><span data-icon="search"></span></button>
@@ -82,12 +83,6 @@
     </div>
     <div class="hero-slider-controls"><div class="hero-dots" id="heroDots"><button type="button" class="hero-dot active" data-slide="0" aria-label="رفتن به اسلاید ۱" aria-current="true"></button><button type="button" class="hero-dot" data-slide="1" aria-label="رفتن به اسلاید ۲" aria-current="false"></button><button type="button" class="hero-dot" data-slide="2" aria-label="رفتن به اسلاید ۳" aria-current="false"></button></div><div class="hero-arrows"><button type="button" id="heroPrev" aria-label="اسلاید قبلی"><i data-lucide="chevron-right"></i></button><button type="button" id="heroNext" aria-label="اسلاید بعدی"><i data-lucide="chevron-left"></i></button></div></div>
   </section>
-  <div class="h24-music-strip" id="h24MusicStrip" aria-label="موسیقی اختصاصی حورانت۲۴">
-    <span class="h24-music-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-    <span class="h24-music-label">موسیقی اختصاصی حورانت۲۴</span>
-    <span class="h24-music-caption">یک حس آرام در دنیای دیجیتال</span>
-    <button type="button" id="musicToggle" class="h24-music-control" aria-label="پخش موسیقی اختصاصی حورانت۲۴" title="پخش موسیقی حورانت۲۴" aria-pressed="false"><i data-lucide="play"></i></button>
-  </div>
   <script>
   (() => {
     "use strict";
@@ -292,7 +287,8 @@
 </nav>
 <div class="modal-backdrop" id="modalBackdrop" hidden><section class="app-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="بستن">×</button><div id="modalContent"></div></section></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="./app.js?v=45"></script>
+<script src="./music-widget.js?v=1"></script>
+<script src="./app.js?v=46"></script>
 <script src="./assistant-chat.js"></script>
 
 </body></html>
