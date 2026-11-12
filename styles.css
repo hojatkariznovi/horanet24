@@ -1788,3 +1788,7 @@ html[data-theme="dark"] .popular-links .seo-service-links a{background:linear-gr
 .founder-shortcut-avatar{display:block;object-fit:cover;object-position:center 36%;overflow:hidden;border-radius:15px;border:1px solid #ffffff;box-shadow:0 4px 12px rgba(46,125,139,.14)}
 
 .founder-teaser-link{align-items:center}.founder-teaser-link:focus-visible{outline:3px solid rgba(49,184,174,.28);outline-offset:4px}
+
+/* Founder shortcut: visible on mobile and desktop without changing the main navigation. */
+.founder-home-cta{display:inline-flex;align-items:center;gap:10px;margin:13px 0 0;padding:8px 13px 8px 11px;border:1px solid #dcece9;border-radius:15px;background:linear-gradient(110deg,#ffffffd9,#eefaf8);box-shadow:0 7px 20px #6babb016;color:#315e6b;text-decoration:none;transition:transform .2s,box-shadow .2s}.founder-home-cta:hover{transform:translateY(-2px);box-shadow:0 10px 24px #6babb02b}.founder-home-avatar{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(145deg,#e3faf5,#e9efff);color:#279e9d;font-size:18px;font-weight:900}.founder-home-cta span:nth-child(2){display:grid;gap:1px}.founder-home-cta small{font-size:8px;color:#8298a3}.founder-home-cta strong{font-size:10px}.founder-home-cta>i{width:15px;height:15px;color:#36a8a3;margin-right:7px}
+@media(max-width:760px){.founder-home-cta{margin-top:10px;padding:7px 10px}.founder-home-avatar{width:31px;height:31px}}
