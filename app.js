@@ -344,8 +344,8 @@ function showView(name){
  if(view==="account")loadAccount();
  // Keep tab navigation in place; no page jump or anchor scrolling.
 }
-function initThemeAndMusic(){
- const themeButton=$("themeToggle"),soundButton=$("soundToggle"),musicButton=$("musicToggle"),root=document.documentElement;
+function initThemeAndSounds(){
+ const themeButton=$("themeToggle"),soundButton=$("soundToggle"),root=document.documentElement;
  const applyTheme=theme=>{
   const mode=theme==="dark"?"dark":"light";
   root.dataset.theme=mode;
@@ -371,68 +371,10 @@ function initThemeAndMusic(){
   try{localStorage.setItem("h24-ui-sounds",h24UiSoundsEnabled?"on":"off");}catch(_){}
   paintSoundButton();
  };
- let audio=null,musicTimer=null,musicOn=false,musicBusy=false,musicIndex=0;
- const musicNodes=new Set();
- const melody=[587.33,739.99,880,739.99,659.25,587.33,493.88,587.33,659.25,739.99,880,739.99,659.25,587.33,493.88,440,493.88,587.33,659.25,587.33,493.88,440,493.88,587.33,659.25,783.99,880,783.99,698.46,659.25,587.33,659.25,739.99,880,987.77,880,783.99,739.99,659.25,587.33,523.25,587.33,659.25,739.99,659.25,587.33,493.88,587.33];
- const chords=[[146.83,220,293.66,369.99],[123.47,185,246.94,293.66],[98,146.83,196,246.94],[110,164.81,220,293.66]];
- function note(freq,when,duration,volume,type="sine"){
-  const osc=audio.createOscillator(),gain=audio.createGain();
-  osc.type=type;osc.frequency.setValueAtTime(freq,when);
-  gain.gain.setValueAtTime(.0001,when);
-  gain.gain.exponentialRampToValueAtTime(volume,when+.08);
-  gain.gain.setValueAtTime(volume,when+Math.max(.09,duration-.12));
-  gain.gain.exponentialRampToValueAtTime(.0001,when+duration);
-  osc.connect(gain);gain.connect(audio.destination);
-  musicNodes.add(osc);osc.onended=()=>musicNodes.delete(osc);
-  osc.start(when);osc.stop(when+duration+.03);
- }
- function stopMusicNodes(){for(const node of musicNodes){try{node.stop();}catch(_){}}musicNodes.clear();}
- function playMusicStep(){
-  if(!audio||!musicOn)return;
-  const freq=melody[musicIndex];
-  const when=audio.currentTime+.035;
-  note(freq,when,.53,.018,"sine");
-  note(freq,when,.48,.005,"triangle");
-  if(musicIndex%6===0){
-   const chord=chords[Math.floor(musicIndex/6)%chords.length];
-   chord.forEach(hz=>note(hz,when,3.35,.0035,"sine"));
-  }
-  musicIndex=(musicIndex+1)%melody.length;
-  musicTimer=setTimeout(()=>{musicTimer=null;playMusicStep();},620);
- }
- function paintMusicButton(){
-  if(!musicButton)return;
-  musicButton.innerHTML='<span data-icon="'+(musicOn?"pause":"play")+'"></span>';
-  musicButton.setAttribute("aria-label",musicOn?"توقف موسیقی اختصاصی حورانت۲۴":"پخش موسیقی اختصاصی حورانت۲۴");
-  musicButton.title=musicOn?"توقف موسیقی":"پخش موسیقی حورانت۲۴";
-  musicButton.setAttribute("aria-pressed",String(musicOn));
-  refreshIcons();
- }
- async function toggleMusic(){
-  if(musicBusy)return;
-  musicBusy=true;
-  try{
-   const Ctx=window.AudioContext||window.webkitAudioContext;
-   if(!Ctx){toast("مرورگر شما پخش موسیقی را پشتیبانی نمی‌کند.");return;}
-   if(!audio)audio=new Ctx();
-   if(musicOn){
-    musicOn=false;
-    if(musicTimer!==null){clearTimeout(musicTimer);musicTimer=null;}
-    stopMusicNodes();
-    await audio.suspend();
-   }else{
-    await audio.resume();
-    musicOn=true;
-    playMusicStep();
-   }
-   paintMusicButton();
-  }finally{musicBusy=false;}
- }
- paintMusicButton();
- if(musicButton)musicButton.onclick=()=>toggleMusic().catch(error=>{console.warn("H24 music:",error);toast("پخش موسیقی آغاز نشد.");});
+ 
 }
 function wire(){
- initThemeAndMusic();
+ initThemeAndSounds();
  // Delegated listener covers mouse, touch and keyboard activation without per-control handlers.
  document.addEventListener("click",event=>{
   const control=event.target.closest('button,a,[role="button"],.service-live,.product-card,.nav-item,[data-home-category],[data-slide]');
