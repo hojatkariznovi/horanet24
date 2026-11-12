@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./tailwind.css">
-  <link rel="stylesheet" href="./styles.css?v=37">
+  <link rel="stylesheet" href="./styles.css?v=38">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
@@ -239,14 +239,10 @@
       <span class="contact-heading-mark"><i data-lucide="messages-square"></i></span>
     </div>
     <div class="contact-layout">
-      <aside class="contact-support-panel">
-        <div class="contact-support-orb"><i data-lucide="headset"></i></div>
-        <span class="contact-panel-kicker">ارتباط مستقیم</span>
-        <h3>نیاز به راهنمایی بیشتر داری؟</h3>
-        <p>برای بررسی شرایط خدمت، پیگیری موضوع یا دریافت راهنمایی اختصاصی، پیام‌رسان دلخواهت را انتخاب کن.</p>
+      <aside class="contact-support-panel" aria-label="ارتباط مستقیم با پشتیبانی">
+        <span class="contact-direct-label"><i data-lucide="headset"></i> ارتباط مستقیم با پشتیبانی</span>
         <button type="button" class="contact-support-action contact-eitaa-action" id="contactEitaaBtn"><span class="contact-social-icon"><i data-lucide="message-circle"></i></span><span><b>پشتیبانی در ایتا</b><small>گفت‌وگو با پشتیبانی حورانت۲۴</small></span><i data-lucide="arrow-up-left"></i></button>
         <button type="button" class="contact-support-action contact-telegram-action" id="contactTelegramBtn"><span class="contact-social-icon"><i data-lucide="send"></i></span><span><b>پشتیبانی در تلگرام</b><small>ارسال پیام به پشتیبانی</small></span><i data-lucide="arrow-up-left"></i></button>
-        <div class="contact-support-note"><i data-lucide="shield-check"></i><span>انتخاب پیام‌رسان فقط شما را به گفت‌وگوی پشتیبانی هدایت می‌کند؛ ثبت درخواست و ارسال مدارک در سایت انجام نمی‌شود.</span></div>
       </aside>
       <section class="faq-chat-panel" aria-label="گفت‌وگو و سؤالات متداول">
         <div class="faq-chat-head"><span class="faq-chat-avatar"><i data-lucide="bot"></i><i class="faq-online-dot"></i></span><div><b>راهنمای هوشمند حورانت۲۴</b><small><i></i> پاسخ‌گویی به سؤالات پرتکرار</small></div><span class="faq-chat-tag">راهنمای آنلاین</span></div>
@@ -284,7 +280,7 @@
 </nav>
 <div class="modal-backdrop" id="modalBackdrop" hidden><section class="app-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose" aria-label="بستن">×</button><div id="modalContent"></div></section></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="./app.js?v=43"></script>
+<script src="./app.js?v=44"></script>
 <script src="./assistant-chat.js"></script>
 
 </body></html>
