@@ -1585,3 +1585,13 @@ html[data-theme="dark"] .service-deadline strong{color:#81ded3}
 html[data-theme="dark"] .service-deadline.is-expired{background:#482d30;border-color:#704447;color:#f0b9b4}
 html[data-theme="dark"] .service-deadline.is-expired strong{color:#ffc1b9}
 
+
+
+/* Desktop navigation: give utility icons clear breathing room */
+@media(min-width:761px){
+ .topbar{gap:24px}
+ .desktop-nav{gap:25px;margin-left:28px}
+ .top-actions{gap:15px;flex:0 0 auto;padding-inline:4px}
+ .top-actions .icon-btn,.top-actions .profile-btn{width:46px;height:46px;border-radius:15px;flex:0 0 46px}
+ .top-actions .icon-btn svg,.top-actions .profile-btn svg{width:20px;height:20px}
+}
