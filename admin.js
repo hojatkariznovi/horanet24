@@ -76,7 +76,7 @@ async function loadItems(){
  const cols=state.tab==="services"?"id,title,slug,summary,description,category_id,required_documents,steps,is_active,is_featured,is_time_limited,registration_deadline,sort_order":
  state.tab==="products"?"id,title,slug,summary,description,price,price_label,compare_at_price,image_url,product_type,category_id,sku,stock_quantity,stock_status,badge,specifications,file_path,file_name,file_size,is_active,is_featured,is_new,sort_order":
  (state.tab==="product_categories"||state.tab==="service_categories")?"id,title,slug,description,icon,is_active,sort_order":state.tab==="stories"?"id,title,media_url,media_type,link_url,is_published,expires_at,sort_order":state.tab==="explore_posts"?"id,title,caption,media_url,media_type,category,is_published,published_at,sort_order":state.tab==="challenges"?"id,title,description,points_reward,starts_at,ends_at,is_active":"id,eyebrow,title,description,badge_label,button_text,button_url,image_url,is_active,sort_order";
- const {data,error}=await db.from(state.tab).select(cols).order("sort_order");
+ const orderColumn=state.tab==="explore_posts"||state.tab==="challenges"?"created_at":"sort_order";const {data,error}=await db.from(state.tab).select(cols).order(orderColumn,{ascending:orderColumn==="sort_order"});
  if(error){$("contentList").innerHTML='<div class="empty-state">خطا در دریافت محتوا: '+esc(error.message)+'</div>';return;}
  state.items=data||[];renderList();
 }
@@ -90,9 +90,9 @@ async function loadAssistantLeads(){
 function renderList(){
  const el=$("contentList");if(!state.items.length){el.innerHTML='<div class="empty-state">موردی ثبت نشده است.</div>';return;}
  el.innerHTML=state.items.map(x=>{
-  const detail=state.tab==="products"?(x.price?Number(x.price).toLocaleString("fa-IR")+" تومان":(x.price_label||"قیمت استعلامی"))+" · "+(x.stock_status==="in_stock"?"موجود":x.stock_status==="out_of_stock"?"ناموجود":x.stock_status==="preorder"?"پیش‌سفارش":"استعلام موجودی"):
+  const detail=state.tab==="stories"?(x.media_type==="video"?"ویدئو":"تصویر")+(x.expires_at?" · انقضا: "+new Date(x.expires_at).toLocaleString("fa-IR"):""):state.tab==="explore_posts"?(x.category||"محتوای اکسپلور")+" · "+(x.media_type==="video"?"ویدئو":"تصویر"):state.tab==="challenges"?(Number(x.points_reward||0).toLocaleString("fa-IR")+" امتیاز · "+(x.is_active?"فعال":"غیرفعال")):state.tab==="products"?(x.price?Number(x.price).toLocaleString("fa-IR")+" تومان":(x.price_label||"قیمت استعلامی"))+" · "+(x.stock_status==="in_stock"?"موجود":x.stock_status==="out_of_stock"?"ناموجود":x.stock_status==="preorder"?"پیش‌سفارش":"استعلام موجودی"):
   (state.tab==="product_categories"||state.tab==="service_categories")?(x.slug||"دسته‌بندی"):state.tab==="services"?(x.is_time_limited?(new Date(x.registration_deadline)<=new Date()?"مهلت پایان‌یافته · موقتاً غیرفعال":"زمان‌دار تا "+new Date(x.registration_deadline).toLocaleString("fa-IR")):(x.slug||"خدمت")):(x.badge_label||x.eyebrow||"اسلاید");
-  const fileAction=state.tab==="products"&&x.file_path?'<button class="secondary-btn" data-file="'+esc(x.file_path)+'">دریافت فایل</button>':"";return '<article class="admin-list-item"><div><b>'+esc(x.title)+'</b><small>'+esc(detail)+(x.file_name?" · فایل: "+esc(x.file_name):"")+((x.is_published??x.is_active)?" · فعال":" · غیرفعال")+'</small></div><div class="admin-item-actions">'+fileAction+'<button class="secondary-btn" data-edit="'+x.id+'">ویرایش</button><button class="secondary-btn" data-toggle="'+x.id+'">'+(x.is_active?"غیرفعال‌سازی":"فعال‌سازی")+'</button><button class="secondary-btn admin-delete-btn" data-delete="'+x.id+'">حذف</button></div></article>';
+  const fileAction=state.tab==="products"&&x.file_path?'<button class="secondary-btn" data-file="'+esc(x.file_path)+'">دریافت فایل</button>':"";return '<article class="admin-list-item"><div><b>'+esc(x.title)+'</b><small>'+esc(detail)+(x.file_name?" · فایل: "+esc(x.file_name):"")+((x.is_published??x.is_active)?" · فعال":" · غیرفعال")+'</small></div><div class="admin-item-actions">'+fileAction+'<button class="secondary-btn" data-edit="'+x.id+'">ویرایش</button><button class="secondary-btn" data-toggle="'+x.id+'">'+((x.is_published??x.is_active)?"غیرفعال‌سازی":"فعال‌سازی")+'</button><button class="secondary-btn admin-delete-btn" data-delete="'+x.id+'">حذف</button></div></article>';
  }).join("");
  el.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editItem(b.dataset.edit));el.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>toggleItem(b.dataset.toggle));el.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteItem(b.dataset.delete));el.querySelectorAll("[data-file]").forEach(b=>b.onclick=()=>openPrivateProductFile(b.dataset.file));
 }
@@ -122,7 +122,7 @@ function editItem(id){
 }
 async function toggleItem(id){
  const x=state.items.find(i=>i.id===id);if(!x)return;
- const statusField=state.tab==="stories"||state.tab==="explore_posts"?"is_published":state.tab==="challenges"?"is_active":"is_active";const {error}=await db.from(state.tab).update({[statusField]:!x[statusField],updated_at:new Date().toISOString()}).eq("id",id);
+ const statusField=state.tab==="stories"||state.tab==="explore_posts"?"is_published":state.tab==="challenges"?"is_active":"is_active";const {error}=await db.from(state.tab).update({[statusField]:!x[statusField]}).eq("id",id);
  if(error){toast("تغییر وضعیت ذخیره نشد: "+error.message);return;}toast("وضعیت محتوا تغییر کرد.");await loadItems();
 }
 async function openPrivateProductFile(path){
