@@ -1696,3 +1696,53 @@ html[data-theme="dark"] .faq-chat-suggestions button,html[data-theme="dark"] .fa
  .faq-chat-panel{min-height:590px}
  .faq-chat-suggestions button{font-size:9px;padding:8px 9px}
 }
+
+
+/* Contact page compact single-screen layout */
+.contact-page{height:calc(100dvh - 198px);min-height:420px;max-height:850px;box-sizing:border-box;padding-top:8px;padding-bottom:8px;display:flex;flex-direction:column;overflow:hidden;margin-bottom:0!important}
+.contact-page-heading{display:none!important}
+.contact-layout{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px}
+.contact-support-panel{flex:0 0 auto;display:flex;flex-direction:row;align-items:center;gap:10px;padding:9px 13px;border-radius:17px;overflow:visible}
+.contact-support-panel:before{display:none}
+.contact-direct-label{display:flex;align-items:center;gap:7px;white-space:nowrap;color:#4b8790;font-size:11px;font-weight:800;margin-left:auto}
+.contact-direct-label svg{width:18px;height:18px;color:#15999a}
+.contact-support-action{width:auto;min-width:175px;flex:0 1 220px;margin:0;padding:7px 9px;border-radius:12px;gap:8px}
+.contact-social-icon{width:32px;height:32px;flex-basis:32px;border-radius:10px}
+.contact-social-icon svg{width:17px;height:17px}
+.contact-support-action b{font-size:10px}.contact-support-action small{font-size:8px}
+.faq-chat-panel{flex:1;min-height:0;height:100%;max-height:none}
+.faq-chat-head{flex:0 0 auto;padding:10px 15px}
+.faq-chat-avatar{width:36px;height:36px;flex-basis:36px;border-radius:12px}
+.faq-chat-messages{flex:1;min-height:0;max-height:none;padding:14px 16px;overflow-y:auto}
+.faq-chat-suggestions{flex:0 0 auto;padding:10px 14px 12px;gap:7px}
+.faq-chat-suggestions button{padding:7px 10px;font-size:9px}
+.faq-chat-suggestions>span{font-size:9px}
+.faq-chat-compose{flex:0 0 auto;padding:8px 13px}
+html[data-theme="dark"] .contact-direct-label{color:#a7c8ce}
+@media(max-width:760px){
+ .contact-page{height:calc(100dvh - 160px);min-height:430px;padding-top:6px;padding-bottom:5px}
+ .contact-layout{gap:8px}
+ .contact-support-panel{order:0;display:flex;flex-direction:row;flex-wrap:nowrap;gap:7px;padding:7px 8px;border-radius:14px}
+ .contact-direct-label{font-size:9px;gap:4px;margin-left:auto}
+ .contact-direct-label svg{width:15px;height:15px}
+ .contact-support-action{flex:0 1 39%;min-width:0;gap:5px;padding:6px 6px}
+ .contact-support-action>span:nth-child(2){min-width:0}
+ .contact-support-action b{font-size:9px;white-space:nowrap}
+ .contact-support-action small{display:none}
+ .contact-support-action>svg{display:none}
+ .contact-social-icon{width:27px;height:27px;flex-basis:27px}
+ .faq-chat-panel{order:1;min-height:0}
+ .faq-chat-head{padding:9px 11px}
+ .faq-chat-messages{padding:11px 10px;gap:9px}
+ .faq-bubble{padding:8px 10px;font-size:10px;line-height:1.85}
+ .faq-chat-suggestions{padding:9px 9px 10px;gap:6px}
+ .faq-chat-suggestions button{font-size:8px;padding:6px 8px;border-radius:10px}
+ .faq-chat-compose{padding:7px 10px}
+}
+@media(max-width:390px){
+ .contact-direct-label{font-size:8px}
+ .contact-support-action b{font-size:8px}
+ .contact-support-panel{gap:5px;padding:6px}
+ .contact-support-action{padding:6px 4px}
+ .faq-chat-suggestions button{font-size:7.5px;padding:6px 7px}
+}
