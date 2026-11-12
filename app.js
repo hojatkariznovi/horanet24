@@ -336,6 +336,20 @@ function initContactChat(){
  $("contactTelegramBtn")?.addEventListener("click",()=>showContactOptions("contact","پشتیبانی حورانت۲۴ در تلگرام"));
 }
 
+// ثبت کلیک واقعی روی گزینه پیام‌رسان؛ بدون ذخیره اطلاعات شخصی کاربر
+document.addEventListener("click",event=>{
+ const choice=event.target.closest(".contact-choice");
+ if(!choice)return;
+ const href=choice.getAttribute("href")||"";
+ const platform=href.includes("eitaa.com")?"eitaa":href.includes("t.me/")?"telegram":null;
+ if(!platform)return;
+ const pagePath=location.pathname+(location.hash||"");
+ const sourceLabel=(document.getElementById("modalTitle")?.textContent||document.body.dataset.activeView||"سایت").trim().slice(0,160);
+ db.from("messenger_click_events").insert({platform,page_path:pagePath,source_label:sourceLabel}).then(({error})=>{
+  if(error)console.warn("ثبت آمار پیام‌رسان انجام نشد:",error.message);
+ });
+},{capture:true});
+
 function showView(name){
  const allowed=["home","services","products","account","contact"];
  const view=allowed.includes(name)?name:"home";
