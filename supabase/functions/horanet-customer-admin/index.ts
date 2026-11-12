@@ -174,15 +174,9 @@ Deno.serve(async (req: Request) => {
       const id = String(body.referralId || "");
       const points = Math.trunc(Number(body.points));
       if (!id || !Number.isSafeInteger(points) || points < 1 || points > 100000) return reply({ error: "مقدار پاداش باید بین ۱ تا ۱۰۰٬۰۰۰ امتیاز باشد." }, 400);
-      const { data: row, error: findErr } = await admin.from("referrals").select("id,status,inviter_id,invited_user_id").eq("id", id).maybeSingle();
-      if (findErr || !row) return reply({ error: "دعوت پیدا نشد." }, 404);
-      if (row.status !== "qualified") return reply({ error: "ابتدا دعوت را تأیید کنید." }, 409);
-      const { data: balance, error: pointErr } = await admin.rpc("admin_adjust_customer_points", { p_user_id: row.inviter_id, p_admin_id: adminId, p_delta: points, p_reason: "پاداش معرفی دوست · " + id });
-      if (pointErr) throw pointErr;
-      const { error: updateErr } = await admin.from("referrals").update({ status: "rewarded", reward_points: points, rewarded_at: new Date().toISOString() }).eq("id", id).eq("status", "qualified");
-      if (updateErr) throw updateErr;
-      await audit("referral_rewarded", row.inviter_id, { referral_id: id, invited_user_id: row.invited_user_id, points, balance_after: balance });
-      return reply({ ok: true, balance });
+      const { data, error } = await admin.rpc("admin_process_referral_reward", { p_referral_id: id, p_admin_id: adminId, p_points: points });
+      if (error) throw error;
+      return reply(data || { ok: true });
     }
 
     if (action === "audit") {
