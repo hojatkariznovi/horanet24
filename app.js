@@ -294,8 +294,47 @@ function editAccountProfile(profile,user){
  $("profileEditForm").onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,btn=f.querySelector('button[type="submit"]');btn.disabled=true;btn.textContent="در حال ذخیره...";const payload={full_name:f.elements.full_name.value.trim(),phone:f.elements.phone.value.trim()||null,birth_date:f.elements.birth_date.value||null,updated_at:new Date().toISOString()};const {error}=await state.client.from("profiles").update(payload).eq("id",user.id);if(error){$("profileSaveMessage").textContent="ذخیره ناموفق: "+error.message;btn.disabled=false;btn.textContent="ذخیره اطلاعات";return;}state.profileCache=null;closeModal();await loadAccount();toast("اطلاعات حساب به‌روزرسانی شد.");};
 }
 async function loadFavorites(){if(!state.session)return;const {data,error}=await state.client.from("favorites").select("service_id").eq("user_id",state.session.user.id);if(!error)(data||[]).forEach(x=>state.favorites.add(x.service_id));}
+
+function initContactChat(){
+ const messages=$("faqChatMessages"),suggestions=$("faqChatSuggestions");
+ if(!messages||!suggestions||messages.dataset.ready)return;
+ messages.dataset.ready="1";
+ const answers={
+  services:{q:"چه خدماتی ارائه می‌کنید؟",a:"حورانت۲۴ راهنمای خدمات خودرو، بیمه، امور اداری، کسب‌وکار و کارت‌خوان است. فهرست خدمات و جزئیات هرکدام را از بخش «خدمات» ببین؛ خدمات قابل ارائه ممکن است با توجه به شرایط هر پرونده متفاوت باشد.",next:"مشاهده خدمات"},
+  documents:{q:"مدارک لازم را از کجا ببینم؟",a:"وارد بخش «خدمات» شو و خدمت موردنظرت را انتخاب کن. در صفحه جزئیات هر خدمت، مدارک موردنیاز و مراحل انجام آن درج شده است. اگر شرایط پرونده‌ات خاص است، از پشتیبانی سؤال کن.",next:"پشتیبانی درباره مدارک"},
+  request:{q:"چطور درخواست ثبت کنم؟",a:"پس از انتخاب خدمت و مطالعه مدارک و مراحل، دکمه «ثبت درخواست» را بزن و ایتا یا تلگرام را انتخاب کن. ادامه هماهنگی و ثبت درخواست در گفت‌وگوی پیام‌رسان انجام می‌شود؛ سایت فرم ثبت سفارش ندارد.",next:"شروع ثبت درخواست"},
+  payment:{q:"هزینه و پرداخت چگونه است؟",a:"هزینه به نوع خدمت و شرایط پرونده بستگی دارد. مبلغ و روش پرداخت باید پیش از شروع کار و از طریق پشتیبانی اعلام و تأیید شود. تا پیش از دریافت اطلاعات روشن، پرداختی انجام نده.",next:"استعلام هزینه"},
+  tracking:{q:"چطور پیگیری کنم؟",a:"برای پیگیری، از همان پیام‌رسانی که درخواستت را در آن مطرح کرده‌ای ادامه بده و در صورت امکان کد مشتری یا اطلاعات اولیه درخواست را برای پشتیبانی بفرست. سابقه درخواست‌ها در سایت ذخیره نمی‌شود.",next:"پیگیری با پشتیبانی"},
+  online:{q:"خدمات در سراسر ایران ارائه می‌شود؟",a:"حورانت۲۴ راهنمای خدمات آنلاین را برای کاربران سراسر ایران فراهم می‌کند. امکان انجام هر خدمت به مقررات، شهر محل انجام و شرایط پرونده بستگی دارد؛ پیش از اقدام از پشتیبانی تأیید بگیر.",next:"بررسی امکان انجام خدمت"},
+  account:{q:"کد مشتری و حساب کاربری چیست؟",a:"با ورود به حساب کاربری می‌توانی اطلاعات پروفایل، کد مشتری و علاقه‌مندی‌ها را ببینی. کد مشتری را هنگام ارتباط با پشتیبانی اعلام کن تا شناسایی و راهنمایی آسان‌تر شود.",next:"ورود به حساب کاربری"},
+  human:{q:"می‌خواهم با پشتیبان صحبت کنم.",a:"حتماً. برای ارتباط مستقیم، یکی از دو راه ارتباطی ایتا یا تلگرام را از بخش کنار گفت‌وگو انتخاب کن. پیام تو مستقیماً در پیام‌رسان ارسال می‌شود.",next:"ارتباط با پشتیبانی"}
+ };
+ function addMessage(kind,html){
+  const row=document.createElement("div");row.className="faq-chat-message "+kind;
+  if(kind==="assistant"){const avatar=document.createElement("span");avatar.className="faq-message-avatar";avatar.innerHTML='<i data-lucide="sparkles"></i>';row.append(avatar);}
+  const bubble=document.createElement("div");bubble.className="faq-bubble";bubble.innerHTML=html;row.append(bubble);messages.append(row);messages.scrollTop=messages.scrollHeight;refreshIcons();
+ }
+ function showFaq(key){
+  const item=answers[key];if(!item)return;
+  addMessage("user","<p>"+esc(item.q)+"</p>");
+  addMessage("assistant","<p>"+esc(item.a)+"</p><small>راهنمای حورانت۲۴</small>");
+  if(key==="human")return;
+  const action=document.createElement("button");action.type="button";action.className="faq-answer-action";action.textContent=item.next;
+  action.addEventListener("click",()=>{
+   if(key==="account"){showView("account");return;}
+   if(key==="services"){showView("services");return;}
+   const context=({documents:"راهنمای مدارک",request:"ثبت درخواست",payment:"استعلام هزینه",tracking:"پیگیری درخواست",online:"بررسی امکان ارائه خدمت"}[key]||item.next);
+   showContactOptions(key==="request"?"request":"contact",context);
+  });
+  const row=document.createElement("div");row.className="faq-chat-message assistant faq-action-row";const spacer=document.createElement("span");spacer.className="faq-message-avatar";row.append(spacer,action);messages.append(row);messages.scrollTop=messages.scrollHeight;
+ }
+ suggestions.addEventListener("click",event=>{const button=event.target.closest("[data-faq]");if(!button)return;showFaq(button.dataset.faq);});
+ $("contactEitaaBtn")?.addEventListener("click",()=>showContactOptions("contact","پشتیبانی حورانت۲۴ در ایتا"));
+ $("contactTelegramBtn")?.addEventListener("click",()=>showContactOptions("contact","پشتیبانی حورانت۲۴ در تلگرام"));
+}
+
 function showView(name){
- const allowed=["home","services","products","account"];
+ const allowed=["home","services","products","account","contact"];
  const view=allowed.includes(name)?name:"home";
  document.querySelectorAll("[data-app-view]").forEach(el=>{el.hidden=el.dataset.appView!==view;});
  document.querySelectorAll(".nav-item").forEach(el=>el.classList.toggle("selected",el.dataset.view===view));
@@ -407,7 +446,8 @@ function wire(){
   const socialLink=event.target.closest('a[data-h24-title],a[href*="eitaa.com"],a[href*="t.me"]');
   if(socialLink&&!socialLink.closest(".contact-options")){event.preventDefault();showContactOptions("contact",socialLink.dataset.h24Title||socialLink.textContent.trim()||"ادامه در پیام‌رسان");}
  });
- $("navCoreBtn").onclick=showContactOptions;
+ $("navCoreBtn").onclick=()=>showView("contact");
+ initContactChat();
  $("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal();});
  $("serviceSearch").addEventListener("input",renderServices);
  $("productSearch")?.addEventListener("input",e=>{state.productSearch=e.target.value;renderProducts();});
