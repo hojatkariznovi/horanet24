@@ -345,7 +345,7 @@ document.addEventListener("click",event=>{
  if(!platform)return;
  const pagePath=location.pathname+(location.hash||"");
  const sourceLabel=(document.getElementById("modalTitle")?.textContent||document.body.dataset.activeView||"سایت").trim().slice(0,160);
- db.from("messenger_click_events").insert({platform,page_path:pagePath,source_label:sourceLabel}).then(({error})=>{
+ state.client?.from("messenger_click_events").insert({platform,page_path:pagePath,source_label:sourceLabel}).then(({error})=>{
   if(error)console.warn("ثبت آمار پیام‌رسان انجام نشد:",error.message);
  });
 },{capture:true});
