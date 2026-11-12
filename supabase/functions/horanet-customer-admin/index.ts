@@ -147,6 +147,44 @@ Deno.serve(async (req: Request) => {
       return reply({ ok: true });
     }
 
+    if (action === "referrals_list") {
+      const { data, error } = await admin.from("referrals").select("id,inviter_id,invited_user_id,referral_code,status,created_at,qualified_at,rewarded_at,reward_points,admin_note").order("created_at", { ascending: false }).limit(300);
+      if (error) throw error;
+      const ids = [...new Set((data || []).flatMap((x: any) => [x.inviter_id, x.invited_user_id]))];
+      const { data: profiles, error: pErr } = ids.length ? await admin.from("profiles").select("id,full_name,customer_code").in("id", ids) : { data: [], error: null };
+      if (pErr) throw pErr;
+      const map = new Map((profiles || []).map((p: any) => [p.id, p]));
+      const referrals = (data || []).map((x: any) => ({ ...x, inviter_name: (map.get(x.inviter_id) as any)?.full_name || "کاربر", invited_name: (map.get(x.invited_user_id) as any)?.full_name || "کاربر" }));
+      return reply({ referrals, total: referrals.length, pending: referrals.filter((x: any) => x.status === "pending").length, qualified: referrals.filter((x: any) => x.status === "qualified").length, rewarded: referrals.filter((x: any) => x.status === "rewarded").length });
+    }
+
+    if (action === "referral_status") {
+      const id = String(body.referralId || "");
+      if (!id || body.status !== "qualified") return reply({ error: "وضعیت درخواستی معتبر نیست." }, 400);
+      const { data: row, error: findErr } = await admin.from("referrals").select("id,status,inviter_id").eq("id", id).maybeSingle();
+      if (findErr || !row) return reply({ error: "دعوت پیدا نشد." }, 404);
+      if (row.status !== "pending") return reply({ error: "فقط دعوت در انتظار بررسی قابل تأیید است." }, 409);
+      const { error } = await admin.from("referrals").update({ status: "qualified", qualified_at: new Date().toISOString() }).eq("id", id).eq("status", "pending");
+      if (error) throw error;
+      await audit("referral_qualified", row.inviter_id, { referral_id: id });
+      return reply({ ok: true });
+    }
+
+    if (action === "referral_reward") {
+      const id = String(body.referralId || "");
+      const points = Math.trunc(Number(body.points));
+      if (!id || !Number.isSafeInteger(points) || points < 1 || points > 100000) return reply({ error: "مقدار پاداش باید بین ۱ تا ۱۰۰٬۰۰۰ امتیاز باشد." }, 400);
+      const { data: row, error: findErr } = await admin.from("referrals").select("id,status,inviter_id,invited_user_id").eq("id", id).maybeSingle();
+      if (findErr || !row) return reply({ error: "دعوت پیدا نشد." }, 404);
+      if (row.status !== "qualified") return reply({ error: "ابتدا دعوت را تأیید کنید." }, 409);
+      const { data: balance, error: pointErr } = await admin.rpc("admin_adjust_customer_points", { p_user_id: row.inviter_id, p_admin_id: adminId, p_delta: points, p_reason: "پاداش معرفی دوست · " + id });
+      if (pointErr) throw pointErr;
+      const { error: updateErr } = await admin.from("referrals").update({ status: "rewarded", reward_points: points, rewarded_at: new Date().toISOString() }).eq("id", id).eq("status", "qualified");
+      if (updateErr) throw updateErr;
+      await audit("referral_rewarded", row.inviter_id, { referral_id: id, invited_user_id: row.invited_user_id, points, balance_after: balance });
+      return reply({ ok: true, balance });
+    }
+
     if (action === "audit") {
       const { data, error } = await admin.from("admin_audit_logs").select("id,admin_id,action,target_user_id,details,created_at").order("created_at", { ascending: false }).limit(100);
       if (error) throw error;
