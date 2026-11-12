@@ -16,14 +16,17 @@ function reset(){
  $("saveMessage").textContent="";
 }
 function setTab(tab){
- state.tab=tab;const leads=tab==="assistant_leads",slide=tab==="hero_slides",service=tab==="services",product=tab==="products",category=tab==="product_categories"||tab==="service_categories";
- show("assistantLeadsPanel",leads);document.querySelector(".admin-layout").hidden=leads;document.querySelector(".premium-settings").hidden=leads;
+ state.tab=tab;
+ const dashboard=tab==="dashboard",leads=tab==="assistant_leads",slide=tab==="hero_slides",service=tab==="services",product=tab==="products",category=tab==="product_categories"||tab==="service_categories";
+ show("adminOverview",dashboard);show("assistantLeadsPanel",leads);
+ document.querySelector(".admin-layout").hidden=leads||dashboard;
+ document.querySelector(".premium-settings").hidden=!dashboard;
  document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
  show("serviceFields",service);show("timeLimitFields",false);show("productFields",product);show("slideFields",slide);show("categoryFields",category);
  const f=$("contentForm");
  ["title","slug"].forEach(n=>{f.elements[n].disabled=slide||leads;f.elements[n].required=!slide&&!leads;});
  ["summary","description"].forEach(n=>{f.elements[n].disabled=slide||category||leads;});
-  ["is_time_limited","registration_deadline"].forEach(n=>{if(f.elements[n])f.elements[n].disabled=!service;});
+ ["is_time_limited","registration_deadline"].forEach(n=>{if(f.elements[n])f.elements[n].disabled=!service;});
  $("categorySelect").disabled=!service;$("productCategorySelect").disabled=!product;
  if(f.elements.slide_title){f.elements.slide_title.required=slide;f.elements.slide_title.disabled=!slide;}
  ["slide_description","eyebrow","badge_label","button_text","button_url","slide_image_url"].forEach(n=>{if(f.elements[n])f.elements[n].disabled=!slide;});
@@ -33,7 +36,7 @@ function setTab(tab){
  if(category){f.elements.description.disabled=false;}
  $("formEyebrow").textContent=service?"مدیریت خدمات":product?"مدیریت محصولات":category?(tab==="product_categories"?"مدیریت دسته‌بندی فروشگاه":"مدیریت دسته‌بندی خدمات"):"مدیریت اسلایدر";
  $("listTitle").textContent=service?"فهرست خدمات":product?"فهرست محصولات":category?(tab==="product_categories"?"دسته‌بندی‌های فروشگاه":"دسته‌بندی‌های خدمات"):"اسلایدها و بنرها";
- reset();loadItems();
+ reset();if(!dashboard&&!leads)loadItems();if(leads)loadAssistantLeads();if(dashboard)loadDashboard();
 }
 async function checkAdmin(session){
  state.session=session;show("adminLogin",false);
