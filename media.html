@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f7fa">
+<title>HOORA MEDIA | مدیریت رسانه</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./media.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0"></script>
+</head>
+<body>
+<div class="ambient"></div>
+<header class="topbar">
+  <a class="brand" href="./"><span class="brand-mark">H</span><span><b>HOORA <em>MEDIA</em></b><small>سامانه هوشمند رسانه دفتر هورا</small></span></a>
+  <div class="top-actions"><span id="sessionEmail" class="session-email"></span><button id="logoutBtn" class="btn btn-ghost" hidden>خروج</button></div>
+</header>
+<main class="shell">
+  <section id="loginPanel" class="login-card">
+    <span class="eyebrow">فضای مدیریت خصوصی</span><h1>ورود به HOORA MEDIA</h1>
+    <p>این پنل فقط برای حساب‌هایی فعال می‌شود که در فهرست مدیران حورانت۲۴ ثبت شده‌اند.</p>
+    <form id="loginForm"><label for="email">ایمیل مدیر</label><input id="email" type="email" required autocomplete="email" placeholder="ایمیل حساب مدیر"><button class="btn btn-primary" type="submit">ارسال لینک ورود</button></form>
+    <p id="loginMessage" class="message" aria-live="polite"></p>
+  </section>
+  <section id="deniedPanel" class="login-card" hidden><h2>دسترسی مدیر فعال نیست</h2><p>این حساب اجازه مدیریت رسانه هورا را ندارد.</p><button id="deniedLogout" class="btn btn-ghost">خروج</button></section>
+  <section id="workspace" hidden>
+    <div class="page-heading"><div><span class="eyebrow">MEDIA CONTROL CENTER</span><h1>مرکز فرماندهی رسانه هورا</h1><p>رصد خبر، تولید محتوا، انتشار و باشگاه اعضا</p></div><span class="secure-pill"><i></i> اتصال امن مدیر</span></div>
+    <div class="stats-grid">
+      <article class="stat-card"><span>اخبار ثبت‌شده</span><b id="statNews">—</b><small>رصد و بررسی</small></article>
+      <article class="stat-card"><span>محتواها</span><b id="statContent">—</b><small>پیش‌نویس و انتشار</small></article>
+      <article class="stat-card"><span>اعضای تلگرام</span><b id="statMembers">—</b><small>کانال عمومی و VIP</small></article>
+      <article class="stat-card"><span>کدهای تخفیف</span><b id="statCoupons">—</b><small>مدیریت کمپین‌ها</small></article>
+    </div>
+    <nav class="tabs" aria-label="بخش‌های پنل">
+      <button class="tab active" data-tab="news">رصد اخبار</button><button class="tab" data-tab="content">کارخانه محتوا</button><button class="tab" data-tab="members">اعضای VIP</button><button class="tab" data-tab="coupons">کدهای تخفیف</button>
+    </nav>
+    <section id="panel-news" class="panel">
+      <div class="section-head"><div><span class="eyebrow">NEWS INTELLIGENCE</span><h2>اخبار و فرصت‌ها</h2><p>خبرها پیش از انتشار باید از نظر منبع، تاریخ و وضعیت رسمی بررسی شوند.</p></div><button class="btn btn-ghost" data-refresh="news">به‌روزرسانی</button></div>
+      <div id="newsList" class="item-list"><div class="empty">هنوز خبری در سامانه ثبت نشده است.</div></div>
+    </section>
+    <section id="panel-content" class="panel" hidden>
+      <div class="section-head"><div><span class="eyebrow">CONTENT STUDIO</span><h2>کارخانه تولید محتوا</h2><p>پیش‌نویس‌ها را بساز و برای تأیید آماده کن.</p></div><button class="btn btn-ghost" data-refresh="content">به‌روزرسانی</button></div>
+      <form id="contentForm" class="editor-form">
+        <div class="field"><label>عنوان محتوا</label><input name="title" required maxlength="250" placeholder="مثلاً شروع ثبت‌نام طرح جدید"></div>
+        <div class="field"><label>کانال انتشار</label><select name="channel"><option value="instagram">اینستاگرام</option><option value="telegram_public">تلگرام عمومی</option><option value="telegram_vip">تلگرام VIP</option></select></div>
+        <div class="field"><label>قالب</label><select name="format"><option value="reel">ریلز</option><option value="story">استوری</option><option value="carousel">کاروسل</option><option value="post">پست</option><option value="text">متن تلگرام</option><option value="video">ویدئو</option></select></div>
+        <div class="field"><label>دسته محتوا</label><select name="content_pillar"><option value="news">اخبار</option><option value="humor">طنز</option><option value="education">آموزش</option><option value="service_promotion">تبلیغ خدمات</option><option value="vip">VIP</option><option value="campaign">کمپین</option></select></div>
+        <div class="field full"><label>متن / کپشن</label><textarea name="caption" rows="4" placeholder="متن آماده انتشار..."></textarea></div>
+        <div class="field full"><label>سناریو / متن اجرا</label><textarea name="script" rows="4" placeholder="قلاب شروع، صحنه‌ها و دعوت به اقدام..."></textarea></div>
+        <button class="btn btn-primary" type="submit">ذخیره و ارسال برای تأیید</button><span id="contentMessage" class="message"></span>
+      </form>
+      <div id="contentList" class="item-list"><div class="empty">محتوایی ثبت نشده است.</div></div>
+    </section>
+    <section id="panel-members" class="panel" hidden>
+      <div class="section-head"><div><span class="eyebrow">VIP CLUB</span><h2>اعضای تلگرام</h2><p>نمایش اعضایی که از طریق ربات هورا ثبت شده‌اند.</p></div><button class="btn btn-ghost" data-refresh="members">به‌روزرسانی</button></div>
+      <div id="memberList" class="item-list"><div class="empty">هنوز عضوی ثبت نشده است.</div></div>
+    </section>
+    <section id="panel-coupons" class="panel" hidden>
+      <div class="section-head"><div><span class="eyebrow">FLASH COUPONS</span><h2>مدیریت کدهای تخفیف</h2><p>کد جدید ابتدا غیرفعال ساخته می‌شود؛ پس از بررسی، آن را فعال کن.</p></div><button class="btn btn-ghost" data-refresh="coupons">به‌روزرسانی</button></div>
+      <form id="couponForm" class="editor-form">
+        <div class="field"><label>کد تخفیف</label><input name="code" required maxlength="40" placeholder="HOORA-FLASH"></div>
+        <div class="field"><label>عنوان</label><input name="title" required maxlength="200" placeholder="تخفیف ویژه اعضای VIP"></div>
+        <div class="field"><label>نوع امتیاز</label><select name="discount_type"><option value="percent">درصدی</option><option value="fixed">مبلغ ثابت</option><option value="gift">هدیه</option><option value="priority">اولویت خدمات</option></select></div>
+        <div class="field"><label>مقدار تخفیف</label><input name="discount_value" type="number" min="0" step="any" placeholder="مثلاً 10"></div>
+        <div class="field"><label>تعداد کل استفاده</label><input name="max_redemptions" type="number" min="1" placeholder="مثلاً 5"></div>
+        <div class="field"><label>حداکثر استفاده هر عضو</label><input name="max_per_member" type="number" min="1" value="1"></div>
+        <div class="field full"><label>توضیحات</label><textarea name="description" rows="2" placeholder="شرایط استفاده و خدمات مشمول..."></textarea></div>
+        <button class="btn btn-primary" type="submit">ساخت کد غیرفعال</button><span id="couponMessage" class="message"></span>
+      </form>
+      <div id="couponList" class="item-list"><div class="empty">کدی ثبت نشده است.</div></div>
+    </section>
+    <footer class="footnote">نسخه اولیه پنل مدیریتی — انتشار خودکار، رصد زمان‌بندی‌شده و ربات تلگرام پس از اتصال کانال‌ها و کلیدهای دسترسی فعال می‌شوند.</footer>
+  </section>
+</main>
+<script src="./media.js"></script>
+</body></html>
