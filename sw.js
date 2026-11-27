@@ -1,4 +1,4 @@
-const CACHE="horanet24-shell-v85";
+const CACHE="horanet24-shell-v86";
 const ASSETS=["./","./index.html","./tailwind.css","./styles.css?v=48","./music-widget.css?v=5","./app.js?v=51","./music-widget.js?v=3","./assistant-chat.js","./manifest.webmanifest","./assets/icon.svg","./founder.html","./founder.css?v=8"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key))))));
