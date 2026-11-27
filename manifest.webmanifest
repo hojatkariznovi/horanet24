@@ -1,1 +1,14 @@
-{"name":"حورانت۲۴ | دنیای دیجیتال شما","short_name":"حورانت۲۴","description":"خدمات دیجیتال، ساده و همیشه در دسترس","lang":"fa","dir":"rtl","start_url":"./","display":"standalone","background_color":"#f5faff","theme_color":"#f5faff","icons":[{"src":"./assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
+{
+  "name":"حورانت۲۴ | همراه دیجیتال شما",
+  "short_name":"حورانت۲۴",
+  "description":"راهنمای خدمات دیجیتال، خودرو، بیمه و امور اداری",
+  "lang":"fa",
+  "dir":"rtl",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#0b1730",
+  "theme_color":"#0b1730",
+  "icons":[
+    {"src":"./assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
