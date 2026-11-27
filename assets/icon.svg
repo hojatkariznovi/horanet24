@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#d8edf0"/></linearGradient><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#43c9bc"/><stop offset="1" stop-color="#7199e8"/></linearGradient></defs><rect x="5" y="5" width="118" height="118" rx="34" fill="url(#g)"/><path d="M35 88V39h10v19h28V39h10v49H73V68H45v20z" fill="url(#a)"/><circle cx="94" cy="34" r="8" fill="#8d9fe8"/><circle cx="96" cy="95" r="5" fill="#4ac8c0"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="gold" x1="18" y1="12" x2="108" y2="116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffe6a8"/><stop offset=".48" stop-color="#d7ad5e"/><stop offset="1" stop-color="#a8752e"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#294a72"/><stop offset="1" stop-color="#101c31"/></linearGradient>
+  </defs>
+  <rect x="3" y="3" width="122" height="122" rx="29" fill="#0b1730"/>
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="none" stroke="url(#edge)" stroke-width="2"/>
+  <path d="M35 29h13v26h32V29h13v70H80V68H48v31H35z" fill="url(#gold)"/>
+  <path d="M16 77c25-28 68-40 96-25-25 0-54 12-78 34-7 6-14 5-18-9z" fill="none" stroke="url(#gold)" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="105" cy="35" r="4" fill="#f6d58e"/>
+  <text x="64" y="116" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="1.5" fill="#f6d58e">24</text>
+</svg>
